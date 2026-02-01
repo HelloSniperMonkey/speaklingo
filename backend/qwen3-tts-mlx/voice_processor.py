@@ -32,8 +32,10 @@ DEFAULT_VOICE = "Chelsie"
 # Audio chunk size in seconds (500ms for low latency)
 CHUNK_DURATION = 0.5
 
-# Thread pool for blocking TTS operations
-executor = ThreadPoolExecutor(max_workers=2)
+# Thread pool for blocking TTS operations - SINGLE WORKER to prevent GPU contention
+# MLX can crash with 'encodeSignalEvent:value: with uncommitted encoder' when multiple
+# TTS generations run concurrently on the same GPU
+executor = ThreadPoolExecutor(max_workers=1)
 
 # Global model instance
 _model = None
@@ -41,6 +43,10 @@ _model_type = None  # 'mlx' or 'qwen'
 
 # Track active audio generation sessions for cancellation
 active_generations = {}  # hash -> {'session_id': str, 'cancelled': bool, 'room_id': str}
+
+# Processing queue for serialized TTS requests
+tts_request_queue = None  # Initialized in main()
+is_processing = False
 
 
 def load_model():
@@ -63,17 +69,80 @@ def load_model():
         raise RuntimeError(f"Could not load TTS model: {e}")
 
 
-def get_voice_sample_from_redis(room_id: str, user_id: str = 'default') -> tuple[bytes, str, int] | None:
+def get_voice_mapping(room_id: str, role: str) -> str | None:
+    """Get the actual voice user ID for a room role from Redis.
+    
+    Args:
+        room_id: The room ID
+        role: "local-user" or "remote-user"
+    
+    Returns the actual voice user ID or None.
+    """
+    import redis
+    
+    mapping_key = f"voice_mapping:{room_id}:{role}"
+    
+    try:
+        client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+        voice_user_id = client.get(mapping_key)
+        if voice_user_id:
+            logger.info(f"✓ Found voice mapping: {mapping_key} -> {voice_user_id}")
+            return voice_user_id
+    except Exception as e:
+        logger.warning(f"Redis voice mapping lookup failed: {e}")
+    
+    logger.warning(f"✗ No voice mapping found for {mapping_key}")
+    return None
+
+
+def get_voice_sample_from_redis(room_id: str, user_id: str = 'default', target_user_id: str = None) -> tuple[bytes, str, int] | None:
     """Fetch voice sample from Redis or local file (sync version for thread pool).
+    
+    For 2-way voice communication:
+    - user_id: The speaker (whose text we're converting to speech)
+    - target_user_id: The voice to use (the OTHER user, so the listener hears their own voice style)
+    
+    If target_user_id is provided, we look up the voice mapping to get the actual voice user ID.
+    This is because target_user_id is "local-user" or "remote-user", but the actual voice
+    sample is stored under the user's unique ID from the intro recording.
+    
     Returns (wav_data, transcript, sample_rate) or None."""
     import redis
     
-    # Try user-based key first, then room-based, then global 'intro_user' fallback
+    # Resolve the actual voice user ID from the mapping
+    # target_user_id is "local-user" or "remote-user" - we need to look up the actual voice ID
+    actual_voice_user_id = None
+    if target_user_id:
+        actual_voice_user_id = get_voice_mapping(room_id, target_user_id)
+        if actual_voice_user_id:
+            logger.info(f"Resolved voice mapping: {target_user_id} -> {actual_voice_user_id}")
+    
+    # Determine which user's voice sample to use
+    # Priority: mapped voice user ID > target_user_id > user_id
+    voice_user_id = actual_voice_user_id or target_user_id or user_id
+    
+    # Build list of keys to try
     keys_to_try = [
-        f"voice_sample:{user_id}",
-        f"voice_sample:{room_id}:{user_id}",
-        f"voice_sample:intro_user",  # Global fallback for intro voice sample
+        f"voice_sample:{voice_user_id}",
+        f"voice_sample:{room_id}:{voice_user_id}",
     ]
+    
+    # If we have an actual mapped ID, also try the original target_user_id as fallback
+    if actual_voice_user_id and target_user_id:
+        keys_to_try.extend([
+            f"voice_sample:{target_user_id}",
+            f"voice_sample:{room_id}:{target_user_id}",
+        ])
+    
+    # If target_user_id was specified but not found, also try the original speaker user
+    if target_user_id and target_user_id != user_id:
+        keys_to_try.extend([
+            f"voice_sample:{user_id}",
+            f"voice_sample:{room_id}:{user_id}",
+        ])
+    
+    # Always add intro_user as last fallback
+    keys_to_try.append(f"voice_sample:intro_user")
     
     try:
         client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
@@ -90,9 +159,15 @@ def get_voice_sample_from_redis(room_id: str, user_id: str = 'default') -> tuple
     except Exception as e:
         logger.warning(f"Redis lookup failed: {e}")
     
-    # Fallback to local files - try user_id first, then intro_user
-    users_to_try = [user_id]
-    if user_id != 'intro_user':
+    # Fallback to local files - try mapped voice_user_id first, then target, then speaker, then intro_user
+    users_to_try = [voice_user_id]
+    if actual_voice_user_id and actual_voice_user_id not in users_to_try:
+        users_to_try.append(actual_voice_user_id)
+    if target_user_id and target_user_id not in users_to_try:
+        users_to_try.append(target_user_id)
+    if user_id and user_id not in users_to_try:
+        users_to_try.append(user_id)
+    if 'intro_user' not in users_to_try:
         users_to_try.append('intro_user')
     
     try:
@@ -119,21 +194,28 @@ def get_voice_sample_from_redis(room_id: str, user_id: str = 'default') -> tuple
     except Exception as e:
         logger.warning(f"Local file lookup failed: {e}")
     
-    logger.warning(f"✗ No voice sample found for user={user_id}, room={room_id}")
+    logger.warning(f"✗ No voice sample found for voice_user={voice_user_id}, speaker={user_id}, room={room_id}")
     return None
 
 
-def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'default') -> tuple[np.ndarray, int]:
+def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'default', target_user_id: str = None) -> tuple[np.ndarray, int]:
     """
     Generate audio using TTS with voice cloning if sample available.
+    
+    Args:
+        text: Text to synthesize
+        room_id: Room identifier
+        user_id: The speaker (whose text we're converting)
+        target_user_id: The voice to use (the OTHER user in 2-way communication)
+    
     Returns (audio_array, sample_rate).
     """
     import mlx.core as mx
     
     model, model_type = load_model()
     
-    # Try to get voice sample for cloning
-    voice_sample = get_voice_sample_from_redis(room_id, user_id)
+    # Try to get voice sample for cloning - use target_user_id's voice if specified
+    voice_sample = get_voice_sample_from_redis(room_id, user_id, target_user_id)
     
     if voice_sample:
         wav_data, ref_text, ref_sample_rate = voice_sample
@@ -196,9 +278,19 @@ async def process_translation(message: dict, redis_client):
     """
     Process a translation message and generate voice.
     Publishes audio chunks to Redis.
+    
+    Voice Selection Logic for 2-way communication:
+    - user_id: The speaker whose text is being translated
+    - targetUserId: The listener who will hear this audio (use THEIR voice sample)
+    
+    In a 2-way call:
+    - When User A speaks, User B should hear it in User B's cloned voice
+    - When User B speaks, User A should hear it in User A's cloned voice
     """
     room_id = message.get('roomId')
     user_id = message.get('userId', 'default')
+    # targetUserId is the listener - use their voice for TTS
+    target_user_id = message.get('targetUserId')
     text = message.get('translatedText') or message.get('text', '')
     source_language = message.get('sourceLanguage', 'unknown')
     target_language = message.get('targetLanguage', 'unknown')
@@ -212,7 +304,7 @@ async def process_translation(message: dict, redis_client):
     base_hash = ml_hash.replace('_ml', '') if ml_hash else None
     au_hash = f"{base_hash}_au" if base_hash else None
     
-    logger.info(f"Processing voice for room {room_id}, user {user_id}: '{text[:50]}...' (hash: {au_hash})")
+    logger.info(f"Processing voice for room {room_id}, speaker={user_id}, target_voice={target_user_id}: '{text[:50]}...' (hash: {au_hash})")
     logger.info(f"  Language: {source_language} → {target_language}")
     
     session_id = str(uuid.uuid4())
@@ -228,11 +320,12 @@ async def process_translation(message: dict, redis_client):
     
     try:
         # Run TTS in thread pool (blocking operation)
+        # Pass target_user_id to use the listener's voice sample
         loop = asyncio.get_event_loop()
         audio, sample_rate = await loop.run_in_executor(
             executor,
             generate_audio_with_voice_clone,
-            text, room_id, user_id
+            text, room_id, user_id, target_user_id
         )
         
         # Check if cancelled during generation
@@ -266,7 +359,8 @@ async def process_translation(message: dict, redis_client):
                 'hash': au_hash,  # Include audio hash
                 'sessionId': session_id,
                 'roomId': room_id,
-                'userId': user_id,
+                'userId': user_id,  # Speaker who said the original text
+                'targetUserId': target_user_id,  # Listener who should hear this (whose voice is used)
                 'chunkIndex': idx,
                 'totalChunks': total_chunks,
                 'audioBase64': audio_to_base64(chunk, sample_rate),
@@ -284,7 +378,7 @@ async def process_translation(message: dict, redis_client):
             if idx < total_chunks - 1:
                 await asyncio.sleep(0.01)
         
-        logger.info(f"Published {total_chunks} chunks to {channel}")
+        logger.info(f"Published {total_chunks} chunks to {channel} (for target: {target_user_id})")
         
         # Clean up tracking
         if base_hash and base_hash in active_generations:
@@ -342,8 +436,20 @@ async def translation_subscriber():
     """
     Subscribe to translation channel and process messages.
     Receives both translations and invalidations from the same channel.
+    
+    IMPORTANT: TTS requests are queued and processed ONE AT A TIME to prevent
+    GPU contention crashes (MLX throws 'encodeSignalEvent:value' errors when
+    multiple TTS generations run concurrently).
     """
+    global tts_request_queue
+    
     redis_client = get_redis_client()
+    
+    # Initialize the TTS request queue
+    tts_request_queue = asyncio.Queue()
+    
+    # Start the queue processor (serializes all TTS work)
+    queue_processor_task = asyncio.create_task(process_tts_queue(redis_client))
     
     while True:
         try:
@@ -365,12 +471,14 @@ async def translation_subscriber():
                         # Process based on message type
                         msg_type = data.get('type')
                         if msg_type == 'invalidation':
+                            # Invalidations are processed immediately (they're fast)
                             asyncio.create_task(process_invalidation(data, redis_client))
                         elif msg_type == 'translation':
-                            asyncio.create_task(process_translation(data, redis_client))
-                        
-                    except json.JSONDecodeError:
-                        logger.warning(f"Invalid JSON in message: {message['data']}")
+                            # Queue TTS requests for serialized processing
+                            await tts_request_queue.put(data)
+                            queue_size = tts_request_queue.qsize()
+                            if queue_size > 1:
+                                logger.info(f"📥 Queued TTS request (queue size: {queue_size})")
                         
                     except json.JSONDecodeError:
                         logger.warning(f"Invalid JSON in message: {message['data']}")
@@ -378,6 +486,47 @@ async def translation_subscriber():
         except Exception as e:
             logger.error(f"Subscriber error: {e}", exc_info=True)
             await asyncio.sleep(5)  # Retry with backoff
+
+
+async def process_tts_queue(redis_client):
+    """
+    Process TTS requests one at a time from the queue.
+    This serialization prevents GPU contention crashes.
+    """
+    global tts_request_queue
+    
+    logger.info("TTS queue processor started - processing requests one at a time")
+    
+    while True:
+        try:
+            # Wait for next request
+            data = await tts_request_queue.get()
+            
+            queue_size = tts_request_queue.qsize()
+            if queue_size > 0:
+                logger.info(f"📤 Processing TTS request ({queue_size} more in queue)")
+            
+            # Check if this request was already cancelled before we got to it
+            ml_hash = data.get('hash')
+            base_hash = ml_hash.replace('_ml', '') if ml_hash else None
+            
+            if base_hash and base_hash in active_generations:
+                if active_generations[base_hash].get('cancelled'):
+                    logger.info(f"Skipping already-cancelled TTS request: {base_hash}")
+                    tts_request_queue.task_done()
+                    continue
+            
+            # Process the translation (this does the actual TTS work)
+            try:
+                await process_translation(data, redis_client)
+            except Exception as e:
+                logger.error(f"Error processing TTS request: {e}", exc_info=True)
+            
+            tts_request_queue.task_done()
+            
+        except Exception as e:
+            logger.error(f"Queue processor error: {e}", exc_info=True)
+            await asyncio.sleep(1)
 
 
 async def main():

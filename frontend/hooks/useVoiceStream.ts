@@ -6,7 +6,8 @@ interface VoiceChunkMessage {
   hash?: string;  // Audio hash (format: {uuid}_au)
   sessionId?: string;
   roomId?: string;
-  userId?: string;
+  userId?: string;  // The speaker (who said the original text)
+  targetUserId?: string;  // The listener (whose voice is used for TTS, who should hear this)
   chunkIndex?: number;
   totalChunks?: number;
   audioBase64?: string;

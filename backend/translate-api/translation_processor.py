@@ -108,7 +108,16 @@ async def process_transcription(message_data: str, channel: str):
         session_id = transcription.get('sessionId')
         tc_hash = transcription.get('hash')  # Extract hash (format: {uuid}_tc)
         
-        logger.info(f"Translating for room {room_id}: {text[:50]}... (hash: {tc_hash})")
+        # Determine the target user for voice cloning in 2-way communication
+        # When local-user speaks, the audio should be in remote-user's voice (and vice versa)
+        # This way each user hears the translation in the OTHER person's cloned voice
+        target_user_id = None
+        if user_id == 'local-user':
+            target_user_id = 'remote-user'
+        elif user_id == 'remote-user':
+            target_user_id = 'local-user'
+        
+        logger.info(f"Translating for room {room_id}: {text[:50]}... (hash: {tc_hash}, speaker: {user_id}, target_voice: {target_user_id})")
         
         # Translate
         result = await translate_text(text)
@@ -119,6 +128,7 @@ async def process_transcription(message_data: str, channel: str):
             'hash': tc_hash.replace('_tc', '_ml') if tc_hash else None,  # Convert tc hash to ml hash
             'roomId': room_id,
             'userId': user_id,
+            'targetUserId': target_user_id,  # Voice to use for TTS
             'sessionId': session_id,
             'originalText': text,
             'translatedText': result['translated'],

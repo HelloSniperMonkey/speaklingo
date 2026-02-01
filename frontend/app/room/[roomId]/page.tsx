@@ -13,6 +13,12 @@ import { LiveTranscription } from "@/components/LiveTranscription";
 import { VoiceLatencyIndicator } from "@/components/VoiceLatencyIndicator";
 import { getLanguageName } from "@/lib/languages";
 
+// Get the unique voice user ID from storage
+function getVoiceUserId(): string {
+  if (typeof window === 'undefined') return '';
+  return sessionStorage.getItem('voiceUserId') || localStorage.getItem('voiceUserId') || '';
+}
+
 export default function RoomPage() {
   const params = useParams();
   const router = useRouter();
@@ -23,6 +29,7 @@ export default function RoomPage() {
   const [targetLanguage, setTargetLanguage] = useState("en");
   const hasInitializedRef = useRef(false);
   const hasJoinedRef = useRef(false);
+  const hasRegisteredVoiceRef = useRef(false);
 
   const {
     localStream,
@@ -56,6 +63,13 @@ export default function RoomPage() {
   // Processed voice stream for TTS playback
   // userId: 'local-user' for creator, determines whose processed voice to play locally vs send to remote
   const userId = role === "creator" ? "local-user" : "remote-user";
+  
+  // Get the actual unique voice user ID for this user
+  const voiceUserId = useRef<string>('');
+  useEffect(() => {
+    voiceUserId.current = getVoiceUserId();
+  }, []);
+  
   const {
     isConnected: voiceConnected,
     isPlaying: voicePlaying,
@@ -68,6 +82,33 @@ export default function RoomPage() {
     voiceMode,
     setDataChannel,
   } = useProcessedVoice({ roomId, userId, peerConnection });
+
+  // Register voice user ID mapping when entering the room
+  // This tells the backend: "local-user in this room has voice sample X"
+  useEffect(() => {
+    if (hasRegisteredVoiceRef.current || !roomId) return;
+    hasRegisteredVoiceRef.current = true;
+    
+    const actualVoiceUserId = getVoiceUserId();
+    if (actualVoiceUserId) {
+      // Register the voice mapping with the backend
+      fetch('/api/register-voice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roomId,
+          role: userId, // "local-user" or "remote-user"
+          voiceUserId: actualVoiceUserId
+        })
+      }).then(res => {
+        if (res.ok) {
+          console.log(`[RoomPage] Registered voice mapping: ${userId} -> ${actualVoiceUserId}`);
+        }
+      }).catch(err => {
+        console.error('[RoomPage] Failed to register voice mapping:', err);
+      });
+    }
+  }, [roomId, userId]);
 
   // Pass the WebRTC data channel to the processed voice hook when available
   useEffect(() => {

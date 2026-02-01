@@ -234,6 +234,86 @@ def get_voice_sample_endpoint():
     })
 
 
+@app.route('/register-voice-mapping', methods=['POST'])
+def register_voice_mapping():
+    """
+    Register a mapping between room role (local-user/remote-user) and the actual voice user ID.
+    This allows the voice processor to look up the correct voice sample for each user.
+    
+    Body:
+    - roomId: The room ID
+    - role: "local-user" or "remote-user"  
+    - voiceUserId: The actual unique voice user ID from the intro recording
+    """
+    try:
+        data = request.get_json()
+        room_id = data.get('roomId')
+        role = data.get('role')  # "local-user" or "remote-user"
+        voice_user_id = data.get('voiceUserId')
+        
+        if not room_id or not role or not voice_user_id:
+            return jsonify({'error': 'Missing required fields: roomId, role, voiceUserId'}), 400
+        
+        # Store mapping in Redis: room:{roomId}:voice_mapping:{role} -> voiceUserId
+        mapping_key = f"voice_mapping:{room_id}:{role}"
+        
+        try:
+            redis_client.setex(mapping_key, VOICE_SAMPLE_TTL, voice_user_id)
+            logger.info(f"Registered voice mapping: {mapping_key} -> {voice_user_id}")
+        except Exception as e:
+            logger.warning(f"Redis store failed for voice mapping: {e}")
+            # Also store in memory cache as fallback
+            voice_samples_cache[mapping_key] = voice_user_id
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Voice mapping registered',
+            'roomId': room_id,
+            'role': role,
+            'voiceUserId': voice_user_id
+        })
+    
+    except Exception as e:
+        logger.error(f"Voice mapping error: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/get-voice-mapping', methods=['GET'])
+def get_voice_mapping():
+    """Get the voice user ID for a room role (for debugging)."""
+    room_id = request.args.get('roomId')
+    role = request.args.get('role')
+    
+    if not room_id or not role:
+        return jsonify({'error': 'Missing roomId or role'}), 400
+    
+    mapping_key = f"voice_mapping:{room_id}:{role}"
+    
+    try:
+        voice_user_id = redis_client.get(mapping_key)
+        if voice_user_id:
+            if isinstance(voice_user_id, bytes):
+                voice_user_id = voice_user_id.decode('utf-8')
+            return jsonify({
+                'roomId': room_id,
+                'role': role,
+                'voiceUserId': voice_user_id
+            })
+    except Exception as e:
+        logger.warning(f"Redis get failed: {e}")
+    
+    # Try memory cache
+    voice_user_id = voice_samples_cache.get(mapping_key)
+    if voice_user_id:
+        return jsonify({
+            'roomId': room_id,
+            'role': role,
+            'voiceUserId': voice_user_id
+        })
+    
+    return jsonify({'error': 'No voice mapping found'}), 404
+
+
 if __name__ == '__main__':
     logger.info("Starting Voice Sample Server on port 8712...")
     app.run(host='0.0.0.0', port=8712, debug=False, threaded=True)

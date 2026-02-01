@@ -1,24 +1,59 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Gloria_Hallelujah } from "next/font/google";
 import { LANGUAGES } from "@/lib/languages";
 
 const handFont = Gloria_Hallelujah({ subsets: ["latin"], weight: "400" });
 
+// Generate a unique user ID that persists across sessions
+// Supports ?testUser=2 query param for testing with same browser
+function getOrCreateUserId(testUserOverride?: string | null): string {
+  if (typeof window === 'undefined') return `user_${Date.now()}`;
+  
+  // For testing: use ?testUser=2 to simulate a second user in same browser
+  if (testUserOverride) {
+    const testUserId = `test_user_${testUserOverride}`;
+    sessionStorage.setItem('voiceUserId', testUserId);
+    return testUserId;
+  }
+  
+  let uniqueUserId = localStorage.getItem('voiceUserId');
+  if (!uniqueUserId) {
+    uniqueUserId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    localStorage.setItem('voiceUserId', uniqueUserId);
+  }
+  return uniqueUserId;
+}
+
+// Wrap the main content to handle Suspense for useSearchParams
 export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const testUser = searchParams.get('testUser'); // For testing: ?testUser=2 simulates second user
+  
   const [introLanguage, setIntroLanguage] = useState("en");
   const [isRecording, setIsRecording] = useState(false);
   const [recordingError, setRecordingError] = useState<string | null>(null);
   const [recordingStatus, setRecordingStatus] = useState<string>("");
   const [voiceSampleUploaded, setVoiceSampleUploaded] = useState(false);
 
-  // Generate a temporary room ID for voice sample storage (will be used when creating room)
-  const tempRoomIdRef = useRef<string>(
-    `temp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-  );
+  // Use a unique persistent user ID for voice sample storage
+  // This ensures each user's voice sample is stored separately
+  const uniqueUserIdRef = useRef<string>('');
+  
+  useEffect(() => {
+    uniqueUserIdRef.current = getOrCreateUserId(testUser);
+  }, [testUser]);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -26,10 +61,12 @@ export default function HomePage() {
 
   const sendAudioToQwen = useCallback(async (audioBlob: Blob) => {
     try {
+      const uniqueUserId = uniqueUserIdRef.current || getOrCreateUserId(testUser);
+      
       const formData = new FormData();
       formData.append("audio", audioBlob, "mic-input.webm");
-      formData.append("roomId", tempRoomIdRef.current);
-      formData.append("userId", "intro_user");
+      formData.append("roomId", "global");  // Use global room for pre-session voice samples
+      formData.append("userId", uniqueUserId);  // Use unique user ID instead of "intro_user"
       formData.append("transcript", "Hello I am feeling great today and the weather is sunny which uplifts my mood.");
 
       const response = await fetch("/api/qwen-tts", {
@@ -46,12 +83,15 @@ export default function HomePage() {
       setRecordingStatus(`Voice sample uploaded (${data.duration?.toFixed(1) || '?'}s)`);
       setVoiceSampleUploaded(true);
       setRecordingError(null);
+      
+      // Store the unique user ID in sessionStorage for the room to use
+      sessionStorage.setItem('voiceUserId', uniqueUserId);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to send audio";
       setRecordingError(message);
       setVoiceSampleUploaded(false);
     }
-  }, []);
+  }, [testUser]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {

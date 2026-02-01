@@ -15,7 +15,8 @@ interface VoiceChunkMessage {
   hash?: string;
   sessionId?: string;
   roomId?: string;
-  userId?: string;
+  userId?: string;  // The speaker (who said the original text)
+  targetUserId?: string;  // The listener (whose voice is used for TTS, who should hear this)
   chunkIndex?: number;
   totalChunks?: number;
   audioBase64?: string;
@@ -206,10 +207,23 @@ export function useProcessedVoice({
     async (message: VoiceChunkMessage) => {
       if (!message.audioBase64 || !message.sampleRate) return;
 
-      // Check if this is for me (matches my userId)
-      // In the backend, we process local-user's audio for the remote-user to hear
-      // and remote-user's audio for the local-user to hear
-      const isForMe = message.userId !== userId; // If it's not MY userId, it's for me to hear
+      // Voice routing logic for 2-way communication:
+      // - userId: The speaker (who said the original text)
+      // - targetUserId: The listener (who should hear this audio, whose voice was used)
+      // 
+      // In production mode:
+      // - If targetUserId === my userId, this audio is FOR ME to hear (I'm the listener)
+      // - If targetUserId !== my userId, this audio is for the OTHER person
+      //
+      // Note: The backend sets targetUserId to the opposite of userId:
+      // - When local-user speaks, targetUserId is remote-user
+      // - When remote-user speaks, targetUserId is local-user
+      
+      const targetUser = message.targetUserId;
+      const speakerUser = message.userId;
+      
+      // Check if this audio is for me (I'm the target/listener)
+      const isForMe = targetUser === userId;
       
       // Skip if this audio's hash has been invalidated
       const baseHash = message.hash?.replace("_au", "");
@@ -219,28 +233,25 @@ export function useProcessedVoice({
       }
 
       // DEV mode: Play all processed voice locally for testing
-      // PROD mode: 
-      //   - If it's MY processed voice (message.userId === userId), send to remote peer
-      //   - If it's REMOTE's processed voice (message.userId !== userId), play locally
+      // PROD mode: Only play audio that is targeted FOR ME
       
       if (VOICE_MODE === "dev") {
         // In dev mode, play everything locally to test the TTS output
-        console.log(`[ProcessedVoice] DEV mode: Playing voice chunk locally (userId: ${message.userId})`);
+        console.log(`[ProcessedVoice] DEV mode: Playing voice chunk locally (speaker: ${speakerUser}, target: ${targetUser}, me: ${userId})`);
         await playVoiceLocally(message);
       } else {
-        // PROD mode
-        if (message.userId === userId) {
-          // This is MY processed voice - send to remote peer
-          console.log(`[ProcessedVoice] PROD mode: Sending my processed voice to remote peer`);
-          sendToRemotePeer(message);
-        } else {
-          // This is the REMOTE's processed voice - play locally
-          console.log(`[ProcessedVoice] PROD mode: Playing remote's processed voice locally`);
+        // PROD mode - only play audio targeted for me
+        if (isForMe) {
+          // This audio is FOR ME - play it locally
+          console.log(`[ProcessedVoice] PROD mode: Playing audio targeted for me (speaker: ${speakerUser})`);
           await playVoiceLocally(message);
+        } else {
+          // This audio is for someone else - ignore it
+          console.log(`[ProcessedVoice] PROD mode: Ignoring audio not for me (target: ${targetUser}, me: ${userId})`);
         }
       }
     },
-    [userId, sendToRemotePeer]
+    [userId]
   );
 
   // Play voice chunk locally
