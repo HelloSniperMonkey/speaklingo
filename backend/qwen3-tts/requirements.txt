@@ -1,0 +1,23 @@
+# Core TTS
+git+https://github.com/QwenLM/Qwen3-TTS.git
+torch
+transformers
+torchaudio
+accelerate
+
+# Audio processing (CRITICAL)
+librosa>=0.10.2.post2
+soundfile
+numpy
+scipy
+
+# Web server
+flask
+flask-cors
+websockets
+
+# Redis
+redis>=5.0.0
+
+# Utilities
+python-dotenv>=1.0.0

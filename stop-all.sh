@@ -1,0 +1,1 @@
+pm2 delete all && docker compose down && rm -rf logs/*

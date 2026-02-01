@@ -1,0 +1,10 @@
+# Core dependencies
+websockets>=12.0
+numpy>=1.24.0
+
+# Google Cloud Speech
+google-cloud-speech>=2.0.0
+
+# Redis for Pub/Sub
+redis==5.0.1
+

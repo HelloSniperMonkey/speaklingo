@@ -1,0 +1,29 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: webrtc-translator-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: webrtc-translator-redisinsight
+    ports:
+      - "8001:5540"
+    depends_on:
+      - redis
+    restart: unless-stopped
+    # RedisInsight will auto-scan local Redis instances; visit http://localhost:8001 to open the GUI
+
+volumes:
+  redis-data:
+    driver: local

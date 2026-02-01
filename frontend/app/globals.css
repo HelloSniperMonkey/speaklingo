@@ -1,0 +1,257 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0a0b;
+  --foreground: #ededed;
+}
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0a0b 0%, #111113 50%, #0a0a0b 100%);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Subtle animated gradient for background */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-bg {
+  background: linear-gradient(
+    135deg,
+    #0a0a0b 0%,
+    #0f0f12 25%,
+    #111115 50%,
+    #0f0f12 75%,
+    #0a0a0b 100%
+  );
+  background-size: 200% 200%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* Video container styles */
+.video-container {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #1a1a1d;
+}
+
+.video-pip {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 200px;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: #0a0a0b;
+}
+
+/* Subtitle panel styles */
+.subtitle-panel {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply px-6 py-3 bg-white text-black font-medium rounded-lg transition-all duration-200;
+}
+
+.btn-primary:hover {
+  @apply bg-gray-200 scale-105;
+}
+
+.btn-primary:disabled {
+  @apply bg-gray-600 text-gray-400 cursor-not-allowed scale-100;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 bg-transparent border border-white/20 text-white font-medium rounded-lg transition-all duration-200;
+}
+
+.btn-secondary:hover {
+  @apply bg-white/10;
+}
+
+.btn-danger {
+  @apply px-6 py-3 bg-red-600 text-white font-medium rounded-lg transition-all duration-200;
+}
+
+.btn-danger:hover {
+  @apply bg-red-700;
+}
+
+/* Control button styles */
+.control-btn {
+  @apply w-12 h-12 flex items-center justify-center rounded-full transition-all duration-200;
+}
+
+.control-btn-active {
+  @apply bg-white/10 text-white hover:bg-white/20;
+}
+
+.control-btn-inactive {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+/* Input styles */
+.input-field {
+  @apply w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors;
+}
+
+/* Select styles */
+.select-field {
+  @apply px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/30 transition-colors appearance-none cursor-pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* Fade in animation for subtitles */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Pulse animation for recording indicator */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Intro screen styles */
+.intro-surface {
+  background: radial-gradient(circle at 20% 20%, #fff4d8 0%, #f3f0e6 35%, #e8e6df 100%);
+  color: #0f172a;
+}
+
+.intro-noise {
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 6px 6px;
+  opacity: 0.25;
+}
+
+.sketch-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border: 3px solid #111827;
+  border-radius: 16px;
+  background: #fffdf7;
+  box-shadow: 6px 6px 0 #111827;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.sketch-select {
+  min-width: 220px;
+  padding: 12px 14px;
+  border: 3px solid #111827;
+  border-radius: 14px;
+  background: #fffdf7;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 6px 6px 0 #111827;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #111827 50%),
+    linear-gradient(135deg, #111827 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(50% - 4px), calc(100% - 14px) calc(50% - 4px);
+  background-size: 8px 8px, 8px 8px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.intro-btn {
+  padding: 14px 22px;
+  border: 3px solid #111827;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 8px 8px 0 #111827;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.intro-btn-primary {
+  background: #111827;
+  color: #fffdf7;
+}
+
+.intro-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 10px 12px 0 #0a0f1a;
+}
+
+.intro-btn-ghost {
+  background: #fffdf7;
+  color: #0f172a;
+}
+
+.intro-btn-ghost:hover {
+  transform: translateY(-3px);
+  box-shadow: 10px 12px 0 #111827;
+  background: #f5f2e8;
+}
+
+.sketch-circle {
+  width: 72px;
+  height: 72px;
+  border: 3px solid #111827;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  box-shadow: 8px 8px 0 #111827;
+  background: #fffdf7;
+  color: #0f172a;
+}
+
+.sketch-circle.recording {
+  background: #fee2e2;
+  color: #b91c1c;
+  box-shadow: 10px 12px 0 #7f1d1d;
+}

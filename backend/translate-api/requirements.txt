@@ -1,0 +1,6 @@
+google-generativeai==0.8.3
+flask==3.0.0
+flask-cors==4.0.0
+python-dotenv==1.0.0
+redis==5.0.1
+websockets==12.0
