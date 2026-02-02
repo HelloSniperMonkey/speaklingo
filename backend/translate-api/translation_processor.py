@@ -108,16 +108,17 @@ async def process_transcription(message_data: str, channel: str):
         session_id = transcription.get('sessionId')
         tc_hash = transcription.get('hash')  # Extract hash (format: {uuid}_tc)
         
-        # Determine the target user for voice cloning in 2-way communication
-        # When local-user speaks, the audio should be in remote-user's voice (and vice versa)
-        # This way each user hears the translation in the OTHER person's cloned voice
+        # Determine the target user (who should RECEIVE/PLAY the audio) in 2-way communication
+        # When local-user speaks, remote-user should hear it (and vice versa)
+        # The TTS should use the SPEAKER's voice so the listener hears the speaker's cloned voice
         target_user_id = None
         if user_id == 'local-user':
-            target_user_id = 'remote-user'
+            target_user_id = 'remote-user'  # Remote user will play this audio
         elif user_id == 'remote-user':
-            target_user_id = 'local-user'
+            target_user_id = 'local-user'   # Local user will play this audio
         
-        logger.info(f"Translating for room {room_id}: {text[:50]}... (hash: {tc_hash}, speaker: {user_id}, target_voice: {target_user_id})")
+        # Note: Voice cloning uses user_id (speaker's voice), targetUserId is for routing
+        logger.info(f"Translating for room {room_id}: {text[:50]}... (hash: {tc_hash}, speaker: {user_id}, target_listener: {target_user_id})")
         
         # Translate
         result = await translate_text(text)
@@ -127,8 +128,8 @@ async def process_transcription(message_data: str, channel: str):
             'type': 'translation',
             'hash': tc_hash.replace('_tc', '_ml') if tc_hash else None,  # Convert tc hash to ml hash
             'roomId': room_id,
-            'userId': user_id,
-            'targetUserId': target_user_id,  # Voice to use for TTS
+            'userId': user_id,              # Speaker - whose voice to clone
+            'targetUserId': target_user_id,  # Listener - who should play this audio
             'sessionId': session_id,
             'originalText': text,
             'translatedText': result['translated'],

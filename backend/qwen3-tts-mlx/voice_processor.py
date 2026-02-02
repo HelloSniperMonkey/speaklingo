@@ -205,8 +205,8 @@ def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'def
     Args:
         text: Text to synthesize
         room_id: Room identifier
-        user_id: The speaker (whose text we're converting)
-        target_user_id: The voice to use (the OTHER user in 2-way communication)
+        user_id: The speaker - whose voice to clone for TTS
+        target_user_id: The listener - who should receive/play this audio (not used for voice)
     
     Returns (audio_array, sample_rate).
     """
@@ -214,8 +214,9 @@ def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'def
     
     model, model_type = load_model()
     
-    # Try to get voice sample for cloning - use target_user_id's voice if specified
-    voice_sample = get_voice_sample_from_redis(room_id, user_id, target_user_id)
+    # Get the SPEAKER's voice sample for cloning (user_id, not target_user_id)
+    # This ensures the listener hears the speaker's cloned voice
+    voice_sample = get_voice_sample_from_redis(room_id, user_id, user_id)
     
     if voice_sample:
         wav_data, ref_text, ref_sample_rate = voice_sample
