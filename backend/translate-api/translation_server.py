@@ -56,7 +56,7 @@ Translation:"""
                 }
             ],
             temperature=0.1,  # Low temperature for consistent output
-            max_completion_tokens=100,  # Limit tokens for short translations
+            max_completion_tokens=200,  # Limit tokens for short translations
             top_p=1,
             stream=False
         )
