@@ -71,5 +71,13 @@ pm2 start python --name "voice-processor" \
 	--error /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/logs/voice-processor-err.log \
 	-- voice_processor.py
 
+# Start Load Balancer
+echo "Starting Load Balancer..."
+cd /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/loadbalancer
+pm2 start python --name "loadbalancer" \
+	--output /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/logs/loadbalancer-out.log \
+	--error /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/logs/loadbalancer-err.log \
+	-- loadbalancer.py
+
 echo "All services started!"
 pm2 status

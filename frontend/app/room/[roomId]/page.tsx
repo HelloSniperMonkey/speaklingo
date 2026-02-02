@@ -27,6 +27,7 @@ export default function RoomPage() {
   const role = searchParams.get("role") || "joiner"; // Default to joiner if no role specified
 
   const [targetLanguage, setTargetLanguage] = useState("en");
+  const [showToast, setShowToast] = useState(false);
   const hasInitializedRef = useRef(false);
   const hasJoinedRef = useRef(false);
   const hasRegisteredVoiceRef = useRef(false);
@@ -174,6 +175,8 @@ export default function RoomPage() {
   // Copy room ID to clipboard
   const copyRoomId = useCallback(() => {
     navigator.clipboard.writeText(roomId);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
   }, [roomId]);
 
   return (
@@ -333,6 +336,13 @@ export default function RoomPage() {
           roomId={roomId}
           myUserId={userId}
         />
+
+        {/* Toast Notification */}
+        {showToast && (
+          <div className="fixed bottom-4 right-4 bg-green-500/90 text-white px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
+            Copied to clipboard
+          </div>
+        )}
       </div>
     </div>
   );

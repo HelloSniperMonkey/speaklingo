@@ -3,6 +3,7 @@
 import { useGoogleLiveTranscription } from "@/hooks/useGoogleLiveTranscription";
 import { useTranslationStream } from "@/hooks/useTranslationStream";
 import { useTranscriptionStream } from "@/hooks/useTranscriptionStream";
+import { API_CONFIG } from "@/lib/apiConfig";
 import { useEffect, useState, useRef } from "react";
 
 interface LiveTranscriptionProps {
@@ -90,7 +91,7 @@ export function LiveTranscription({
     const lastProcessedTranslationRef = useRef<any>(null);
     const lastProcessedTranscriptionRef = useRef<any>(null);
 
-    const wsUrl = "ws://localhost:8765";
+    const wsUrl = API_CONFIG.ws.transcription;
 
     // Single transcriber for MY audio only
     const transcriber = useGoogleLiveTranscription(wsUrl);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { API_CONFIG } from "@/lib/apiConfig";
 
 interface TranscriptionMessage {
   type: "transcription" | "status" | "error";
@@ -34,8 +35,7 @@ export function useTranscriptionStream(roomId: string) {
 
     // Connect to the transcription broadcast WebSocket
     // This assumes a WebSocket server that broadcasts transcriptions for a room
-    // We'll use the translation WS server port 8767 but with transcription subscription
-    const ws = new WebSocket("ws://localhost:8766");
+    const ws = new WebSocket(API_CONFIG.ws.transcriptionBroadcast);
 
     ws.onopen = () => {
       console.log("[TranscriptionStream] Connected");

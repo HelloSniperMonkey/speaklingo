@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { API_CONFIG } from "@/lib/apiConfig";
 
 /**
  * Voice Mode:
@@ -64,7 +65,7 @@ interface UseProcessedVoiceReturn {
   setDataChannel: (channel: RTCDataChannel | null) => void;
 }
 
-const DEFAULT_WS_URL = "ws://localhost:8768";
+const DEFAULT_WS_URL = API_CONFIG.ws.voice;
 
 export function useProcessedVoice({
   roomId,

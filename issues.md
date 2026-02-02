@@ -2,6 +2,35 @@
 
 ## Fixed Issues (Feb 2, 2026)
 
+### 3. ✅ API Load Balancer for Remote Testing
+**Issue:** Needed a unified endpoint for frontend to access all backend services, supporting both local dev and remote testing via Cloudflare Tunnel.
+
+**Fix:**
+- Created `backend/loadbalancer/loadbalancer.py` - Async HTTP/WebSocket proxy on port 8089
+- Routes HTTP requests:
+  - `/api/translate/*` → Translation API (8766)
+  - `/api/voice/*` → Voice Server (8712)
+  - `/api/transcription/*` → Transcription API (8765)
+- Routes WebSocket connections:
+  - `/ws/transcription` → Google Transcription WS (8765)
+  - `/ws/transcription-sub` → Transcription Broadcast WS (8766)
+  - `/ws/translation` → Translation WS (8767)
+  - `/ws/voice` → Voice WS (8768)
+
+**Environment Configuration:**
+- Added `NEXT_PUBLIC_API_ENV=dev|prod` to switch between modes
+- `NEXT_PUBLIC_LOADBALANCER_URL=http://localhost:8089` (dev) or `https://meetapi.snipermonkey.in` (prod)
+- `NEXT_PUBLIC_WS_PROTOCOL=ws|wss` for local/SSL WebSockets
+
+**Files Added/Changed:**
+- `backend/loadbalancer/loadbalancer.py` - New load balancer
+- `frontend/lib/apiConfig.ts` - Centralized API configuration
+- `frontend/.env.local` - Added load balancer env vars
+- `frontend/.env.production` - Production config for remote testing
+- Updated hooks to use `API_CONFIG` for dynamic endpoints
+
+---
+
 ### 1. ✅ Audio Playback Bug - Two sentences spoken rapidly not playing
 **Root Cause:** GPU contention when running concurrent TTS generations with MLX.
 - ThreadPoolExecutor had `max_workers=2`, allowing 2 TTS operations to run simultaneously
