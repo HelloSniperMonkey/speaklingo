@@ -16,7 +16,7 @@ class Config:
     WS_PORT = int(os.getenv('WS_PORT', 8767))
     
     # Translation API
-    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+    GROQ_API_KEY = os.getenv('GROQ_API_KEY')
     
     # Timeouts
     REDIS_TIMEOUT = 5  # seconds

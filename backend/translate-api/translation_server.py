@@ -2,7 +2,7 @@ import os
 import time
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -11,19 +11,17 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# Configure Gemini
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-if not GEMINI_API_KEY or GEMINI_API_KEY == 'your_api_key_here':
-    print("WARNING: GEMINI_API_KEY not set in .env file")
+# Configure Groq
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+if not GROQ_API_KEY or GROQ_API_KEY == 'your_api_key_here':
+    print("WARNING: GROQ_API_KEY not set in .env file")
+    client = None
 else:
-    genai.configure(api_key=GEMINI_API_KEY)
-
-# Use Gemini 2.5 Flash Lite
-model = genai.GenerativeModel('gemini-2.5-flash-lite')
+    client = Groq(api_key=GROQ_API_KEY)
 
 def translate_text(text: str) -> dict:
     """
-    Translate the given text to English using Gemini 2.5 Flash Lite
+    Translate the given text to English using Groq (openai/gpt-oss-safeguard-20b)
     Returns dict with translated text and latency
     """
     if not text or not text.strip():
@@ -32,27 +30,43 @@ def translate_text(text: str) -> dict:
             'latency_ms': 0
         }
     
+    if not client:
+        return {
+            'translated': text,
+            'latency_ms': 0,
+            'error': 'Groq API not configured'
+        }
+    
     start_time = time.time()
     
     try:
         # Create a strict prompt for translation only
-        prompt = f"""Translate the following text to English. 
-Output ONLY the English translation, no additional words, explanations, or punctuation marks.
-If the text is already in English, return it as is.
+        prompt = f"""Translate the following text to English. Only provide the translation, no additional text.
 
 Text: {text}
 
 Translation:"""
 
-        response = model.generate_content(
-            prompt,
-            generation_config={
-                'temperature': 0.1,  # Low temperature for consistent output
-                'max_output_tokens': 100,  # Limit tokens for short translations
-            }
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",  # Fast and good for translation
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.1,  # Low temperature for consistent output
+            max_completion_tokens=100,  # Limit tokens for short translations
+            top_p=1,
+            stream=False
         )
         
-        translated = response.text.strip()
+        translated = completion.choices[0].message.content
+        
+        if not translated or translated is None:
+            translated = text  # Fallback to original
+        else:
+            translated = translated.strip()
         latency_ms = int((time.time() - start_time) * 1000)
         
         return {
@@ -97,5 +111,5 @@ def health():
 
 if __name__ == '__main__':
     print("Starting Translation API server on port 8766...")
-    print(f"Gemini API Key configured: {'Yes' if GEMINI_API_KEY and GEMINI_API_KEY != 'your_api_key_here' else 'No'}")
+    print(f"Groq API Key configured: {'Yes' if GROQ_API_KEY and GROQ_API_KEY != 'your_api_key_here' else 'No'}")
     app.run(host='0.0.0.0', port=8766, debug=True)

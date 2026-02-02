@@ -7,7 +7,7 @@ import asyncio
 import json
 import logging
 import time
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 
 from redis_client import get_redis_client
@@ -17,15 +17,14 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Configure Gemini
-genai.configure(api_key=Config.GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash-lite')
+# Configure Groq
+client = Groq(api_key=Config.GROQ_API_KEY)
 
 # Translation cache (in-memory for now)
 translation_cache = {}
 
 async def translate_text(text: str) -> dict:
-    """Translate text using Gemini. Returns translated text and latency."""
+    """Translate text using Groq. Returns translated text and latency."""
     if not text.strip():
         return {'translated': '', 'latency_ms': 0}
     
@@ -41,9 +40,7 @@ async def translate_text(text: str) -> dict:
     start_time = time.time()
     
     try:
-        prompt = f"""Translate the following text to English. 
-Output ONLY the English translation, no additional words, explanations, or punctuation marks.
-If the text is already in English, return it as is.
+        prompt = f"""Translate the following text to English. Only provide the translation, no additional text.
 
 Text: {text}
 
@@ -53,16 +50,28 @@ Translation:"""
         loop = asyncio.get_event_loop()
         response = await loop.run_in_executor(
             None,
-            lambda: model.generate_content(
-                prompt,
-                generation_config={
-                    'temperature': 0.1,
-                    'max_output_tokens': 100,
-                }
+            lambda: client.chat.completions.create(
+                model="llama-3.3-70b-versatile",  # Fast and good for translation
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                temperature=0.1,
+                max_completion_tokens=100,
+                top_p=1,
+                stream=False
             )
         )
         
-        translated = response.text.strip()
+        translated = response.choices[0].message.content
+        
+        if not translated or translated is None:
+            logger.error("Groq returned None or empty")
+            translated = text  # Fallback to original
+        else:
+            translated = translated.strip()
         latency_ms = int((time.time() - start_time) * 1000)
         
         # Cache the result
