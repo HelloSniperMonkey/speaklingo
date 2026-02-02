@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DEFAULT_VOICE_SERVER_URL = "http://localhost:8712";
+// Get voice server URL from environment
+const API_ENV = process.env.NEXT_PUBLIC_API_ENV || 'dev';
+const IS_PROD = API_ENV === 'prod';
+const LOADBALANCER_URL = process.env.NEXT_PUBLIC_LOADBALANCER_URL || 'http://localhost:8089';
+
+const getVoiceServerUrl = (): string => {
+  if (IS_PROD) {
+    return `${LOADBALANCER_URL}/api/voice`;
+  }
+  return process.env.QWEN_TTS_URL || "http://localhost:8712";
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +24,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const targetUrl = process.env.QWEN_TTS_URL || DEFAULT_VOICE_SERVER_URL;
+    const targetUrl = getVoiceServerUrl();
 
     // Register the voice mapping with the backend
     const response = await fetch(`${targetUrl}/register-voice-mapping`, {

@@ -133,8 +133,12 @@ export function useWebRTC(): UseWebRTCReturn {
       };
 
       // Add local tracks to peer connection
+      // Only add VIDEO tracks - audio (original voice) is NOT transmitted
+      // The translated voice is sent via TTS system instead
       localStream.getTracks().forEach((track) => {
-        pc.addTrack(track, localStream);
+        if (track.kind === 'video') {
+          pc.addTrack(track, localStream);
+        }
       });
 
       // Handle remote tracks - this is crucial for receiving media
@@ -287,8 +291,12 @@ export function useWebRTC(): UseWebRTCReturn {
         };
 
         // Add local tracks
+        // Only add VIDEO tracks - audio (original voice) is NOT transmitted
+        // The translated voice is sent via TTS system instead
         localStream.getTracks().forEach((track) => {
-          pc.addTrack(track, localStream);
+          if (track.kind === 'video') {
+            pc.addTrack(track, localStream);
+          }
         });
 
         // Handle remote tracks - this is crucial for receiving media

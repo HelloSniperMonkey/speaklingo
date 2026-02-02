@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { API_CONFIG } from "@/lib/apiConfig";
 
 interface TranslationMessage {
   type: "translation" | "status" | "error" | "invalidation";
@@ -38,7 +39,7 @@ export function useTranslationStream(roomId: string) {
   const connect = useCallback(() => {
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
-    const ws = new WebSocket("ws://localhost:8767");
+    const ws = new WebSocket(API_CONFIG.ws.translation);
 
     ws.onopen = () => {
       console.log("Connected to Translation Stream");

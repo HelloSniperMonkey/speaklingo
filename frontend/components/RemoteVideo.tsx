@@ -2,6 +2,9 @@
 
 import { useRef, useEffect, useState } from "react";
 
+// Video delay in milliseconds to sync with TTS audio processing
+const VIDEO_DELAY_MS = 1000;
+
 interface RemoteVideoProps {
   stream: MediaStream | null;
   isConnected: boolean;
@@ -10,6 +13,8 @@ interface RemoteVideoProps {
 export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasVideoTrack, setHasVideoTrack] = useState(false);
+  const [isDelayComplete, setIsDelayComplete] = useState(false);
+  const delayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -40,8 +45,21 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
         }
       };
       
+      // When video starts playing, start the delay timer
+      const handlePlaying = () => {
+        console.log("[RemoteVideo] Video playing, starting delay timer");
+        if (delayTimerRef.current) {
+          clearTimeout(delayTimerRef.current);
+        }
+        delayTimerRef.current = setTimeout(() => {
+          console.log("[RemoteVideo] Delay complete, showing video");
+          setIsDelayComplete(true);
+        }, VIDEO_DELAY_MS);
+      };
+      
       stream.addEventListener("addtrack", handleTrackAdded);
       stream.addEventListener("removetrack", handleTrackRemoved);
+      videoElement.addEventListener("playing", handlePlaying);
       
       // Try to play immediately if there are tracks
       if (stream.getTracks().length > 0) {
@@ -53,21 +71,31 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
       return () => {
         stream.removeEventListener("addtrack", handleTrackAdded);
         stream.removeEventListener("removetrack", handleTrackRemoved);
+        videoElement.removeEventListener("playing", handlePlaying);
+        if (delayTimerRef.current) {
+          clearTimeout(delayTimerRef.current);
+        }
       };
     }
   }, [stream]);
 
-  // Show video when we have a stream with video tracks OR when connected
-  const showVideo = stream && (hasVideoTrack || isConnected);
+  // Reset delay when stream changes
+  useEffect(() => {
+    setIsDelayComplete(false);
+  }, [stream]);
+
+  // Show video when we have a stream with video tracks OR when connected AND delay complete
+  const showVideo = stream && (hasVideoTrack || isConnected) && isDelayComplete;
 
   return (
     <div className="relative w-full aspect-video bg-gray-900 rounded-2xl overflow-hidden border border-white/10">
-      {/* Always render the video element but control visibility */}
+      {/* Video element - plays immediately but hidden until delay completes */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
-        className={`w-full h-full object-cover ${showVideo ? 'block' : 'hidden'}`}
+        muted
+        className={`w-full h-full object-cover ${showVideo ? 'block' : 'opacity-0 absolute'}`}
       />
       
       {!showVideo && (
@@ -85,7 +113,9 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
               d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-sm">Waiting for connection...</p>
+          <p className="text-sm">
+            {stream && hasVideoTrack ? "Syncing video..." : "Waiting for connection..."}
+          </p>
         </div>
       )}
 

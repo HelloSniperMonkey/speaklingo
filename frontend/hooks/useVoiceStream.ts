@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { API_CONFIG } from "@/lib/apiConfig";
 
 // Voice chunk message from WebSocket
 interface VoiceChunkMessage {
@@ -49,7 +50,7 @@ interface UseVoiceStreamReturn {
   setPaused: (paused: boolean) => void;
 }
 
-const DEFAULT_WS_URL = "ws://localhost:8768";
+const DEFAULT_WS_URL = API_CONFIG.ws.voice;
 
 export function useVoiceStream({
   roomId,
