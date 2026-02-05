@@ -46,7 +46,8 @@ client = Groq(api_key=Config.GROQ_API_KEY)
 class TranslationState:
     """Tracks translation state per user/room."""
     def __init__(self):
-        self.last_translated_context = ""  # What we've already translated
+        self.last_translated_context = ""  # What we've already translated (source)
+        self.last_translated_output = ""   # The actual translation output we sent
         self.chunk_translations: Dict[int, str] = {}  # sequence -> translation
         self.last_sequence = -1
         
@@ -59,6 +60,54 @@ def get_translation_state(room_id: str, user_id: str) -> TranslationState:
     if key not in translation_states:
         translation_states[key] = TranslationState()
     return translation_states[key]
+
+
+def remove_duplicate_prefix(new_translation: str, previous_translation: str) -> str:
+    """
+    Remove overlapping content from the start of new_translation
+    that matches the end of previous_translation.
+    
+    Example:
+      previous: "I want to say that there's a class tomorrow"
+      new:      "I want to say that there's a class tomorrow but I don't feel like going"
+      result:   "but I don't feel like going"
+    """
+    if not previous_translation or not new_translation:
+        return new_translation
+    
+    prev_words = previous_translation.lower().split()
+    new_words = new_translation.split()
+    new_lower = [w.lower() for w in new_words]
+    
+    # Look for overlap at the start of new_translation
+    # Try matching increasing prefixes of new with suffix of previous
+    best_overlap = 0
+    
+    for overlap_len in range(1, min(len(prev_words), len(new_words)) + 1):
+        # Check if the last overlap_len words of previous match first overlap_len of new
+        if prev_words[-overlap_len:] == new_lower[:overlap_len]:
+            best_overlap = overlap_len
+    
+    if best_overlap > 0:
+        # Remove the overlapping words from new translation
+        result = ' '.join(new_words[best_overlap:])
+        if result:
+            return result
+    
+    # Also check for significant content overlap (more than 50% words match)
+    if len(new_words) > 3:
+        matching = sum(1 for w in new_lower if w in prev_words)
+        if matching >= len(new_words) * 0.7:
+            # This translation is mostly duplicate content
+            # Find the unique part at the end
+            for i in range(len(new_words)):
+                remaining = new_words[i:]
+                remaining_lower = [w.lower() for w in remaining]
+                if not all(w in prev_words for w in remaining_lower):
+                    return ' '.join(remaining)
+            return ""  # Everything was duplicate
+    
+    return new_translation
 
 
 async def translate_with_context(
@@ -77,24 +126,25 @@ async def translate_with_context(
     
     # Build the prompt
     if context.strip():
-        prompt = f"""You are a real-time translator. Translate the [NEW TEXT] from the source language to {target_language}.
+        prompt = f"""You are a real-time speech translator. Translate [NEW TEXT] from the source language to {target_language}.
 
-[CONTEXT - Previously translated, use for coherence but DO NOT translate again]:
+[PREVIOUSLY SPOKEN - For understanding context, DO NOT translate]
 {context}
 
-[NEW TEXT - Translate ONLY this]:
+[NEW TEXT - Translate THIS ONLY]
 {new_text}
 
-Rules:
-1. ONLY output the translation of [NEW TEXT]
-2. Use [CONTEXT] to understand meaning but don't repeat it
-3. Keep the translation natural and coherent with context
-4. Do NOT include any explanations or notes
+CRITICAL RULES:
+1. Output ONLY the translation of [NEW TEXT], never repeat [PREVIOUSLY SPOKEN]
+2. Use [PREVIOUSLY SPOKEN] to understand context and meaning
+3. If [NEW TEXT] is incomplete/fragmented, translate it naturally as a continuation
+4. Make the translation flow naturally from the context
+5. NO explanations, NO notes, ONLY the translation
 
-Translation of [NEW TEXT]:"""
+Translation:"""
     else:
         # No context, simple translation
-        prompt = f"""Translate the following to {target_language}. Only output the translation, nothing else.
+        prompt = f"""Translate to {target_language}. Output ONLY the translation.
 
 Text: {new_text}
 
@@ -175,7 +225,19 @@ async def process_continuous_chunk(message_data: str, channel: str):
         if not translated.strip():
             return
         
-        logger.info(f"  ✅ Translated in {latency_ms:.0f}ms: '{translated[:50]}...'")
+        logger.info(f"  ✅ Raw translation ({latency_ms:.0f}ms): '{translated[:60]}...'")
+        
+        # DEDUPLICATION: Remove content that overlaps with previous translations
+        original_translated = translated
+        if state.last_translated_output:
+            translated = remove_duplicate_prefix(translated, state.last_translated_output)
+            if translated != original_translated:
+                logger.info(f"  🔧 Deduplicated: '{translated[:60]}...'")
+        
+        # Skip if nothing left after deduplication
+        if not translated.strip():
+            logger.info(f"  ⏭️ Skipped (fully duplicate content)")
+            return
         
         # Build translation message for TTS
         translation_msg = {
@@ -198,7 +260,8 @@ async def process_continuous_chunk(message_data: str, channel: str):
             'metadata': {
                 'mode': 'continuous',
                 'contextLength': len(context),
-                'newTextLength': len(new_text)
+                'newTextLength': len(new_text),
+                'deduplicated': translated != original_translated
             }
         }
         
@@ -207,11 +270,20 @@ async def process_continuous_chunk(message_data: str, channel: str):
         translation_channel = f"room:{room_id}:translation"
         await redis_client.publish(translation_channel, json.dumps(translation_msg))
         
-        # Update state
+        # Update state for next deduplication check
+        # Append to last_translated_output (keep rolling window)
+        if state.last_translated_output:
+            state.last_translated_output = state.last_translated_output + " " + translated
+            # Keep last ~200 chars for deduplication window
+            if len(state.last_translated_output) > 200:
+                state.last_translated_output = state.last_translated_output[-200:]
+        else:
+            state.last_translated_output = translated
+        
         state.chunk_translations[chunk_sequence] = translated
         state.last_sequence = chunk_sequence
         
-        logger.info(f"  📤 Dispatched to TTS channel")
+        logger.info(f"  📤 Dispatched to TTS: '{translated[:50]}...'")
     
     except Exception as e:
         logger.error(f"Error processing chunk: {e}", exc_info=True)

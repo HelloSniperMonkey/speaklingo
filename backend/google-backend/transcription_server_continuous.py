@@ -58,18 +58,23 @@ CONTEXT_WINDOW_SECONDS = 4.0  # Keep 4 seconds of context
 
 # Character-based context window
 # Average speaking rate: ~150 words/min = ~2.5 words/sec = ~15 chars/sec
-# 4 seconds of context ≈ 60-80 characters
-CONTEXT_MAX_CHARS = 100  # Maximum characters to keep in context window
+# 4-5 seconds of context ≈ 60-100 characters
+# For non-Latin scripts (Bengali, Hindi, etc.), characters are denser
+CONTEXT_MAX_CHARS = 150  # Increased for better context in non-Latin scripts
 
 # Hybrid chunk emission settings
 # Emit when ANY of these conditions are met:
-# 1. Sentence boundary (., ?, !) detected AND silence > SENTENCE_SILENCE_MS
+# 1. Sentence boundary detected AND silence > SENTENCE_SILENCE_MS
 # 2. Long silence > LONG_SILENCE_MS (pause in speech without sentence end)
 # 3. Timer reaches CHUNK_INTERVAL_SECONDS (fallback for continuous speech)
 # 4. BUT only if MIN_CHUNK_LENGTH characters accumulated
 
-MIN_CHUNK_LENGTH = 15  # Minimum characters before any emission (prevents single words)
-SENTENCE_ENDINGS = '.?？!。'  # Characters that indicate sentence boundaries
+MIN_CHUNK_LENGTH = 25  # Increased to get more complete phrases (prevents fragments)
+# Sentence endings for multiple languages:
+# . ? ! - English/Western
+# 。？！ - Chinese/Japanese
+# । - Bengali/Hindi (Devanagari purna viram)
+SENTENCE_ENDINGS = '.?!。？！।'
 SENTENCE_SILENCE_MS = 200  # Short silence needed after sentence ending
 LONG_SILENCE_MS = 800  # Long silence triggers emit even without sentence ending
 

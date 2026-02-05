@@ -245,3 +245,139 @@ INFO:__main__:🔄 Chunk 6: context='ইচ্ছা করছে না কা�
 INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
 INFO:__main__:  ✅ Translated in 321ms: 'if I don't read a bit, then it's even more...'
 INFO:__main__:  📤 Dispatched to TTS channel
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/translate-api/translation_processor_continuous.py", line 311, in main
+    target_user_id = 'local-user'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/client.py", line 1018, in listen
+    response = await self.handle_message(await self.parse_response(block=True))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/client.py", line 905, in parse_response
+    response = await self._execute(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/client.py", line 885, in _execute
+    return await conn.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/retry.py", line 59, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/connection.py", line 510, in read_response
+    response = await self._parser.read_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/_parsers/resp2.py", line 82, in read_response
+    response = await self._read_response(disable_decoding=disable_decoding)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/_parsers/resp2.py", line 90, in _read_response
+    raw = await self._readline()
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/_parsers/base.py", line 219, in _readline
+    data = await self._stream.readline()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/streams.py", line 568, in readline
+    line = await self.readuntil(sep)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/streams.py", line 660, in readuntil
+    await self._wait_for_data('readuntil')
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/streams.py", line 545, in _wait_for_data
+    await self._waiter
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/translate-api/translation_processor_continuous.py", line 328, in <module>
+    'isFinal': True,
+^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+INFO:__main__:============================================================
+INFO:__main__:  SLIDING WINDOW TRANSLATION PROCESSOR
+INFO:__main__:  Mode: Continuous chunks with context
+INFO:__main__:  Translates 2s new text with 4s context
+INFO:__main__:============================================================
+INFO:redis_client:Redis connected: localhost:6379
+INFO:__main__:Subscribed to: room:*:transcription, room:*:invalidation
+INFO:__main__:🔄 Chunk 0: context='...' new='আমি বলছিলাম যে কালকে ক্লাসে খুবই ঘুম পাচ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (439ms): 'I was saying that I was feeling very sleepy in class yesterd...'
+INFO:__main__:  📤 Dispatched to TTS: 'I was saying that I was feeling very sleepy in cla...'
+INFO:__main__:🔄 Chunk 1: context='আমি বলছিলাম যে কালকে ক্লাসে খু...' new='ছিল না প্রফেসর এটা আমার...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (591ms): 'wasn't sure what the professor was saying, it was my...'
+INFO:__main__:  📤 Dispatched to TTS: 'wasn't sure what the professor was saying, it was ...'
+INFO:__main__:🔄 Chunk 2: context='আমি বলছিলাম যে কালকে ক্লাসে খু...' new='কোন দোষ নাই...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (340ms): 'It's not my fault...'
+INFO:__main__:  📤 Dispatched to TTS: 'It's not my fault...'
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/translate-api/translation_processor_continuous.py", line 382, in main
+    
+
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/client.py", line 1018, in listen
+    response = await self.handle_message(await self.parse_response(block=True))
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/client.py", line 905, in parse_response
+    response = await self._execute(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/client.py", line 885, in _execute
+    return await conn.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/retry.py", line 59, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/asyncio/connection.py", line 510, in read_response
+    response = await self._parser.read_response(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/_parsers/resp2.py", line 82, in read_response
+    response = await self._read_response(disable_decoding=disable_decoding)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/_parsers/resp2.py", line 90, in _read_response
+    raw = await self._readline()
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/.venv/lib/python3.12/site-packages/redis/_parsers/base.py", line 219, in _readline
+    data = await self._stream.readline()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/streams.py", line 568, in readline
+    line = await self.readuntil(sep)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/streams.py", line 660, in readuntil
+    await self._wait_for_data('readuntil')
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/streams.py", line 545, in _wait_for_data
+    await self._waiter
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/translate-api/translation_processor_continuous.py", line 399, in <module>
+    if __name__ == '__main__':
+        ^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+INFO:__main__:============================================================
+INFO:__main__:  SLIDING WINDOW TRANSLATION PROCESSOR
+INFO:__main__:  Mode: Continuous chunks with context
+INFO:__main__:  Translates 2s new text with 4s context
+INFO:__main__:============================================================
+INFO:redis_client:Redis connected: localhost:6379
+INFO:__main__:Subscribed to: room:*:transcription, room:*:invalidation

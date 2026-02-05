@@ -206,3 +206,12 @@ INFO:__main__:  📤 Published to room:KGXwnxGm4rPyjtOND3l1:voice-chunk
 INFO:__main__:🔊 Chunk 6: 'if I don't read a bit, then it's even mo...'
 INFO:__main__:  ✅ Generated 3.84s audio in 1.81s (2.1x RT)
 INFO:__main__:  📤 Published to room:KGXwnxGm4rPyjtOND3l1:voice-chunk
+INFO:__main__:🔊 Chunk 0: 'I was saying that I was feeling very sle...'
+INFO:__main__:  ✅ Generated 6.36s audio in 3.24s (2.0x RT)
+INFO:__main__:  📤 Published to room:KGXwnxGm4rPyjtOND3l1:voice-chunk
+INFO:__main__:🔊 Chunk 1: 'wasn't sure what the professor was sayin...'
+INFO:__main__:  ✅ Generated 5.28s audio in 2.46s (2.1x RT)
+INFO:__main__:  📤 Published to room:KGXwnxGm4rPyjtOND3l1:voice-chunk
+INFO:__main__:🔊 Chunk 2: 'It's not my fault...'
+INFO:__main__:  ✅ Generated 2.04s audio in 1.09s (1.9x RT)
+INFO:__main__:  📤 Published to room:KGXwnxGm4rPyjtOND3l1:voice-chunk

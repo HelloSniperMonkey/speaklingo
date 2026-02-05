@@ -366,3 +366,70 @@ KeyboardInterrupt
 2026-02-06 01:57:57,127 - INFO - Session 4418428160: Restarting stream (gen 1)
 2026-02-06 01:57:57,128 - INFO - Starting continuous stream gen 1
 2026-02-06 01:57:57,394 - INFO - Stream gen 0 superseded
+2026-02-06 02:01:23,623 - INFO - Session 4418428160: Stopping
+2026-02-06 02:01:23,624 - INFO - Chunk timer stopped
+2026-02-06 02:01:23,624 - INFO - Hybrid detector stopped
+2026-02-06 02:01:23,985 - INFO - Stream gen 1 ended normally
+2026-02-06 02:02:47,813 - INFO - Session ended: 4418428160
+2026-02-06 02:02:47,814 - INFO - connection closed
+2026-02-06 02:02:47,817 - INFO - connection open
+2026-02-06 02:02:47,817 - INFO - New continuous client: 4419591904
+2026-02-06 02:02:47,912 - INFO - Config: lang=bn-IN, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 02:02:47,912 - ERROR - Message error: name 'SILENCE_THRESHOLD_MS' is not defined
+2026-02-06 02:02:47,912 - INFO - Session 4419591904: Starting continuous mode
+2026-02-06 02:02:47,912 - INFO - Starting continuous stream gen 0
+2026-02-06 02:02:47,913 - INFO - Starting timer fallback (interval: 3.0s)
+2026-02-06 02:02:47,913 - INFO - Starting hybrid detector (sentence+200ms, long silence 800ms, min 15 chars)
+2026-02-06 02:02:53,914 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 02:02:53,919 - INFO - ⏱️ Chunk 0 [timer]: new='আমি বলছিলাম যে কালকে ক্লাসে খুবই ঘুম পাচ' ctx=''
+2026-02-06 02:02:56,920 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 02:02:56,924 - INFO - ⏱️ Chunk 1 [timer]: new='ছিল না প্রফেসর এটা আমার' ctx='ুবই ঘুম পাচ্ছিল কারন কি ঠিকঠাক'
+2026-02-06 02:02:57,860 - INFO - 📤 Chunk 2 [finalize]: new='কোন দোষ নাই' ctx='ঠিকঠাক ছিল না প্রফেসর এটা আমার'
+2026-02-06 02:02:57,860 - INFO - Session 4419591904: Restarting stream (gen 1)
+2026-02-06 02:02:57,860 - INFO - Starting continuous stream gen 1
+2026-02-06 02:02:57,977 - INFO - Stream gen 0 superseded
+2026-02-06 02:03:01,296 - INFO - Session 4419591904: Stopping
+2026-02-06 02:03:01,297 - INFO - Chunk timer stopped
+2026-02-06 02:03:01,297 - INFO - Hybrid detector stopped
+2026-02-06 02:03:01,558 - INFO - Stream gen 1 ended normally
+2026-02-06 02:14:43,704 - INFO - server closing
+2026-02-06 02:14:43,705 - INFO - Session ended: 4419591904
+2026-02-06 02:14:43,705 - INFO - connection closed
+2026-02-06 02:14:43,705 - INFO - server closed
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 589, in main
+    port,
+    ^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 593, in <module>
+    ):
+    ^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+2026-02-06 02:14:44,424 - INFO - Found credentials: /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/google-backend/credential-videoapp.json
+2026-02-06 02:14:44,496 - INFO - Google Speech Async Client initialized.
+2026-02-06 02:14:44,496 - INFO - ============================================================
+2026-02-06 02:14:44,496 - INFO -   HYBRID TRANSCRIPTION SERVER
+2026-02-06 02:14:44,496 - INFO -   Emission triggers:
+2026-02-06 02:14:44,496 - INFO -     📝 Sentence end + 200ms silence
+2026-02-06 02:14:44,496 - INFO -     🔇 Long silence: 800ms
+2026-02-06 02:14:44,496 - INFO -     ⏱️  Timer fallback: 3.0s
+2026-02-06 02:14:44,496 - INFO -   Min chunk: 25 chars
+2026-02-06 02:14:44,496 - INFO -   Context: ~150 chars
+2026-02-06 02:14:44,496 - INFO -   Server: 0.0.0.0:8765
+2026-02-06 02:14:44,496 - INFO - ============================================================
+2026-02-06 02:14:44,497 - INFO - server listening on 0.0.0.0:8765
