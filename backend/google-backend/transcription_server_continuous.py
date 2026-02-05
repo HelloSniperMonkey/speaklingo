@@ -124,6 +124,47 @@ class ContinuousTranscriptionSession:
             self.last_text_update_time = time.time()  # Reset silence timer
             self.silence_emitted = False  # Allow new silence-based emission
     
+    def _compute_new_text(self, current_text: str) -> str:
+        """
+        Compute genuinely new text vs last_emitted_text using word-level diffing.
+        
+        Handles the case where Google STT's is_final result differs slightly
+        from the accumulated interim (e.g., minor word corrections), which
+        would cause a naive startswith() check to fail and re-emit everything.
+        """
+        if not current_text:
+            return ""
+        if not self.last_emitted_text:
+            return current_text
+        
+        # Fast path: exact character-level prefix match
+        if current_text.startswith(self.last_emitted_text):
+            return current_text[len(self.last_emitted_text):].strip()
+        
+        # Slow path: word-level prefix matching
+        # Handles minor differences from Google finals (punctuation, word corrections)
+        last_words = self.last_emitted_text.split()
+        current_words = current_text.split()
+        
+        # Strip trailing punctuation for fuzzy word comparison
+        def clean(w):
+            return w.rstrip('.,!?;:\u0964\u0965')  # includes Bengali danda
+        
+        common_prefix_len = 0
+        for i in range(min(len(last_words), len(current_words))):
+            if clean(last_words[i]) == clean(current_words[i]):
+                common_prefix_len = i + 1
+            else:
+                break
+        
+        # If we matched a significant portion of last_emitted (>50%), trust the diff
+        if common_prefix_len > 0 and common_prefix_len >= len(last_words) * 0.5:
+            new_words = current_words[common_prefix_len:]
+            return ' '.join(new_words).strip()
+        
+        # Fallback: treat entire text as new
+        return current_text
+    
     async def emit_chunk(self, force: bool = False, trigger: str = "manual"):
         """
         Emit the current transcription chunk if there's new content.
@@ -140,10 +181,8 @@ class ContinuousTranscriptionSession:
         if current_text == self.last_emitted_text and not force:
             return
         
-        # Compute the new text (what's added since last emit)
-        new_text = current_text
-        if self.last_emitted_text and current_text.startswith(self.last_emitted_text):
-            new_text = current_text[len(self.last_emitted_text):].strip()
+        # Compute the new text using word-level diffing (handles Google final corrections)
+        new_text = self._compute_new_text(current_text)
         
         if not new_text:
             return
@@ -229,10 +268,7 @@ class ContinuousTranscriptionSession:
                 
                 # Check if we have enough text to emit
                 current_text = self.current_interim_text.strip()
-                if self.last_emitted_text and current_text.startswith(self.last_emitted_text):
-                    new_text = current_text[len(self.last_emitted_text):].strip()
-                else:
-                    new_text = current_text
+                new_text = self._compute_new_text(current_text) if current_text else ""
                 
                 # Only emit if we have minimum content
                 if len(new_text) >= MIN_CHUNK_LENGTH:
@@ -273,10 +309,7 @@ class ContinuousTranscriptionSession:
                 
                 # Get the new text since last emission
                 current_text = self.current_interim_text.strip()
-                if self.last_emitted_text and current_text.startswith(self.last_emitted_text):
-                    new_text = current_text[len(self.last_emitted_text):].strip()
-                else:
-                    new_text = current_text
+                new_text = self._compute_new_text(current_text) if current_text else ""
                 
                 # Check minimum length requirement
                 if len(new_text) < MIN_CHUNK_LENGTH:
