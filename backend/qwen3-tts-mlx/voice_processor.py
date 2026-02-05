@@ -25,8 +25,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Model configuration
-MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-4bit"
-FALLBACK_MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-4bit"
+MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit"
+FALLBACK_MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit"
 DEFAULT_VOICE = "Chelsie"
 
 # Audio chunk size in seconds (500ms for low latency)
