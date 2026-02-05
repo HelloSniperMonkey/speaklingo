@@ -64,12 +64,13 @@ pm2 start python --name "voice-ws-server" \
 	--error /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/logs/voice-ws-server-err.log \
 	-- voice_ws_server.py
 
-# Start Voice Processor
-echo "Starting Voice Processor..."
+# Start Voice Processor (STREAMING v2 - publishes chunks as generated) change back to voice_processor.py if dont need streaming
+echo "Starting Voice Processor (Streaming Mode)..."
+cd /Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/qwen3-tts-mlx
 pm2 start python --name "voice-processor" \
-	--output /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/logs/voice-processor-out.log \
-	--error /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/logs/voice-processor-err.log \
-	-- voice_processor.py
+	--output /Users/soumyayotimohanta/Developer/hackathon/webrtc-new/logs/voice-processor-out.log \
+	--error /Users/soumyayotimohanta/Developer/hackathon/webrtc-new/logs/voice-processor-err.log \
+	-- voice_processor_sentence_chunking.py
 
 # Start Load Balancer
 echo "Starting Load Balancer..."

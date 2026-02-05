@@ -48,7 +48,7 @@ Text: {text}
 Translation:"""
 
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",  # Fast and good for translation
+            model="llama-3.3-70b-versatile",  # Fastest model, good for translation
             messages=[
                 {
                     "role": "user",
