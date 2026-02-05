@@ -3,7 +3,18 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+# Try to load .env from multiple possible locations
+possible_env_paths = [
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'),
+    '/Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/translate-api/.env',
+]
+
+for env_path in possible_env_paths:
+    if os.path.exists(env_path):
+        load_dotenv(env_path)
+        break
+else:
+    load_dotenv()  # Try default behavior
 
 class Config:
     # Redis
@@ -21,3 +32,4 @@ class Config:
     # Timeouts
     REDIS_TIMEOUT = 5  # seconds
     TRANSLATION_TIMEOUT = 10  # seconds
+
