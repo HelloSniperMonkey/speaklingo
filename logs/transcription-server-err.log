@@ -1,0 +1,368 @@
+2026-02-06 00:42:09,423 - INFO - Found credentials: /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/google-backend/credential-videoapp.json
+2026-02-06 00:42:09,514 - INFO - Google Speech Async Client initialized.
+2026-02-06 00:42:09,514 - INFO - ============================================================
+2026-02-06 00:42:09,514 - INFO -   CONTINUOUS TRANSCRIPTION SERVER
+2026-02-06 00:42:09,514 - INFO -   Chunk interval: 2.0s
+2026-02-06 00:42:09,514 - INFO -   Context window: 4.0s
+2026-02-06 00:42:09,514 - INFO -   Server: 0.0.0.0:8765
+2026-02-06 00:42:09,514 - INFO - ============================================================
+2026-02-06 00:42:09,515 - INFO - server listening on 0.0.0.0:8765
+2026-02-06 00:42:21,601 - INFO - connection open
+2026-02-06 00:42:21,602 - INFO - New continuous client: 4498089616
+2026-02-06 00:42:21,701 - INFO - Config: lang=auto, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 00:42:21,701 - INFO - Started continuous transcription: 2.0s timer + 400ms silence detection
+2026-02-06 00:42:21,701 - INFO - Session 4498089616: Starting continuous mode
+2026-02-06 00:42:21,701 - INFO - Starting continuous stream gen 0
+2026-02-06 00:42:21,701 - INFO - Starting chunk timer (interval: 2.0s, fallback for continuous speech)
+2026-02-06 00:42:21,701 - INFO - Starting silence detector (threshold: 400ms)
+2026-02-06 00:42:24,254 - INFO - Session 4498089616: Stopping
+2026-02-06 00:42:24,255 - INFO - Chunk timer stopped
+2026-02-06 00:42:24,255 - INFO - Silence detector stopped
+2026-02-06 00:42:24,606 - INFO - Stream gen 0 ended normally
+2026-02-06 00:42:27,231 - INFO - Session ended: 4498089616
+2026-02-06 00:42:27,231 - INFO - connection closed
+2026-02-06 00:42:27,234 - INFO - connection open
+2026-02-06 00:42:27,234 - INFO - New continuous client: 4497982912
+2026-02-06 00:42:27,331 - INFO - Config: lang=bn-IN, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 00:42:27,331 - INFO - Started continuous transcription: 2.0s timer + 400ms silence detection
+2026-02-06 00:42:27,331 - INFO - Session 4497982912: Starting continuous mode
+2026-02-06 00:42:27,332 - INFO - Starting continuous stream gen 0
+2026-02-06 00:42:27,332 - INFO - Starting chunk timer (interval: 2.0s, fallback for continuous speech)
+2026-02-06 00:42:27,333 - INFO - Starting silence detector (threshold: 400ms)
+2026-02-06 00:42:29,335 - INFO - Redis connected: localhost:6379
+2026-02-06 00:42:29,347 - INFO - ⏱️ Chunk 0 [timer]: new='এবার যদি...' context_len=0
+2026-02-06 00:42:30,747 - INFO - 🔇 Silence detected (428ms) - emitting chunk early
+2026-02-06 00:42:30,762 - INFO - 🔇 Chunk 1 [silence]: new='কাজ...' context_len=8
+2026-02-06 00:42:31,350 - INFO - ⏱️ Chunk 2 [timer]: new='করে...' context_len=12
+2026-02-06 00:42:32,166 - INFO - 🔇 Silence detected (512ms) - emitting chunk early
+2026-02-06 00:42:32,167 - INFO - 🔇 Chunk 3 [silence]: new='তাহলে...' context_len=7
+2026-02-06 00:42:32,289 - INFO - Session 4497982912: Restarting stream (gen 1)
+2026-02-06 00:42:32,289 - INFO - Starting continuous stream gen 1
+2026-02-06 00:42:32,414 - INFO - Stream gen 0 superseded
+2026-02-06 00:42:41,356 - INFO - ⏱️ Chunk 0 [timer]: new='কাজ করছে...' context_len=0
+2026-02-06 00:42:43,213 - INFO - 🔇 Silence detected (547ms) - emitting chunk early
+2026-02-06 00:42:43,215 - INFO - 🔇 Chunk 1 [silence]: new='এ প্রবলেম হচ্ছে না...' context_len=8
+2026-02-06 00:42:44,017 - INFO - 🔇 Silence detected (576ms) - emitting chunk early
+2026-02-06 00:42:44,019 - INFO - 🔇 Chunk 2 [silence]: new='তুই...' context_len=27
+2026-02-06 00:42:44,429 - INFO - 📤 Chunk 3 [finalize]: new='ভালই হচ্ছে...' context_len=22
+2026-02-06 00:42:44,430 - INFO - Session 4497982912: Restarting stream (gen 2)
+2026-02-06 00:42:44,430 - INFO - Starting continuous stream gen 2
+2026-02-06 00:42:44,763 - INFO - Stream gen 1 superseded
+2026-02-06 00:44:25,409 - INFO - ⏱️ Chunk 0 [timer]: new='আমাকে মনে হচ্ছে...' context_len=0
+2026-02-06 00:44:26,467 - INFO - 🔇 Silence detected (481ms) - emitting chunk early
+2026-02-06 00:44:26,469 - INFO - 🔇 Chunk 1 [silence]: new='নাকি এটা...' context_len=15
+2026-02-06 00:44:27,413 - INFO - ⏱️ Chunk 2 [timer]: new='ব্যাকগ্রাউন্ড...' context_len=24
+2026-02-06 00:44:28,277 - INFO - 🔇 Silence detected (437ms) - emitting chunk early
+2026-02-06 00:44:28,277 - INFO - 🔇 Chunk 3 [silence]: new='সাউন্ড শুনতে...' context_len=22
+2026-02-06 00:44:28,456 - INFO - 📤 Chunk 4 [finalize]: new='পাচ্ছে...' context_len=26
+2026-02-06 00:44:28,456 - INFO - Session 4497982912: Restarting stream (gen 3)
+2026-02-06 00:44:28,457 - INFO - Starting continuous stream gen 3
+2026-02-06 00:44:28,728 - INFO - Stream gen 2 superseded
+2026-02-06 00:44:39,421 - INFO - ⏱️ Chunk 0 [timer]: new='না...' context_len=0
+2026-02-06 00:44:40,930 - INFO - 🔇 Silence detected (550ms) - emitting chunk early
+2026-02-06 00:44:40,932 - INFO - 🔇 Chunk 1 [silence]: new='আগের থেকে খারাপ হয়ে গেল...' context_len=2
+2026-02-06 00:44:41,424 - INFO - ⏱️ Chunk 2 [timer]: new='এটা...' context_len=27
+2026-02-06 00:44:41,772 - INFO - Session 4497982912: Restarting stream (gen 4)
+2026-02-06 00:44:41,772 - INFO - Starting continuous stream gen 4
+2026-02-06 00:44:41,926 - INFO - Stream gen 3 superseded
+2026-02-06 00:44:48,702 - INFO - Session 4497982912: Stopping
+2026-02-06 00:44:48,702 - INFO - Chunk timer stopped
+2026-02-06 00:44:48,702 - INFO - Silence detector stopped
+2026-02-06 00:44:49,019 - INFO - Stream gen 4 ended normally
+2026-02-06 00:44:49,857 - INFO - Session ended: 4497982912
+2026-02-06 00:44:49,858 - INFO - connection closed
+2026-02-06 00:44:52,059 - INFO - connection open
+2026-02-06 00:44:52,059 - INFO - New continuous client: 4493493408
+2026-02-06 00:44:52,159 - INFO - Config: lang=auto, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 00:44:52,159 - INFO - Started continuous transcription: 2.0s timer + 400ms silence detection
+2026-02-06 00:44:52,159 - INFO - Session 4493493408: Starting continuous mode
+2026-02-06 00:44:52,159 - INFO - Starting continuous stream gen 0
+2026-02-06 00:44:52,160 - INFO - Starting chunk timer (interval: 2.0s, fallback for continuous speech)
+2026-02-06 00:44:52,160 - INFO - Starting silence detector (threshold: 400ms)
+2026-02-06 00:44:59,876 - INFO - Session 4493493408: Stopping
+2026-02-06 00:44:59,877 - INFO - Chunk timer stopped
+2026-02-06 00:44:59,877 - INFO - Silence detector stopped
+2026-02-06 00:45:00,254 - INFO - Stream gen 0 ended normally
+2026-02-06 00:45:02,873 - INFO - Session ended: 4493493408
+2026-02-06 00:45:02,873 - INFO - connection closed
+2026-02-06 00:45:02,876 - INFO - connection open
+2026-02-06 00:45:02,876 - INFO - New continuous client: 4498093072
+2026-02-06 00:45:02,974 - INFO - Config: lang=bn-IN, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 00:45:02,974 - INFO - Started continuous transcription: 2.0s timer + 400ms silence detection
+2026-02-06 00:45:02,974 - INFO - Session 4498093072: Starting continuous mode
+2026-02-06 00:45:02,974 - INFO - Starting continuous stream gen 0
+2026-02-06 00:45:02,980 - INFO - Starting chunk timer (interval: 2.0s, fallback for continuous speech)
+2026-02-06 00:45:02,981 - INFO - Starting silence detector (threshold: 400ms)
+2026-02-06 00:45:04,984 - INFO - ⏱️ Chunk 0 [timer]: new='টার্গেট...' context_len=0
+2026-02-06 00:45:06,987 - INFO - ⏱️ Chunk 1 [timer]: new='আগের থেকে খারাপ কি করে হয়ে গেল...' context_len=7
+2026-02-06 00:45:07,597 - INFO - 📤 Chunk 2 [finalize]: new='আগে তো ভালোই...' context_len=39
+2026-02-06 00:45:07,597 - INFO - Session 4498093072: Restarting stream (gen 1)
+2026-02-06 00:45:07,597 - INFO - Starting continuous stream gen 1
+2026-02-06 00:45:07,761 - INFO - Stream gen 0 superseded
+2026-02-06 00:45:16,664 - INFO - Session 4498093072: Stopping
+2026-02-06 00:45:16,665 - INFO - Chunk timer stopped
+2026-02-06 00:45:16,665 - INFO - Silence detector stopped
+2026-02-06 00:45:17,049 - INFO - Stream gen 1 ended normally
+2026-02-06 00:49:30,349 - INFO - server closing
+2026-02-06 00:49:30,350 - INFO - Session ended: 4498093072
+2026-02-06 00:49:30,350 - INFO - connection closed
+2026-02-06 00:49:30,350 - INFO - server closed
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 521, in main
+    except Exception as e:
+        ^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 525, in <module>
+    logger.info("=" * 60)
+    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+2026-02-06 00:49:30,903 - INFO - Found credentials: /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/google-backend/credential-videoapp.json
+2026-02-06 00:49:30,965 - INFO - Google Speech Async Client initialized.
+2026-02-06 00:49:30,965 - INFO - ============================================================
+2026-02-06 00:49:30,965 - INFO -   CONTINUOUS TRANSCRIPTION SERVER
+2026-02-06 00:49:30,965 - INFO -   Chunk interval: 2.0s
+2026-02-06 00:49:30,965 - INFO -   Context window: 4.0s
+2026-02-06 00:49:30,965 - INFO -   Server: 0.0.0.0:8765
+2026-02-06 00:49:30,965 - INFO - ============================================================
+2026-02-06 00:49:30,965 - INFO - server listening on 0.0.0.0:8765
+2026-02-06 00:50:01,706 - INFO - server closing
+2026-02-06 00:50:01,707 - INFO - server closed
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 540, in main
+    ):
+       
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 544, in <module>
+    if __name__ == "__main__":
+        ^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+2026-02-06 00:50:02,144 - INFO - Found credentials: /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/google-backend/credential-videoapp.json
+2026-02-06 00:50:02,202 - INFO - Google Speech Async Client initialized.
+2026-02-06 00:50:02,202 - INFO - ============================================================
+2026-02-06 00:50:02,202 - INFO -   CONTINUOUS TRANSCRIPTION SERVER
+2026-02-06 00:50:02,202 - INFO -   Timer fallback: 2.0s
+2026-02-06 00:50:02,202 - INFO -   Silence threshold: 400ms
+2026-02-06 00:50:02,202 - INFO -   Context window: ~100 chars (~4.0s)
+2026-02-06 00:50:02,202 - INFO -   Server: 0.0.0.0:8765
+2026-02-06 00:50:02,202 - INFO - ============================================================
+2026-02-06 00:50:02,202 - INFO - server listening on 0.0.0.0:8765
+2026-02-06 00:50:31,893 - INFO - connection open
+2026-02-06 00:50:31,894 - INFO - New continuous client: 4420327648
+2026-02-06 00:50:31,987 - INFO - Config: lang=bn-IN, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 00:50:31,987 - INFO - Started continuous transcription: 2.0s timer + 400ms silence detection
+2026-02-06 00:50:31,987 - INFO - Session 4420327648: Starting continuous mode
+2026-02-06 00:50:31,988 - INFO - Starting continuous stream gen 0
+2026-02-06 00:50:31,989 - INFO - Starting chunk timer (interval: 2.0s, fallback for continuous speech)
+2026-02-06 00:50:31,989 - INFO - Starting silence detector (threshold: 400ms)
+2026-02-06 00:50:33,991 - INFO - Redis connected: localhost:6379
+2026-02-06 00:50:34,006 - INFO - ⏱️ Chunk 0 [timer]: new='এবার দেখি' ctx=''
+2026-02-06 00:50:35,403 - INFO - 🔇 Silence detected (449ms) - emitting chunk early
+2026-02-06 00:50:35,405 - INFO - 🔇 Chunk 1 [silence]: new='কি হয়' ctx='এবার দেখি'
+2026-02-06 00:50:36,009 - INFO - ⏱️ Chunk 2 [timer]: new='কারণ কি' ctx='এবার দেখি কি হয়'
+2026-02-06 00:50:37,572 - INFO - 📤 Chunk 3 [finalize]: new='আগের থেকে ভালো কাজ করা উচিত' ctx='এবার দেখি কি হয় কারণ কি'
+2026-02-06 00:50:37,572 - INFO - Session 4420327648: Restarting stream (gen 1)
+2026-02-06 00:50:37,573 - INFO - Starting continuous stream gen 1
+2026-02-06 00:50:37,795 - INFO - Stream gen 0 superseded
+2026-02-06 00:50:49,665 - INFO - 🔇 Silence detected (566ms) - emitting chunk early
+2026-02-06 00:50:49,670 - INFO - 🔇 Chunk 0 [silence]: new='এটা' ctx=''
+2026-02-06 00:50:50,018 - INFO - ⏱️ Chunk 1 [timer]: new='কিন্তু আগের' ctx='এটা'
+2026-02-06 00:50:52,020 - INFO - ⏱️ Chunk 2 [timer]: new='থেকেও ভালো আছে আর তুই এরকম' ctx='এটা কিন্তু আগের'
+2026-02-06 00:50:52,481 - INFO - 🔇 Silence detected (417ms) - emitting chunk early
+2026-02-06 00:50:52,483 - INFO - 🔇 Chunk 3 [silence]: new='করে' ctx='গের থেকেও ভালো আছে আর তুই এরকম'
+2026-02-06 00:50:53,085 - INFO - 🔇 Silence detected (423ms) - emitting chunk early
+2026-02-06 00:50:53,086 - INFO - 🔇 Chunk 4 [silence]: new='বাজে' ctx='থেকেও ভালো আছে আর তুই এরকম করে'
+2026-02-06 00:50:54,026 - INFO - ⏱️ Chunk 5 [timer]: new='আওয়াজ ব্যবহার করছিস রে' ctx=' ভালো আছে আর তুই এরকম করে বাজে'
+2026-02-06 00:50:54,852 - INFO - Session 4420327648: Restarting stream (gen 2)
+2026-02-06 00:50:54,853 - INFO - Starting continuous stream gen 2
+2026-02-06 00:50:55,171 - INFO - Stream gen 1 superseded
+2026-02-06 00:51:11,870 - INFO - 🔇 Silence detected (522ms) - emitting chunk early
+2026-02-06 00:51:11,873 - INFO - 🔇 Chunk 0 [silence]: new='কি কি' ctx=''
+2026-02-06 00:51:13,882 - INFO - 🔇 Silence detected (479ms) - emitting chunk early
+2026-02-06 00:51:13,885 - INFO - 🔇 Chunk 1 [silence]: new='বাজে একটা আওয়াজ' ctx='কি কি'
+2026-02-06 00:51:15,693 - INFO - 🔇 Silence detected (416ms) - emitting chunk early
+2026-02-06 00:51:15,695 - INFO - 🔇 Chunk 2 [silence]: new='কি কি বাজে এটা আমার নাম চেঞ্জ করবো' ctx='কি কি বাজে একটা আওয়াজ'
+2026-02-06 00:51:17,945 - INFO - Session 4420327648: Restarting stream (gen 3)
+2026-02-06 00:51:17,960 - INFO - Starting continuous stream gen 3
+2026-02-06 00:51:18,348 - INFO - Stream gen 2 superseded
+2026-02-06 00:51:29,535 - INFO - Session 4420327648: Stopping
+2026-02-06 00:51:29,535 - INFO - Chunk timer stopped
+2026-02-06 00:51:29,535 - INFO - Silence detector stopped
+2026-02-06 00:51:29,889 - INFO - Stream gen 3 ended normally
+2026-02-06 00:51:34,373 - INFO - Session ended: 4420327648
+2026-02-06 00:51:34,374 - INFO - connection closed
+2026-02-06 00:51:34,384 - INFO - connection open
+2026-02-06 00:51:34,384 - INFO - New continuous client: 4415171056
+2026-02-06 00:51:34,477 - INFO - Config: lang=bn-IN, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 00:51:34,477 - INFO - Started continuous transcription: 2.0s timer + 400ms silence detection
+2026-02-06 00:51:34,478 - INFO - Session 4415171056: Starting continuous mode
+2026-02-06 00:51:34,478 - INFO - Starting continuous stream gen 0
+2026-02-06 00:51:34,478 - INFO - Starting chunk timer (interval: 2.0s, fallback for continuous speech)
+2026-02-06 00:51:34,478 - INFO - Starting silence detector (threshold: 400ms)
+2026-02-06 00:51:36,482 - INFO - ⏱️ Chunk 0 [timer]: new='এটা' ctx=''
+2026-02-06 00:51:38,485 - INFO - ⏱️ Chunk 1 [timer]: new='আগের থেকে ভালো হয়েছে' ctx='এটা'
+2026-02-06 00:51:39,300 - INFO - 🔇 Silence detected (493ms) - emitting chunk early
+2026-02-06 00:51:39,302 - INFO - 🔇 Chunk 2 [silence]: new='কিন্তু তবুও' ctx='এটা আগের থেকে ভালো হয়েছে'
+2026-02-06 00:51:39,903 - INFO - 🔇 Silence detected (530ms) - emitting chunk early
+2026-02-06 00:51:39,905 - INFO - 🔇 Chunk 3 [silence]: new='একটু' ctx='র থেকে ভালো হয়েছে কিন্তু তবুও'
+2026-02-06 00:51:40,487 - INFO - ⏱️ Chunk 4 [timer]: new='প্রবলেম আছে' ctx='ে ভালো হয়েছে কিন্তু তবুও একটু'
+2026-02-06 00:51:41,712 - INFO - 🔇 Silence detected (464ms) - emitting chunk early
+2026-02-06 00:51:41,714 - INFO - 🔇 Chunk 5 [silence]: new='আমাকে মনে হচ্ছে' ctx='ে কিন্তু তবুও একটু প্রবলেম আছে'
+2026-02-06 00:51:42,336 - INFO - Session 4415171056: Stopping
+2026-02-06 00:51:42,337 - INFO - Chunk timer stopped
+2026-02-06 00:51:42,337 - INFO - Silence detector stopped
+2026-02-06 00:51:42,726 - INFO - Stream gen 0 ended normally
+2026-02-06 01:10:00,583 - INFO - Client disconnected: 4415171056
+2026-02-06 01:10:00,583 - INFO - Session ended: 4415171056
+2026-02-06 01:10:00,584 - INFO - connection closed
+2026-02-06 01:54:32,794 - INFO - server closing
+2026-02-06 01:54:32,794 - INFO - server closed
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 541, in main
+    await session.stop()
+    ^^^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/soumyayotimohanta/Developer/hackathon/webrtc-new/backend/google-backend/transcription_server_continuous.py", line 545, in <module>
+    for task in active_tasks:
+^^^^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/soumyayotimohanta/.local/share/uv/python/cpython-3.12.9-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+2026-02-06 01:54:33,565 - INFO - Found credentials: /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/google-backend/credential-videoapp.json
+2026-02-06 01:54:33,638 - INFO - Google Speech Async Client initialized.
+2026-02-06 01:54:33,638 - INFO - ============================================================
+2026-02-06 01:54:33,638 - INFO -   HYBRID TRANSCRIPTION SERVER
+2026-02-06 01:54:33,638 - INFO -   Emission triggers:
+2026-02-06 01:54:33,638 - INFO -     📝 Sentence end + 200ms silence
+2026-02-06 01:54:33,638 - INFO -     🔇 Long silence: 800ms
+2026-02-06 01:54:33,638 - INFO -     ⏱️  Timer fallback: 3.0s
+2026-02-06 01:54:33,638 - INFO -   Min chunk: 15 chars
+2026-02-06 01:54:33,638 - INFO -   Context: ~100 chars
+2026-02-06 01:54:33,638 - INFO -   Server: 0.0.0.0:8765
+2026-02-06 01:54:33,638 - INFO - ============================================================
+2026-02-06 01:54:33,638 - INFO - server listening on 0.0.0.0:8765
+2026-02-06 01:55:25,936 - INFO - connection open
+2026-02-06 01:55:25,937 - INFO - New continuous client: 4424114944
+2026-02-06 01:55:26,024 - INFO - Config: lang=bn-IN, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 01:55:26,025 - ERROR - Message error: name 'SILENCE_THRESHOLD_MS' is not defined
+2026-02-06 01:55:26,025 - INFO - Session 4424114944: Starting continuous mode
+2026-02-06 01:55:26,027 - INFO - Starting continuous stream gen 0
+2026-02-06 01:55:26,031 - INFO - Starting timer fallback (interval: 3.0s)
+2026-02-06 01:55:26,032 - INFO - Starting hybrid detector (sentence+200ms, long silence 800ms, min 15 chars)
+2026-02-06 01:55:32,033 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:55:32,035 - INFO - Redis connected: localhost:6379
+2026-02-06 01:55:32,045 - INFO - ⏱️ Chunk 0 [timer]: new='এবার দেখি কি হচ্ছে কারন কি আগেরবার তো খু' ctx=''
+2026-02-06 01:55:34,147 - INFO - 📤 Chunk 1 [finalize]: new='পেয়েছিলাম মাথা খারাপ হয়ে' ctx=' আগেরবার তো খুবই খারাপ রেজাল্ট'
+2026-02-06 01:55:34,147 - INFO - Session 4424114944: Restarting stream (gen 1)
+2026-02-06 01:55:34,147 - INFO - Starting continuous stream gen 1
+2026-02-06 01:55:34,602 - INFO - Stream gen 0 superseded
+2026-02-06 01:55:54,384 - INFO - 🔇 Long silence detected (897ms)
+2026-02-06 01:55:54,392 - INFO - 🔇 Chunk 0 [silence]: new='এবার তো একটু ঠিকঠাক মনে হচ্ছে' ctx=''
+2026-02-06 01:55:58,022 - INFO - 🔇 Long silence detected (875ms)
+2026-02-06 01:55:58,025 - INFO - 🔇 Chunk 1 [silence]: new='দেখা যাক এবার ভাল করে যদি কাজ করে তাহলে ' ctx='এবার তো একটু ঠিকঠাক মনে হচ্ছে'
+2026-02-06 01:55:59,596 - INFO - 📤 Chunk 2 [finalize]: new='এটাকে ঠিকঠাক' ctx=' ভাল করে যদি কাজ করে তাহলে আমি'
+2026-02-06 01:55:59,596 - INFO - Session 4424114944: Restarting stream (gen 2)
+2026-02-06 01:55:59,596 - INFO - Starting continuous stream gen 2
+2026-02-06 01:55:59,634 - INFO - Stream gen 1 superseded
+2026-02-06 01:56:17,056 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:56:17,060 - INFO - ⏱️ Chunk 0 [timer]: new='ভালো কাজ করছে আগের থেকে কিন্তু দেখি আরো' ctx=''
+2026-02-06 01:56:20,060 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:56:20,062 - INFO - ⏱️ Chunk 1 [timer]: new='একটু কমপ্লেক্স সেন্টেন্স দিলে যদি ভেঙে য' ctx='করছে আগের থেকে কিন্তু দেখি আরো'
+2026-02-06 01:56:21,782 - INFO - 📤 Chunk 2 [finalize]: new='ভেঙ্গে গেলে এটা কি আমাকে চেঞ্জ' ctx='স সেন্টেন্স দিলে যদি ভেঙে যায়'
+2026-02-06 01:56:21,782 - INFO - Session 4424114944: Restarting stream (gen 3)
+2026-02-06 01:56:21,782 - INFO - Starting continuous stream gen 3
+2026-02-06 01:56:21,837 - INFO - Stream gen 2 superseded
+2026-02-06 01:56:46,495 - INFO - 🔇 Long silence detected (801ms)
+2026-02-06 01:56:46,500 - INFO - 🔇 Chunk 0 [silence]: new='আগের থেকে ভালই কাজ করছে এবার' ctx=''
+2026-02-06 01:56:49,343 - INFO - 📤 Chunk 1 [finalize]: new='একটা জিনিস এটা জানতে চাই আমি ওটা হচ্ছে' ctx='আগের থেকে ভালই কাজ করছে এবার'
+2026-02-06 01:56:49,344 - INFO - Session 4424114944: Restarting stream (gen 4)
+2026-02-06 01:56:49,346 - INFO - Starting continuous stream gen 4
+2026-02-06 01:56:49,358 - INFO - Stream gen 3 superseded
+2026-02-06 01:56:53,526 - INFO - 📤 Chunk 0 [finalize]: new='না কাজ করতে পারে' ctx=''
+2026-02-06 01:56:53,526 - INFO - Session 4424114944: Restarting stream (gen 5)
+2026-02-06 01:56:53,528 - INFO - Starting continuous stream gen 5
+2026-02-06 01:56:53,802 - INFO - Stream gen 4 superseded
+2026-02-06 01:56:57,998 - INFO - 🔇 Long silence detected (831ms)
+2026-02-06 01:56:58,001 - INFO - 🔇 Chunk 0 [silence]: new='আমি হচ্ছে আরেকটি' ctx=''
+2026-02-06 01:56:59,073 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:56:59,075 - INFO - ⏱️ Chunk 1 [timer]: new='বিশেষ ইনক্রিমেন্ট করে দিই' ctx='আমি হচ্ছে আরেকটি'
+2026-02-06 01:57:00,865 - INFO - 📤 Chunk 2 [finalize]: new='তাহলে কি ওটা ঠিকঠাক কাজ' ctx='েকটি বিশেষ ইনক্রিমেন্ট করে দিই'
+2026-02-06 01:57:00,865 - INFO - Session 4424114944: Restarting stream (gen 6)
+2026-02-06 01:57:00,866 - INFO - Starting continuous stream gen 6
+2026-02-06 01:57:01,184 - INFO - Stream gen 5 superseded
+2026-02-06 01:57:04,632 - INFO - 📤 Chunk 0 [finalize]: new='না ঠিক' ctx=''
+2026-02-06 01:57:04,635 - INFO - Session 4424114944: Restarting stream (gen 7)
+2026-02-06 01:57:04,636 - INFO - Starting continuous stream gen 7
+2026-02-06 01:57:04,948 - INFO - Stream gen 6 superseded
+2026-02-06 01:57:25,198 - INFO - Session 4424114944: Stopping
+2026-02-06 01:57:25,200 - INFO - Chunk timer stopped
+2026-02-06 01:57:25,200 - INFO - Hybrid detector stopped
+2026-02-06 01:57:25,489 - INFO - Stream gen 7 ended normally
+2026-02-06 01:57:26,171 - INFO - Session ended: 4424114944
+2026-02-06 01:57:26,172 - INFO - connection closed
+2026-02-06 01:57:38,312 - INFO - connection open
+2026-02-06 01:57:38,312 - INFO - New continuous client: 4418428160
+2026-02-06 01:57:38,410 - INFO - Config: lang=bn-IN, room=KGXwnxGm4rPyjtOND3l1, user=local-user
+2026-02-06 01:57:38,410 - ERROR - Message error: name 'SILENCE_THRESHOLD_MS' is not defined
+2026-02-06 01:57:38,410 - INFO - Session 4418428160: Starting continuous mode
+2026-02-06 01:57:38,410 - INFO - Starting continuous stream gen 0
+2026-02-06 01:57:38,411 - INFO - Starting timer fallback (interval: 3.0s)
+2026-02-06 01:57:38,411 - INFO - Starting hybrid detector (sentence+200ms, long silence 800ms, min 15 chars)
+2026-02-06 01:57:41,411 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:57:41,415 - INFO - ⏱️ Chunk 0 [timer]: new='আমি বলতে চাই যে' ctx=''
+2026-02-06 01:57:44,416 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:57:44,419 - INFO - ⏱️ Chunk 1 [timer]: new='কালকে ক্লাস আছে কিন্তু আমার যাওয়ার ইচ্ছ' ctx='আমি বলতে চাই যে'
+2026-02-06 01:57:50,421 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:57:50,425 - INFO - ⏱️ Chunk 2 [timer]: new='কারণ খুবই বোরিং আছে আর কি আর বলব কি করে' ctx='্তু আমার যাওয়ার ইচ্ছা করছে না'
+2026-02-06 01:57:52,122 - INFO - 🔇 Long silence detected (860ms)
+2026-02-06 01:57:52,124 - INFO - 🔇 Chunk 3 [silence]: new='আমি বলতে চাই যে কালকে ক্লাস আছে কিন্তু আ' ctx=' বোরিং আছে আর কি আর বলব কি করে'
+2026-02-06 01:57:53,132 - INFO - 🔇 Long silence detected (866ms)
+2026-02-06 01:57:53,133 - INFO - 🔇 Chunk 4 [silence]: new='কি করে ঘুমিয়ে ঘুমিয়ে' ctx='রণ খুবই বোরিং আছে আর কি আর বলব'
+2026-02-06 01:57:56,428 - INFO - ⏱️ Timer triggered (3.0s elapsed)
+2026-02-06 01:57:56,431 - INFO - ⏱️ Chunk 5 [timer]: new='খুব ভালো জিনিস না যদি একটু' ctx=' আর বলব কি করে ঘুমিয়ে ঘুমিয়ে'
+2026-02-06 01:57:57,127 - INFO - 📤 Chunk 6 [finalize]: new='পড়ে নি তাহলে আরো' ctx='য়ে খুব ভালো জিনিস না যদি একটু'
+2026-02-06 01:57:57,127 - INFO - Session 4418428160: Restarting stream (gen 1)
+2026-02-06 01:57:57,128 - INFO - Starting continuous stream gen 1
+2026-02-06 01:57:57,394 - INFO - Stream gen 0 superseded

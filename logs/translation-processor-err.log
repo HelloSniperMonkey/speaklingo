@@ -1,0 +1,247 @@
+INFO:__main__:============================================================
+INFO:__main__:  SLIDING WINDOW TRANSLATION PROCESSOR
+INFO:__main__:  Mode: Continuous chunks with context
+INFO:__main__:  Translates 2s new text with 4s context
+INFO:__main__:============================================================
+INFO:redis_client:Redis connected: localhost:6379
+INFO:__main__:Subscribed to: room:*:transcription, room:*:invalidation
+INFO:__main__:🔄 Chunk 0: context='...' new='এবার যদি...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 430ms: 'This time if...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='এবার যদি...' new='কাজ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 200ms: 'work...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='এবার যদি কাজ...' new='করে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 203ms: 'is done...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 3: context='কাজ করে...' new='তাহলে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 306ms: 'Then...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='কাজ করছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 268ms: 'Is working...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='কাজ করছে...' new='এ প্রবলেম হচ্ছে না...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 196ms: 'It's not working...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='কাজ করছে এ প্রবলেম হচ্ছে না...' new='তুই...'
+INFO:__main__:🔄 Chunk 3: context='এ প্রবলেম হচ্ছে না তুই...' new='ভালই হচ্ছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 423ms: 'You...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 335ms: 'It's going well...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='আমাকে মনে হচ্ছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 544ms: 'I think...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='আমাকে মনে হচ্ছে...' new='নাকি এটা...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 323ms: 'or is it...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='আমাকে মনে হচ্ছে নাকি এটা...' new='ব্যাকগ্রাউন্ড...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 330ms: 'Background...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 3: context='নাকি এটা ব্যাকগ্রাউন্ড...' new='সাউন্ড শুনতে...'
+INFO:__main__:🔄 Chunk 4: context='ব্যাকগ্রাউন্ড সাউন্ড শুনতে...' new='পাচ্ছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 377ms: 'is hearing...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 727ms: 'to hear the sound...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='না...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 473ms: 'No...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='না...' new='আগের থেকে খারাপ হয়ে গেল...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 260ms: 'It has become worse than before...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='না আগের থেকে খারাপ হয়ে গেল...' new='এটা...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 254ms: 'It...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='টার্গেট...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 411ms: 'Target...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='টার্গেট...' new='আগের থেকে খারাপ কি করে হয়ে গেল...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 184ms: 'What has become worse than before...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='টার্গেট আগের থেকে খারাপ কি করে...' new='আগে তো ভালোই...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 492ms: 'It was good before...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='এবার দেখি...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 529ms: 'Let's see this time...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='এবার দেখি...' new='কি হয়...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 510ms: 'what happens...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='এবার দেখি কি হয়...' new='কারণ কি...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 295ms: 'What's the reason...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 3: context='এবার দেখি কি হয় কারণ কি...' new='আগের থেকে ভালো কাজ করা উচিত...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 185ms: 'One should do better than before...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='এটা...'
+INFO:__main__:🔄 Chunk 1: context='এটা...' new='কিন্তু আগের...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 414ms: 'It...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 242ms: 'but previously...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='এটা কিন্তু আগের...' new='থেকেও ভালো আছে আর তুই এরকম...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 393ms: 'It's even better than before and you are like this...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 3: context='এটা কিন্তু আগের থেকেও ভালো আছে...' new='করে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 218ms: 'are doing...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 4: context='এটা কিন্তু আগের থেকেও ভালো আছে...' new='বাজে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 193ms: 'worse...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 5: context='এটা কিন্তু আগের থেকেও ভালো আছে...' new='আওয়াজ ব্যবহার করছিস রে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 240ms: 'You're using such a tone...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='কি কি...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 285ms: 'What what...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='কি কি...' new='বাজে একটা আওয়াজ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 328ms: 'a bad sound...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='কি কি বাজে একটা আওয়াজ...' new='কি কি বাজে এটা আমার নাম চেঞ্জ করবো...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 286ms: 'What a racket, I'm going to change my name...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='এটা...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 436ms: 'It...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='এটা...' new='আগের থেকে ভালো হয়েছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 236ms: 'It has improved from before...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='এটা আগের থেকে ভালো হয়েছে...' new='কিন্তু তবুও...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 236ms: 'but still...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 3: context='এটা আগের থেকে ভালো হয়েছে কিন্...' new='একটু...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 308ms: 'a little...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 4: context='এটা আগের থেকে ভালো হয়েছে কিন্...' new='প্রবলেম আছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 225ms: 'there's still a problem...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 5: context='এটা আগের থেকে ভালো হয়েছে কিন্...' new='আমাকে মনে হচ্ছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 198ms: 'I think...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='এবার দেখি কি হচ্ছে কারন কি আগেরবার তো খু...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 496ms: 'Let's see what happens this time because the resul...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='এবার দেখি কি হচ্ছে কারন কি আগে...' new='পেয়েছিলাম মাথা খারাপ হয়ে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 413ms: 'got a terrible result and my head is spinning...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='এবার তো একটু ঠিকঠাক মনে হচ্ছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 622ms: 'This time it seems a bit okay...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='এবার তো একটু ঠিকঠাক মনে হচ্ছে...' new='দেখা যাক এবার ভাল করে যদি কাজ করে তাহলে ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 651ms: 'Let's see if it works well this time, if it does, ...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='এবার তো একটু ঠিকঠাক মনে হচ্ছে ...' new='এটাকে ঠিকঠাক...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 1022ms: 'consider it okay...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='ভালো কাজ করছে আগের থেকে কিন্তু দেখি আরো...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 298ms: 'Doing better than before but let's see more...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='ভালো কাজ করছে আগের থেকে কিন্তু...' new='একটু কমপ্লেক্স সেন্টেন্স দিলে যদি ভেঙে য...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 225ms: 'if it breaks down with a slightly complex sentence...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='ভালো কাজ করছে আগের থেকে কিন্তু...' new='ভেঙ্গে গেলে এটা কি আমাকে চেঞ্জ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 207ms: 'If it breaks down, will it change me?...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='আগের থেকে ভালই কাজ করছে এবার...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 305ms: 'Doing better than before this time...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='আগের থেকে ভালই কাজ করছে এবার...' new='একটা জিনিস এটা জানতে চাই আমি ওটা হচ্ছে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 205ms: 'There's one thing I want to know, and that is...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='না কাজ করতে পারে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 299ms: 'May not work...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='আমি হচ্ছে আরেকটি...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 145ms: 'I am another one...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='আমি হচ্ছে আরেকটি...' new='বিশেষ ইনক্রিমেন্ট করে দিই...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 228ms: 'I make a special increment...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='আমি হচ্ছে আরেকটি বিশেষ ইনক্রিম...' new='তাহলে কি ওটা ঠিকঠাক কাজ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 266ms: 'Then is it working properly?...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='না ঠিক...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 356ms: 'No, not right...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 0: context='...' new='আমি বলতে চাই যে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 348ms: 'I want to say that...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 1: context='আমি বলতে চাই যে...' new='কালকে ক্লাস আছে কিন্তু আমার যাওয়ার ইচ্ছ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 374ms: 'I have a class tomorrow but I don't feel like goin...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 2: context='আমি বলতে চাই যে কালকে ক্লাস আছ...' new='কারণ খুবই বোরিং আছে আর কি আর বলব কি করে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 491ms: 'because it's too boring and what else can I say, w...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 3: context='চাই যে কালকে ক্লাস আছে কিন্তু ...' new='আমি বলতে চাই যে কালকে ক্লাস আছে কিন্তু আ...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 408ms: 'I want to say that there's a class tomorrow but I ...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 4: context='আমি বলতে চাই যে কালকে ক্লাস আছ...' new='কি করে ঘুমিয়ে ঘুমিয়ে...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 359ms: 'How can I sleep through it all...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 5: context=' ক্লাস আছে কিন্তু আমার যাওয়ার...' new='খুব ভালো জিনিস না যদি একটু...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 267ms: 'it's not a very good thing if a little...'
+INFO:__main__:  📤 Dispatched to TTS channel
+INFO:__main__:🔄 Chunk 6: context='ইচ্ছা করছে না কারণ খুবই বোরিং ...' new='পড়ে নি তাহলে আরো...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Translated in 321ms: 'if I don't read a bit, then it's even more...'
+INFO:__main__:  📤 Dispatched to TTS channel
