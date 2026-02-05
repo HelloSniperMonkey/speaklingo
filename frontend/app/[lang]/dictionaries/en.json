@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "continue": "Continue",
+    "skipForNow": "Skip for now",
+    "poweredBy": "Powered by",
+    "copiedToClipboard": "Copied to clipboard"
+  },
+  "home": {
+    "title": "Record your voice sample for translation",
+    "sampleText": "Hello I am feeling great today and the weather is sunny which uplifts my mood.",
+    "languageHint": "You can switch languages later inside the room controls.",
+    "recording": "Recording...",
+    "sending": "Sending...",
+    "voiceSampleUploaded": "Voice sample uploaded",
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "microphoneAccessDenied": "Microphone access denied",
+    "failedToSendAudio": "Failed to send audio"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Real-time video chat with live AI translation",
+    "createNewRoom": "Create New Room",
+    "creatingRoom": "Creating room...",
+    "or": "OR",
+    "enterRoomId": "Enter room ID",
+    "joinRoom": "Join Room",
+    "joining": "Joining...",
+    "failedToCreateRoom": "Failed to create room. Please try again.",
+    "features": {
+      "videoChat": "Video Chat",
+      "speechToText": "Speech to Text",
+      "aiTranslation": "AI Translation"
+    }
+  },
+  "room": {
+    "title": "WebRTC Translator",
+    "roomLabel": "Room:",
+    "copyRoomId": "Copy room ID",
+    "connectingToPeer": "Connecting to peer... Share the room ID with your friend.",
+    "muteMicrophone": "Mute microphone",
+    "unmuteMicrophone": "Unmute microphone",
+    "turnOffCamera": "Turn off camera",
+    "turnOnCamera": "Turn on camera",
+    "stopTranscription": "Stop transcription",
+    "startTranscription": "Start transcription",
+    "leave": "Leave",
+    "shareRoomId": "Share this room ID with your friend:",
+    "joinInstructions": "They can join by entering this ID on the home page.",
+    "translationTip": "Click the translation button to start live translation."
+  },
+  "subtitle": {
+    "original": "Original",
+    "listening": "Listening...",
+    "waitingForSpeech": "Waiting for speech...",
+    "translated": "Translated",
+    "translating": "Translating...",
+    "translationPlaceholder": "Translation will appear here..."
+  },
+  "controls": {
+    "translateTo": "Translate to:"
+  },
+  "voiceIndicator": {
+    "error": "Error",
+    "disconnected": "Disconnected",
+    "paused": "Paused",
+    "playing": "Playing",
+    "idle": "Idle",
+    "resumeAudio": "Resume audio",
+    "pauseAudio": "Pause audio",
+    "unmuteVoice": "Unmute voice",
+    "muteVoice": "Mute voice",
+    "restartTranscription": "Restart transcription",
+    "generationTime": "Generation time",
+    "totalLatency": "Total latency",
+    "bufferSize": "Buffer size",
+    "transcriptionLatency": "Transcription latency",
+    "lag": "lag"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev Demo",
+    "description": "Real-time video chat with AI-powered live translation using Lingo.dev SDK"
+  }
+}

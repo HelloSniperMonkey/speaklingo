@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Laster...",
+    "continue": "Fortsett",
+    "skipForNow": "Hopp over nå",
+    "poweredBy": "Drevet av",
+    "copiedToClipboard": "Kopiert til utklippstavle"
+  },
+  "home": {
+    "title": "Ta opp stemmeprøven din for oversettelse",
+    "sampleText": "Hei, jeg føler meg veldig bra i dag, og været er solrikt, noe som løfter humøret mitt.",
+    "languageHint": "Du kan bytte språk senere i romkontrollene.",
+    "recording": "Tar opp...",
+    "sending": "Sender...",
+    "voiceSampleUploaded": "Stemmeprøve lastet opp",
+    "startRecording": "Start opptak",
+    "stopRecording": "Stopp opptak",
+    "microphoneAccessDenied": "Mikrofontilgang nektet",
+    "failedToSendAudio": "Kunne ikke sende lyd"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Sanntids videochat med direkte AI-oversettelse",
+    "createNewRoom": "Opprett nytt rom",
+    "creatingRoom": "Oppretter rom...",
+    "or": "ELLER",
+    "enterRoomId": "Skriv inn rom-ID",
+    "joinRoom": "Bli med i rom",
+    "joining": "Blir med...",
+    "failedToCreateRoom": "Kunne ikke opprette rom. Vennligst prøv igjen.",
+    "features": {
+      "videoChat": "Videochat",
+      "speechToText": "Tale til tekst",
+      "aiTranslation": "AI-oversettelse"
+    }
+  },
+  "room": {
+    "title": "WebRTC-oversetter",
+    "roomLabel": "Rom:",
+    "copyRoomId": "Kopier rom-ID",
+    "connectingToPeer": "Kobler til motpart... Del rom-ID-en med vennen din.",
+    "muteMicrophone": "Demp mikrofon",
+    "unmuteMicrophone": "Slå på mikrofon",
+    "turnOffCamera": "Slå av kamera",
+    "turnOnCamera": "Slå på kamera",
+    "stopTranscription": "Stopp transkripsjon",
+    "startTranscription": "Start transkripsjon",
+    "leave": "Forlat",
+    "shareRoomId": "Del denne rom-ID-en med vennen din:",
+    "joinInstructions": "De kan bli med ved å skrive inn denne ID-en på startsiden.",
+    "translationTip": "Klikk på oversettelsesknappen for å starte direkteoversettelse."
+  },
+  "subtitle": {
+    "original": "Original",
+    "listening": "Lytter...",
+    "waitingForSpeech": "Venter på tale...",
+    "translated": "Oversatt",
+    "translating": "Oversetter...",
+    "translationPlaceholder": "Oversettelsen vil vises her..."
+  },
+  "controls": {
+    "translateTo": "Oversett til:"
+  },
+  "voiceIndicator": {
+    "error": "Feil",
+    "disconnected": "Frakoblet",
+    "paused": "Pauset",
+    "playing": "Spiller av",
+    "idle": "Inaktiv",
+    "resumeAudio": "Gjenoppta lyd",
+    "pauseAudio": "Pause lyd",
+    "unmuteVoice": "Slå på lyd",
+    "muteVoice": "Demp lyd",
+    "restartTranscription": "Start transkripsjon på nytt",
+    "generationTime": "Genereringstid",
+    "totalLatency": "Total forsinkelse",
+    "bufferSize": "Bufferstørrelse",
+    "transcriptionLatency": "Transkripsjonsforsinkelse",
+    "lag": "forsinkelse"
+  },
+  "metadata": {
+    "title": "WebRTC-oversetter | Lingo.dev-demo",
+    "description": "Sanntids videochat med AI-drevet direkteoversettelse ved hjelp av Lingo.dev SDK"
+  }
+}

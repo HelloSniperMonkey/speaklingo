@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Ładowanie...",
+    "continue": "Kontynuuj",
+    "skipForNow": "Pomiń na razie",
+    "poweredBy": "Zasilane przez",
+    "copiedToClipboard": "Skopiowano do schowka"
+  },
+  "home": {
+    "title": "Nagraj próbkę swojego głosu do tłumaczenia",
+    "sampleText": "Cześć, dziś czuję się świetnie, a pogoda jest słoneczna, co poprawia mi nastrój.",
+    "languageHint": "Możesz zmienić język później w ustawieniach pokoju.",
+    "recording": "Nagrywanie...",
+    "sending": "Wysyłanie...",
+    "voiceSampleUploaded": "Próbka głosu została przesłana",
+    "startRecording": "Rozpocznij nagrywanie",
+    "stopRecording": "Zatrzymaj nagrywanie",
+    "microphoneAccessDenied": "Odmowa dostępu do mikrofonu",
+    "failedToSendAudio": "Nie udało się wysłać nagrania"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Wideorozmowa na żywo z tłumaczeniem AI w czasie rzeczywistym",
+    "createNewRoom": "Utwórz nowy pokój",
+    "creatingRoom": "Tworzenie pokoju...",
+    "or": "LUB",
+    "enterRoomId": "Wprowadź ID pokoju",
+    "joinRoom": "Dołącz do pokoju",
+    "joining": "Dołączanie...",
+    "failedToCreateRoom": "Nie udało się utworzyć pokoju. Spróbuj ponownie.",
+    "features": {
+      "videoChat": "Wideorozmowa",
+      "speechToText": "Konwersja mowy na tekst",
+      "aiTranslation": "Tłumaczenie AI"
+    }
+  },
+  "room": {
+    "title": "Tłumacz WebRTC",
+    "roomLabel": "Pokój:",
+    "copyRoomId": "Kopiuj ID pokoju",
+    "connectingToPeer": "Łączenie z rozmówcą... Udostępnij ID pokoju swojemu znajomemu.",
+    "muteMicrophone": "Wycisz mikrofon",
+    "unmuteMicrophone": "Włącz mikrofon",
+    "turnOffCamera": "Wyłącz kamerę",
+    "turnOnCamera": "Włącz kamerę",
+    "stopTranscription": "Zatrzymaj transkrypcję",
+    "startTranscription": "Rozpocznij transkrypcję",
+    "leave": "Opuść",
+    "shareRoomId": "Udostępnij ten ID pokoju swojemu znajomemu:",
+    "joinInstructions": "Może dołączyć, wpisując ten ID na stronie głównej.",
+    "translationTip": "Kliknij przycisk tłumaczenia, aby rozpocząć tłumaczenie na żywo."
+  },
+  "subtitle": {
+    "original": "Oryginał",
+    "listening": "Słucham...",
+    "waitingForSpeech": "Oczekiwanie na mowę...",
+    "translated": "Przetłumaczono",
+    "translating": "Tłumaczenie...",
+    "translationPlaceholder": "Tutaj pojawi się tłumaczenie..."
+  },
+  "controls": {
+    "translateTo": "Tłumacz na:"
+  },
+  "voiceIndicator": {
+    "error": "Błąd",
+    "disconnected": "Rozłączono",
+    "paused": "Wstrzymano",
+    "playing": "Odtwarzanie",
+    "idle": "Bezczynny",
+    "resumeAudio": "Wznów dźwięk",
+    "pauseAudio": "Wstrzymaj dźwięk",
+    "unmuteVoice": "Włącz głos",
+    "muteVoice": "Wycisz głos",
+    "restartTranscription": "Uruchom ponownie transkrypcję",
+    "generationTime": "Czas generowania",
+    "totalLatency": "Całkowite opóźnienie",
+    "bufferSize": "Rozmiar bufora",
+    "transcriptionLatency": "Opóźnienie transkrypcji",
+    "lag": "opóźnienie"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Demo Lingo.dev",
+    "description": "Czat wideo na żywo z tłumaczeniem AI w czasie rzeczywistym dzięki SDK Lingo.dev"
+  }
+}

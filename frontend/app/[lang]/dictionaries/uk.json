@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Завантаження...",
+    "continue": "Продовжити",
+    "skipForNow": "Пропустити зараз",
+    "poweredBy": "Працює на",
+    "copiedToClipboard": "Скопійовано в буфер обміну"
+  },
+  "home": {
+    "title": "Запишіть зразок свого голосу для перекладу",
+    "sampleText": "Привіт, я чудово почуваюся сьогодні, а сонячна погода піднімає мій настрій.",
+    "languageHint": "Ви зможете змінити мову пізніше в налаштуваннях кімнати.",
+    "recording": "Запис...",
+    "sending": "Надсилання...",
+    "voiceSampleUploaded": "Зразок голосу завантажено",
+    "startRecording": "Почати запис",
+    "stopRecording": "Зупинити запис",
+    "microphoneAccessDenied": "Доступ до мікрофона заборонено",
+    "failedToSendAudio": "Не вдалося надіслати аудіо"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Відеочат у реальному часі з живим перекладом ШІ",
+    "createNewRoom": "Створити нову кімнату",
+    "creatingRoom": "Створення кімнати...",
+    "or": "АБО",
+    "enterRoomId": "Введіть ID кімнати",
+    "joinRoom": "Приєднатися до кімнати",
+    "joining": "Приєднання...",
+    "failedToCreateRoom": "Не вдалося створити кімнату. Будь ласка, спробуйте ще раз.",
+    "features": {
+      "videoChat": "Відеочат",
+      "speechToText": "Мовлення в текст",
+      "aiTranslation": "AI-переклад"
+    }
+  },
+  "room": {
+    "title": "WebRTC перекладач",
+    "roomLabel": "Кімната:",
+    "copyRoomId": "Скопіювати ID кімнати",
+    "connectingToPeer": "Підключення до співрозмовника... Поділіться ID кімнати з другом.",
+    "muteMicrophone": "Вимкнути мікрофон",
+    "unmuteMicrophone": "Увімкнути мікрофон",
+    "turnOffCamera": "Вимкнути камеру",
+    "turnOnCamera": "Увімкнути камеру",
+    "stopTranscription": "Зупинити транскрипцію",
+    "startTranscription": "Почати транскрипцію",
+    "leave": "Вийти",
+    "shareRoomId": "Поділіться цим ID кімнати з другом:",
+    "joinInstructions": "Вони можуть приєднатися, ввівши цей ID на головній сторінці.",
+    "translationTip": "Натисніть кнопку перекладу, щоб почати переклад у реальному часі."
+  },
+  "subtitle": {
+    "original": "Оригінал",
+    "listening": "Слухаю...",
+    "waitingForSpeech": "Очікування мовлення...",
+    "translated": "Переклад",
+    "translating": "Перекладаю...",
+    "translationPlaceholder": "Переклад з'явиться тут..."
+  },
+  "controls": {
+    "translateTo": "Перекласти на:"
+  },
+  "voiceIndicator": {
+    "error": "Помилка",
+    "disconnected": "Відключено",
+    "paused": "Призупинено",
+    "playing": "Відтворюється",
+    "idle": "Очікування",
+    "resumeAudio": "Відновити аудіо",
+    "pauseAudio": "Призупинити аудіо",
+    "unmuteVoice": "Увімкнути звук",
+    "muteVoice": "Вимкнути звук",
+    "restartTranscription": "Перезапустити транскрипцію",
+    "generationTime": "Час генерації",
+    "totalLatency": "Загальна затримка",
+    "bufferSize": "Розмір буфера",
+    "transcriptionLatency": "Затримка транскрипції",
+    "lag": "затримка"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Демо Lingo.dev",
+    "description": "Відеочат у реальному часі з живим перекладом на основі ШІ за допомогою Lingo.dev SDK"
+  }
+}

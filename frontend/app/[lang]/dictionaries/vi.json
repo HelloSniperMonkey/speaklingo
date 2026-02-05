@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "continue": "Tiếp tục",
+    "skipForNow": "Bỏ qua",
+    "poweredBy": "Được hỗ trợ bởi",
+    "copiedToClipboard": "Đã sao chép vào clipboard"
+  },
+  "home": {
+    "title": "Ghi âm mẫu giọng nói của bạn để dịch",
+    "sampleText": "Xin chào, hôm nay tôi cảm thấy rất tuyệt và thời tiết nắng đẹp khiến tâm trạng tôi phấn chấn.",
+    "languageHint": "Bạn có thể chuyển đổi ngôn ngữ sau trong phần điều khiển phòng.",
+    "recording": "Đang ghi âm...",
+    "sending": "Đang gửi...",
+    "voiceSampleUploaded": "Đã tải lên mẫu giọng nói",
+    "startRecording": "Bắt đầu ghi âm",
+    "stopRecording": "Dừng ghi âm",
+    "microphoneAccessDenied": "Quyền truy cập microphone bị từ chối",
+    "failedToSendAudio": "Không thể gửi âm thanh"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Trò chuyện video thời gian thực với dịch thuật AI trực tiếp",
+    "createNewRoom": "Tạo phòng mới",
+    "creatingRoom": "Đang tạo phòng...",
+    "or": "HOẶC",
+    "enterRoomId": "Nhập ID phòng",
+    "joinRoom": "Tham gia phòng",
+    "joining": "Đang tham gia...",
+    "failedToCreateRoom": "Không thể tạo phòng. Vui lòng thử lại.",
+    "features": {
+      "videoChat": "Trò chuyện video",
+      "speechToText": "Chuyển giọng nói thành văn bản",
+      "aiTranslation": "Dịch thuật AI"
+    }
+  },
+  "room": {
+    "title": "Trình dịch WebRTC",
+    "roomLabel": "Phòng:",
+    "copyRoomId": "Sao chép ID phòng",
+    "connectingToPeer": "Đang kết nối với người dùng khác... Chia sẻ ID phòng với bạn bè của bạn.",
+    "muteMicrophone": "Tắt tiếng micro",
+    "unmuteMicrophone": "Bật tiếng micro",
+    "turnOffCamera": "Tắt camera",
+    "turnOnCamera": "Bật camera",
+    "stopTranscription": "Dừng phiên âm",
+    "startTranscription": "Bắt đầu phiên âm",
+    "leave": "Rời khỏi",
+    "shareRoomId": "Chia sẻ ID phòng này với bạn bè của bạn:",
+    "joinInstructions": "Họ có thể tham gia bằng cách nhập ID này trên trang chủ.",
+    "translationTip": "Nhấp vào nút dịch để bắt đầu dịch trực tiếp."
+  },
+  "subtitle": {
+    "original": "Bản gốc",
+    "listening": "Đang nghe...",
+    "waitingForSpeech": "Đang chờ giọng nói...",
+    "translated": "Đã dịch",
+    "translating": "Đang dịch...",
+    "translationPlaceholder": "Bản dịch sẽ xuất hiện ở đây..."
+  },
+  "controls": {
+    "translateTo": "Dịch sang:"
+  },
+  "voiceIndicator": {
+    "error": "Lỗi",
+    "disconnected": "Đã ngắt kết nối",
+    "paused": "Đã tạm dừng",
+    "playing": "Đang phát",
+    "idle": "Không hoạt động",
+    "resumeAudio": "Tiếp tục phát âm thanh",
+    "pauseAudio": "Tạm dừng âm thanh",
+    "unmuteVoice": "Bật tiếng",
+    "muteVoice": "Tắt tiếng",
+    "restartTranscription": "Khởi động lại phiên âm",
+    "generationTime": "Thời gian tạo",
+    "totalLatency": "Độ trễ tổng",
+    "bufferSize": "Kích thước bộ đệm",
+    "transcriptionLatency": "Độ trễ phiên âm",
+    "lag": "độ trễ"
+  },
+  "metadata": {
+    "title": "Trình dịch WebRTC | Lingo.dev Demo",
+    "description": "Trò chuyện video thời gian thực với tính năng dịch trực tiếp được hỗ trợ bởi AI sử dụng Lingo.dev SDK"
+  }
+}

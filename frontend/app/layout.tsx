@@ -12,9 +12,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className="gradient-bg antialiased">{children}</body>
-    </html>
-  );
+  return children;
 }

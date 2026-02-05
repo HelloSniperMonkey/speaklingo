@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "טוען...",
+    "continue": "המשך",
+    "skipForNow": "דלג לעת עתה",
+    "poweredBy": "מופעל על ידי",
+    "copiedToClipboard": "הועתק ללוח"
+  },
+  "home": {
+    "title": "הקלט דגימת קול לתרגום",
+    "sampleText": "שלום, אני מרגיש נהדר היום והמזג אוורי שטוף שמש, מה שמרים את מצב הרוח שלי.",
+    "languageHint": "תוכל להחליף שפות מאוחר יותר בתוך בקרות החדר.",
+    "recording": "מקליט...",
+    "sending": "שולח...",
+    "voiceSampleUploaded": "דגימת הקול הועלתה",
+    "startRecording": "התחל הקלטה",
+    "stopRecording": "עצור הקלטה",
+    "microphoneAccessDenied": "הגישה למיקרופון נדחתה",
+    "failedToSendAudio": "שליחת האודיו נכשלה"
+  },
+  "lobby": {
+    "title": "מתרגם WebRTC",
+    "subtitle": "צ'אט וידאו בזמן אמת עם תרגום AI חי",
+    "createNewRoom": "צור חדר חדש",
+    "creatingRoom": "יוצר חדר...",
+    "or": "או",
+    "enterRoomId": "הזן מזהה חדר",
+    "joinRoom": "הצטרף לחדר",
+    "joining": "מצטרף...",
+    "failedToCreateRoom": "יצירת החדר נכשלה. אנא נסה שוב.",
+    "features": {
+      "videoChat": "צ'אט וידאו",
+      "speechToText": "דיבור לטקסט",
+      "aiTranslation": "תרגום AI"
+    }
+  },
+  "room": {
+    "title": "מתרגם WebRTC",
+    "roomLabel": "חדר:",
+    "copyRoomId": "העתק מזהה חדר",
+    "connectingToPeer": "מתחבר לעמית... שתף את מזהה החדר עם חברך.",
+    "muteMicrophone": "השתק מיקרופון",
+    "unmuteMicrophone": "בטל השתקת מיקרופון",
+    "turnOffCamera": "כבה מצלמה",
+    "turnOnCamera": "הפעל מצלמה",
+    "stopTranscription": "עצור תמלול",
+    "startTranscription": "התחל תמלול",
+    "leave": "עזוב",
+    "shareRoomId": "שתף את מזהה החדר הזה עם חברך:",
+    "joinInstructions": "הם יכולים להצטרף על ידי הזנת מזהה זה בדף הבית.",
+    "translationTip": "לחץ על כפתור התרגום כדי להתחיל תרגום חי."
+  },
+  "subtitle": {
+    "original": "מקורי",
+    "listening": "מאזין...",
+    "waitingForSpeech": "ממתין לדיבור...",
+    "translated": "מתורגם",
+    "translating": "מתרגם...",
+    "translationPlaceholder": "התרגום יופיע כאן..."
+  },
+  "controls": {
+    "translateTo": "תרגם ל:"
+  },
+  "voiceIndicator": {
+    "error": "שגיאה",
+    "disconnected": "מנותק",
+    "paused": "מושהה",
+    "playing": "מתנגן",
+    "idle": "לא פעיל",
+    "resumeAudio": "המשך שמע",
+    "pauseAudio": "השהה שמע",
+    "unmuteVoice": "בטל השתקת קול",
+    "muteVoice": "השתק קול",
+    "restartTranscription": "הפעל מחדש תמלול",
+    "generationTime": "זמן יצירה",
+    "totalLatency": "זמן אחזור כולל",
+    "bufferSize": "גודל חוצץ",
+    "transcriptionLatency": "זמן אחזור תמלול",
+    "lag": "עיכוב"
+  },
+  "metadata": {
+    "title": "מתרגם WebRTC | הדגמת Lingo.dev",
+    "description": "צ'אט וידאו בזמן אמת עם תרגום חי מבוסס בינה מלאכותית באמצעות Lingo.dev SDK"
+  }
+}

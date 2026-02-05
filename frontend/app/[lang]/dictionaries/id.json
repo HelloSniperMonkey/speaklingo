@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Memuat...",
+    "continue": "Lanjutkan",
+    "skipForNow": "Lewati untuk sekarang",
+    "poweredBy": "Didukung oleh",
+    "copiedToClipboard": "Disalin ke clipboard"
+  },
+  "home": {
+    "title": "Rekam sampel suara Anda untuk diterjemahkan",
+    "sampleText": "Halo, saya merasa sangat baik hari ini dan cuacanya cerah yang membuat suasana hati saya lebih baik.",
+    "languageHint": "Anda dapat mengganti bahasa nanti di dalam kontrol ruangan.",
+    "recording": "Merekam...",
+    "sending": "Mengirim...",
+    "voiceSampleUploaded": "Sampel suara berhasil diunggah",
+    "startRecording": "Mulai merekam",
+    "stopRecording": "Berhenti merekam",
+    "microphoneAccessDenied": "Akses mikrofon ditolak",
+    "failedToSendAudio": "Gagal mengirim audio"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Obrolan video real-time dengan terjemahan AI langsung",
+    "createNewRoom": "Buat ruangan baru",
+    "creatingRoom": "Membuat ruangan...",
+    "or": "ATAU",
+    "enterRoomId": "Masukkan ID ruangan",
+    "joinRoom": "Gabung ruangan",
+    "joining": "Bergabung...",
+    "failedToCreateRoom": "Gagal membuat ruangan. Silakan coba lagi.",
+    "features": {
+      "videoChat": "Obrolan video",
+      "speechToText": "Ucapan ke teks",
+      "aiTranslation": "Terjemahan AI"
+    }
+  },
+  "room": {
+    "title": "Penerjemah WebRTC",
+    "roomLabel": "Ruangan:",
+    "copyRoomId": "Salin ID ruangan",
+    "connectingToPeer": "Menghubungkan ke rekan... Bagikan ID ruangan dengan teman Anda.",
+    "muteMicrophone": "Bisukan mikrofon",
+    "unmuteMicrophone": "Nyalakan mikrofon",
+    "turnOffCamera": "Matikan kamera",
+    "turnOnCamera": "Nyalakan kamera",
+    "stopTranscription": "Hentikan transkripsi",
+    "startTranscription": "Mulai transkripsi",
+    "leave": "Keluar",
+    "shareRoomId": "Bagikan ID ruangan ini dengan teman Anda:",
+    "joinInstructions": "Mereka dapat bergabung dengan memasukkan ID ini di halaman beranda.",
+    "translationTip": "Klik tombol terjemahan untuk memulai terjemahan langsung."
+  },
+  "subtitle": {
+    "original": "Asli",
+    "listening": "Mendengarkan...",
+    "waitingForSpeech": "Menunggu ucapan...",
+    "translated": "Diterjemahkan",
+    "translating": "Menerjemahkan...",
+    "translationPlaceholder": "Terjemahan akan muncul di sini..."
+  },
+  "controls": {
+    "translateTo": "Terjemahkan ke:"
+  },
+  "voiceIndicator": {
+    "error": "Kesalahan",
+    "disconnected": "Terputus",
+    "paused": "Dijeda",
+    "playing": "Memutar",
+    "idle": "Menganggur",
+    "resumeAudio": "Lanjutkan audio",
+    "pauseAudio": "Jeda audio",
+    "unmuteVoice": "Nyalakan suara",
+    "muteVoice": "Bisukan suara",
+    "restartTranscription": "Mulai ulang transkripsi",
+    "generationTime": "Waktu pembuatan",
+    "totalLatency": "Total latensi",
+    "bufferSize": "Ukuran buffer",
+    "transcriptionLatency": "Latensi transkripsi",
+    "lag": "lag"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Demo Lingo.dev",
+    "description": "Obrolan video real-time dengan terjemahan langsung bertenaga AI menggunakan SDK Lingo.dev"
+  }
+}

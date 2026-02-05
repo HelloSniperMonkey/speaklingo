@@ -1,15 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { LobbyForm } from "@/components/LobbyForm";
 import { firestore } from "@/lib/firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
+import { useTranslation } from "../components/I18nProvider";
 
 export default function CreatePage() {
   const router = useRouter();
+  const params = useParams();
+  const lang = params.lang as string;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   // Create a new room document in Firestore and navigate to it
   const handleCreateRoom = async () => {
@@ -25,10 +30,10 @@ export default function CreatePage() {
       });
 
       // Navigate to the room page with a flag indicating we're the creator
-      router.push(`/room/${callDoc.id}?role=creator`);
+      router.push(`/${lang}/room/${callDoc.id}?role=creator`);
     } catch (err) {
       console.error("Failed to create room:", err);
-      setError("Failed to create room. Please try again.");
+      setError(t("lobby.failedToCreateRoom"));
       setIsLoading(false);
     }
   };
@@ -39,16 +44,37 @@ export default function CreatePage() {
     setError(null);
 
     // Navigate to the room page with a flag indicating we're joining
-    router.push(`/room/${roomId}?role=joiner`);
+    router.push(`/${lang}/room/${roomId}?role=joiner`);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
+      {/* Language Switcher in top-right corner */}
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSwitcher />
+      </div>
+
       <LobbyForm
         onCreateRoom={handleCreateRoom}
         onJoinRoom={handleJoinRoom}
         isLoading={isLoading}
         error={error}
+        dictionary={{
+          title: t("lobby.title"),
+          subtitle: t("lobby.subtitle"),
+          createNewRoom: t("lobby.createNewRoom"),
+          creatingRoom: t("lobby.creatingRoom"),
+          or: t("lobby.or"),
+          enterRoomId: t("lobby.enterRoomId"),
+          joinRoom: t("lobby.joinRoom"),
+          joining: t("lobby.joining"),
+          poweredBy: t("common.poweredBy"),
+          features: {
+            videoChat: t("lobby.features.videoChat"),
+            speechToText: t("lobby.features.speechToText"),
+            aiTranslation: t("lobby.features.aiTranslation"),
+          }
+        }}
       />
     </div>
   );

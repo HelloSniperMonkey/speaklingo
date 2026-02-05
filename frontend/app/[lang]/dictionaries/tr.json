@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Yükleniyor...",
+    "continue": "Devam et",
+    "skipForNow": "Şimdilik atla",
+    "poweredBy": "Destekleyen",
+    "copiedToClipboard": "Panoya kopyalandı"
+  },
+  "home": {
+    "title": "Çeviri için ses örneğinizi kaydedin",
+    "sampleText": "Merhaba bugün kendimi harika hissediyorum ve hava güneşli, bu da ruh halimi yükseltiyor.",
+    "languageHint": "Dilleri daha sonra oda kontrolleri içinden değiştirebilirsiniz.",
+    "recording": "Kaydediliyor...",
+    "sending": "Gönderiliyor...",
+    "voiceSampleUploaded": "Ses örneği yüklendi",
+    "startRecording": "Kaydı başlat",
+    "stopRecording": "Kaydı durdur",
+    "microphoneAccessDenied": "Mikrofon erişimi reddedildi",
+    "failedToSendAudio": "Ses gönderilemedi"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Canlı AI çevirisi ile gerçek zamanlı görüntülü sohbet",
+    "createNewRoom": "Yeni oda oluştur",
+    "creatingRoom": "Oda oluşturuluyor...",
+    "or": "VEYA",
+    "enterRoomId": "Oda ID'sini girin",
+    "joinRoom": "Odaya katıl",
+    "joining": "Katılınıyor...",
+    "failedToCreateRoom": "Oda oluşturulamadı. Lütfen tekrar deneyin.",
+    "features": {
+      "videoChat": "Görüntülü sohbet",
+      "speechToText": "Konuşmadan metne",
+      "aiTranslation": "Yapay zeka çevirisi"
+    }
+  },
+  "room": {
+    "title": "WebRTC çevirmen",
+    "roomLabel": "Oda:",
+    "copyRoomId": "Oda kimliğini kopyala",
+    "connectingToPeer": "Eşe bağlanılıyor... Oda kimliğini arkadaşınla paylaş.",
+    "muteMicrophone": "Mikrofonu kapat",
+    "unmuteMicrophone": "Mikrofonu aç",
+    "turnOffCamera": "Kamerayı kapat",
+    "turnOnCamera": "Kamerayı aç",
+    "stopTranscription": "Transkripti durdur",
+    "startTranscription": "Transkripti başlat",
+    "leave": "Ayrıl",
+    "shareRoomId": "Bu oda kimliğini arkadaşınla paylaş:",
+    "joinInstructions": "Ana sayfada bu kimliği girerek katılabilirler.",
+    "translationTip": "Canlı çeviriyi başlatmak için çeviri düğmesine tıkla."
+  },
+  "subtitle": {
+    "original": "Orijinal",
+    "listening": "Dinleniyor...",
+    "waitingForSpeech": "Konuşma bekleniyor...",
+    "translated": "Çevrildi",
+    "translating": "Çevriliyor...",
+    "translationPlaceholder": "Çeviri burada görünecek..."
+  },
+  "controls": {
+    "translateTo": "Şuna çevir:"
+  },
+  "voiceIndicator": {
+    "error": "Hata",
+    "disconnected": "Bağlantı kesildi",
+    "paused": "Duraklatıldı",
+    "playing": "Oynatılıyor",
+    "idle": "Boşta",
+    "resumeAudio": "Sesi devam ettir",
+    "pauseAudio": "Sesi duraklat",
+    "unmuteVoice": "Sesi aç",
+    "muteVoice": "Sesi kapat",
+    "restartTranscription": "Transkripsionu yeniden başlat",
+    "generationTime": "Oluşturma süresi",
+    "totalLatency": "Toplam gecikme",
+    "bufferSize": "Arabellek boyutu",
+    "transcriptionLatency": "Transkripsiyon gecikmesi",
+    "lag": "gecikme"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev Demo",
+    "description": "Lingo.dev SDK kullanarak yapay zeka destekli canlı çeviri ile gerçek zamanlı görüntülü sohbet"
+  }
+}

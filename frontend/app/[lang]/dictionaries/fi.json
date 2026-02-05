@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Ladataan...",
+    "continue": "Jatka",
+    "skipForNow": "Ohita toistaiseksi",
+    "poweredBy": "Palvelun tarjoaa",
+    "copiedToClipboard": "Kopioitu leikepöydälle"
+  },
+  "home": {
+    "title": "Tallenna äänesi käännöstä varten",
+    "sampleText": "Hei, voin tänään hienosti ja aurinkoinen sää nostaa mielialaani.",
+    "languageHint": "Voit vaihtaa kieltä myöhemmin huoneen asetuksista.",
+    "recording": "Tallennetaan...",
+    "sending": "Lähetetään...",
+    "voiceSampleUploaded": "Äänesi on lähetetty",
+    "startRecording": "Aloita tallennus",
+    "stopRecording": "Lopeta tallennus",
+    "microphoneAccessDenied": "Mikrofonin käyttö estetty",
+    "failedToSendAudio": "Äänen lähettäminen epäonnistui"
+  },
+  "lobby": {
+    "title": "WebRTC-kääntäjä",
+    "subtitle": "Reaaliaikainen videopuhelu tekoälyn suorakäännöksellä",
+    "createNewRoom": "Luo uusi huone",
+    "creatingRoom": "Luodaan huonetta...",
+    "or": "TAI",
+    "enterRoomId": "Syötä huoneen tunnus",
+    "joinRoom": "Liity huoneeseen",
+    "joining": "Liitytään...",
+    "failedToCreateRoom": "Huoneen luominen epäonnistui. Yritä uudelleen.",
+    "features": {
+      "videoChat": "Videopuhelu",
+      "speechToText": "Puheesta tekstiksi",
+      "aiTranslation": "Tekoälykäännös"
+    }
+  },
+  "room": {
+    "title": "WebRTC-kääntäjä",
+    "roomLabel": "Huone:",
+    "copyRoomId": "Kopioi huoneen tunnus",
+    "connectingToPeer": "Yhdistetään vertaiseen... Jaa huoneen tunnus ystävällesi.",
+    "muteMicrophone": "Mykistä mikrofoni",
+    "unmuteMicrophone": "Poista mykistys",
+    "turnOffCamera": "Sammuta kamera",
+    "turnOnCamera": "Käynnistä kamera",
+    "stopTranscription": "Pysäytä litterointi",
+    "startTranscription": "Aloita litterointi",
+    "leave": "Poistu",
+    "shareRoomId": "Jaa tämä huoneen tunnus ystävällesi:",
+    "joinInstructions": "He voivat liittyä syöttämällä tämän tunnuksen etusivulla.",
+    "translationTip": "Napsauta käännöspainiketta aloittaaksesi reaaliaikaisen käännöksen."
+  },
+  "subtitle": {
+    "original": "Alkuperäinen",
+    "listening": "Kuunnellaan...",
+    "waitingForSpeech": "Odotetaan puhetta...",
+    "translated": "Käännetty",
+    "translating": "Käännetään...",
+    "translationPlaceholder": "Käännös näkyy tässä..."
+  },
+  "controls": {
+    "translateTo": "Käännä kielelle:"
+  },
+  "voiceIndicator": {
+    "error": "Virhe",
+    "disconnected": "Yhteys katkaistu",
+    "paused": "Keskeytetty",
+    "playing": "Toistetaan",
+    "idle": "Käyttämätön",
+    "resumeAudio": "Jatka ääntä",
+    "pauseAudio": "Keskeytä ääni",
+    "unmuteVoice": "Poista äänen mykistys",
+    "muteVoice": "Mykistä ääni",
+    "restartTranscription": "Käynnistä litterointi uudelleen",
+    "generationTime": "Luontiaika",
+    "totalLatency": "Kokonaisviive",
+    "bufferSize": "Puskurin koko",
+    "transcriptionLatency": "Litterointiviive",
+    "lag": "viive"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev Demo",
+    "description": "Reaaliaikainen videokeskustelu tekoälypohjaisella reaaliaikaisella käännöksellä Lingo.dev SDK:n avulla"
+  }
+}

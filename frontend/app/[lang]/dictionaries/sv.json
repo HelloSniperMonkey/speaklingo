@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Laddar...",
+    "continue": "Fortsätt",
+    "skipForNow": "Hoppa över för nu",
+    "poweredBy": "Drivs av",
+    "copiedToClipboard": "Kopierat till urklipp"
+  },
+  "home": {
+    "title": "Spela in ditt röstprov för översättning",
+    "sampleText": "Hej, jag mår bra idag och vädret är soligt vilket lyfter mitt humör.",
+    "languageHint": "Du kan byta språk senare i rummets kontroller.",
+    "recording": "Spelar in...",
+    "sending": "Skickar...",
+    "voiceSampleUploaded": "Röstprov uppladdat",
+    "startRecording": "Börja spela in",
+    "stopRecording": "Stoppa inspelning",
+    "microphoneAccessDenied": "Mikrofonåtkomst nekad",
+    "failedToSendAudio": "Misslyckades att skicka ljudet"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Videomöte i realtid med AI-översättning",
+    "createNewRoom": "Skapa nytt rum",
+    "creatingRoom": "Skapar rum...",
+    "or": "ELLER",
+    "enterRoomId": "Ange rums-ID",
+    "joinRoom": "Gå med i rum",
+    "joining": "Går med...",
+    "failedToCreateRoom": "Det gick inte att skapa rum. Försök igen.",
+    "features": {
+      "videoChat": "Videosamtal",
+      "speechToText": "Tal till text",
+      "aiTranslation": "AI-översättning"
+    }
+  },
+  "room": {
+    "title": "WebRTC Translator",
+    "roomLabel": "Rum:",
+    "copyRoomId": "Kopiera rums-ID",
+    "connectingToPeer": "Ansluter till deltagare... Dela rums-ID med din vän.",
+    "muteMicrophone": "Stäng av mikrofonen",
+    "unmuteMicrophone": "Slå på mikrofonen",
+    "turnOffCamera": "Stäng av kameran",
+    "turnOnCamera": "Slå på kameran",
+    "stopTranscription": "Stoppa transkribering",
+    "startTranscription": "Starta transkribering",
+    "leave": "Lämna",
+    "shareRoomId": "Dela detta rums-ID med din vän:",
+    "joinInstructions": "De kan gå med genom att ange detta ID på startsidan.",
+    "translationTip": "Klicka på översättningsknappen för att starta liveöversättning."
+  },
+  "subtitle": {
+    "original": "Original",
+    "listening": "Lyssnar...",
+    "waitingForSpeech": "Väntar på tal...",
+    "translated": "Översatt",
+    "translating": "Översätter...",
+    "translationPlaceholder": "Översättningen visas här..."
+  },
+  "controls": {
+    "translateTo": "Översätt till:"
+  },
+  "voiceIndicator": {
+    "error": "Fel",
+    "disconnected": "Frånkopplad",
+    "paused": "Pausad",
+    "playing": "Spelar upp",
+    "idle": "Inaktiv",
+    "resumeAudio": "Återuppta ljud",
+    "pauseAudio": "Pausa ljud",
+    "unmuteVoice": "Slå på röst",
+    "muteVoice": "Stäng av röst",
+    "restartTranscription": "Starta om transkribering",
+    "generationTime": "Genereringstid",
+    "totalLatency": "Total fördröjning",
+    "bufferSize": "Buffertstorlek",
+    "transcriptionLatency": "Transkriberingsfördröjning",
+    "lag": "fördröjning"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev Demo",
+    "description": "Videokonversation i realtid med AI-driven liveöversättning via Lingo.dev SDK"
+  }
+}

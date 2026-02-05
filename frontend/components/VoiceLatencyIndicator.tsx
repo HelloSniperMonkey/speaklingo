@@ -1,6 +1,7 @@
 "use client";
 
 import { Gloria_Hallelujah } from "next/font/google";
+import { useTranslation } from "@/app/[lang]/components/I18nProvider";
 
 const handFont = Gloria_Hallelujah({ subsets: ["latin"], weight: "400" });
 
@@ -37,13 +38,15 @@ export function VoiceLatencyIndicator({
   onTogglePause,
   onRestartTranscription,
 }: VoiceLatencyIndicatorProps) {
+  const { t } = useTranslation();
+
   // Determine status
   const getStatus = () => {
-    if (error) return { label: "Error", color: "text-red-600", bg: "bg-red-100" };
-    if (!isConnected) return { label: "Disconnected", color: "text-gray-500", bg: "bg-gray-100" };
-    if (isPaused) return { label: "Paused", color: "text-yellow-600", bg: "bg-yellow-100" };
-    if (isPlaying) return { label: "Playing", color: "text-green-600", bg: "bg-green-100" };
-    return { label: "Idle", color: "text-blue-600", bg: "bg-blue-100" };
+    if (error) return { label: t("voiceIndicator.error"), color: "text-red-600", bg: "bg-red-100" };
+    if (!isConnected) return { label: t("voiceIndicator.disconnected"), color: "text-gray-500", bg: "bg-gray-100" };
+    if (isPaused) return { label: t("voiceIndicator.paused"), color: "text-yellow-600", bg: "bg-yellow-100" };
+    if (isPlaying) return { label: t("voiceIndicator.playing"), color: "text-green-600", bg: "bg-green-100" };
+    return { label: t("voiceIndicator.idle"), color: "text-blue-600", bg: "bg-blue-100" };
   };
 
   const status = getStatus();
@@ -102,17 +105,17 @@ export function VoiceLatencyIndicator({
       {/* Latency metrics */}
       {latencyMetrics && isConnected && (
         <div className="flex items-center gap-2 text-xs text-gray-600">
-          <span title="Generation time">
+          <span title={t("voiceIndicator.generationTime")}>
             🎙 {formatLatency(latencyMetrics.generationTimeMs)}
           </span>
           <span className="text-gray-400">|</span>
-          <span title="Total latency">
+          <span title={t("voiceIndicator.totalLatency")}>
             ⏱ {formatLatency(latencyMetrics.totalLatencyMs)}
           </span>
           {latencyMetrics.bufferSizeChunks > 0 && (
             <>
               <span className="text-gray-400">|</span>
-              <span title="Buffer size">
+              <span title={t("voiceIndicator.bufferSize")}>
                 📦 {latencyMetrics.bufferSizeChunks}
               </span>
             </>
@@ -122,7 +125,7 @@ export function VoiceLatencyIndicator({
 
       {/* Transcription latency */}
       {transcriptionLatencyMs !== undefined && transcriptionLatencyMs !== null && (
-        <div className="flex items-center gap-1 text-xs text-gray-600" title="Transcription latency">
+        <div className="flex items-center gap-1 text-xs text-gray-600" title={t("voiceIndicator.transcriptionLatency")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -136,7 +139,7 @@ export function VoiceLatencyIndicator({
             <line x1="12" y1="19" x2="12" y2="23" />
             <line x1="8" y1="23" x2="16" y2="23" />
           </svg>
-          <span>{formatLatency(transcriptionLatencyMs)} lag</span>
+          <span>{formatLatency(transcriptionLatencyMs)} {t("voiceIndicator.lag")}</span>
         </div>
       )}
 
@@ -149,7 +152,7 @@ export function VoiceLatencyIndicator({
             ${isPaused ? "bg-yellow-100 text-yellow-600" : "bg-gray-100 text-gray-600"}
             hover:bg-gray-200
           `}
-          title={isPaused ? "Resume audio" : "Pause audio"}
+          title={isPaused ? t("voiceIndicator.resumeAudio") : t("voiceIndicator.pauseAudio")}
         >
           {isPaused ? (
             <svg
@@ -187,7 +190,7 @@ export function VoiceLatencyIndicator({
             ${isMuted ? "bg-red-100 text-red-600" : "bg-gray-100 text-gray-600"}
             hover:bg-gray-200
           `}
-          title={isMuted ? "Unmute voice" : "Mute voice"}
+          title={isMuted ? t("voiceIndicator.unmuteVoice") : t("voiceIndicator.muteVoice")}
         >
           {isMuted ? (
             <svg
@@ -231,7 +234,7 @@ export function VoiceLatencyIndicator({
             bg-gray-100 text-gray-600
             hover:bg-gray-200
           "
-          title="Restart transcription"
+          title={t("voiceIndicator.restartTranscription")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

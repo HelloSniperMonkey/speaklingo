@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "continue": "जारी रखें",
+    "skipForNow": "अभी के लिए छोड़ें",
+    "poweredBy": "द्वारा संचालित",
+    "copiedToClipboard": "क्लिपबोर्ड पर कॉपी किया गया"
+  },
+  "home": {
+    "title": "अनुवाद के लिए अपना वॉइस सैंपल रिकॉर्ड करें",
+    "sampleText": "नमस्ते मैं आज बहुत अच्छा महसूस कर रहा हूं और मौसम धूप वाला है जो मेरे मूड को बेहतर बनाता है।",
+    "languageHint": "आप रूम कंट्रोल्स के अंदर बाद में भाषाएं बदल सकते हैं।",
+    "recording": "रिकॉर्ड हो रहा है...",
+    "sending": "भेजा जा रहा है...",
+    "voiceSampleUploaded": "वॉइस सैंपल अपलोड किया गया",
+    "startRecording": "रिकॉर्डिंग शुरू करें",
+    "stopRecording": "रिकॉर्डिंग बंद करें",
+    "microphoneAccessDenied": "माइक्रोफ़ोन एक्सेस अस्वीकृत",
+    "failedToSendAudio": "ऑडियो भेजने में विफल"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "लाइव AI अनुवाद के साथ रियल-टाइम वीडियो चैट",
+    "createNewRoom": "नया रूम बनाएं",
+    "creatingRoom": "रूम बनाया जा रहा है...",
+    "or": "या",
+    "enterRoomId": "रूम ID दर्ज करें",
+    "joinRoom": "रूम में शामिल हों",
+    "joining": "शामिल हो रहे हैं...",
+    "failedToCreateRoom": "रूम बनाने में विफल। कृपया पुनः प्रयास करें।",
+    "features": {
+      "videoChat": "वीडियो चैट",
+      "speechToText": "वाक् से पाठ",
+      "aiTranslation": "AI अनुवाद"
+    }
+  },
+  "room": {
+    "title": "WebRTC अनुवादक",
+    "roomLabel": "रूम:",
+    "copyRoomId": "रूम ID कॉपी करें",
+    "connectingToPeer": "पीयर से कनेक्ट हो रहा है... अपने मित्र के साथ रूम ID साझा करें।",
+    "muteMicrophone": "माइक्रोफ़ोन म्यूट करें",
+    "unmuteMicrophone": "माइक्रोफ़ोन अनम्यूट करें",
+    "turnOffCamera": "कैमरा बंद करें",
+    "turnOnCamera": "कैमरा चालू करें",
+    "stopTranscription": "ट्रांसक्रिप्शन बंद करें",
+    "startTranscription": "ट्रांसक्रिप्शन शुरू करें",
+    "leave": "छोड़ें",
+    "shareRoomId": "अपने मित्र के साथ यह रूम ID साझा करें:",
+    "joinInstructions": "वे होम पेज पर यह ID दर्ज करके जुड़ सकते हैं।",
+    "translationTip": "लाइव अनुवाद शुरू करने के लिए अनुवाद बटन पर क्लिक करें।"
+  },
+  "subtitle": {
+    "original": "मूल",
+    "listening": "सुन रहा है...",
+    "waitingForSpeech": "वाक् की प्रतीक्षा में...",
+    "translated": "अनुवादित",
+    "translating": "अनुवाद हो रहा है...",
+    "translationPlaceholder": "अनुवाद यहाँ दिखाई देगा..."
+  },
+  "controls": {
+    "translateTo": "इसमें अनुवाद करें:"
+  },
+  "voiceIndicator": {
+    "error": "त्रुटि",
+    "disconnected": "डिस्कनेक्ट हो गया",
+    "paused": "रोका गया",
+    "playing": "चल रहा है",
+    "idle": "निष्क्रिय",
+    "resumeAudio": "ऑडियो फिर से शुरू करें",
+    "pauseAudio": "ऑडियो रोकें",
+    "unmuteVoice": "आवाज़ चालू करें",
+    "muteVoice": "आवाज़ बंद करें",
+    "restartTranscription": "ट्रांसक्रिप्शन फिर से शुरू करें",
+    "generationTime": "जनरेशन समय",
+    "totalLatency": "कुल विलंबता",
+    "bufferSize": "बफर आकार",
+    "transcriptionLatency": "ट्रांसक्रिप्शन विलंबता",
+    "lag": "विलंब"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev Demo",
+    "description": "Lingo.dev SDK का उपयोग करके AI-संचालित लाइव अनुवाद के साथ रियल-टाइम वीडियो चैट"
+  }
+}

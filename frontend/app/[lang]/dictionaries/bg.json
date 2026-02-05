@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Зареждане...",
+    "continue": "Продължи",
+    "skipForNow": "Пропусни засега",
+    "poweredBy": "Задвижвано от",
+    "copiedToClipboard": "Копирано в клипборда"
+  },
+  "home": {
+    "title": "Запишете гласов образец за превод",
+    "sampleText": "Здравей, чувствам се страхотно днес и времето е слънчево, което подобрява настроението ми.",
+    "languageHint": "Можете да смените езиците по-късно от контролите на стаята.",
+    "recording": "Записване...",
+    "sending": "Изпращане...",
+    "voiceSampleUploaded": "Гласовият образец е качен",
+    "startRecording": "Започни записване",
+    "stopRecording": "Спри записването",
+    "microphoneAccessDenied": "Достъпът до микрофона е отказан",
+    "failedToSendAudio": "Неуспешно изпращане на аудио"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Видео чат в реално време с AI превод на живо",
+    "createNewRoom": "Създай нова стая",
+    "creatingRoom": "Създаване на стая...",
+    "or": "ИЛИ",
+    "enterRoomId": "Въведи ID на стаята",
+    "joinRoom": "Присъедини се към стаята",
+    "joining": "Присъединяване...",
+    "failedToCreateRoom": "Неуспешно създаване на стая. Моля, опитайте отново.",
+    "features": {
+      "videoChat": "Видео чат",
+      "speechToText": "Реч към текст",
+      "aiTranslation": "AI превод"
+    }
+  },
+  "room": {
+    "title": "WebRTC преводач",
+    "roomLabel": "Стая:",
+    "copyRoomId": "Копирай ID на стаята",
+    "connectingToPeer": "Свързване с участник... Сподели ID на стаята с приятел.",
+    "muteMicrophone": "Изключи микрофона",
+    "unmuteMicrophone": "Включи микрофона",
+    "turnOffCamera": "Изключи камерата",
+    "turnOnCamera": "Включи камерата",
+    "stopTranscription": "Спри транскрипцията",
+    "startTranscription": "Стартирай транскрипцията",
+    "leave": "Напусни",
+    "shareRoomId": "Сподели този ID на стаята с приятел:",
+    "joinInstructions": "Те могат да се присъединят, като въведат този ID на началната страница.",
+    "translationTip": "Кликни бутона за превод, за да стартираш превод на живо."
+  },
+  "subtitle": {
+    "original": "Оригинал",
+    "listening": "Слушам...",
+    "waitingForSpeech": "Изчакване на реч...",
+    "translated": "Преведено",
+    "translating": "Превеждам...",
+    "translationPlaceholder": "Преводът ще се появи тук..."
+  },
+  "controls": {
+    "translateTo": "Преведи на:"
+  },
+  "voiceIndicator": {
+    "error": "Грешка",
+    "disconnected": "Прекъсната връзка",
+    "paused": "На пауза",
+    "playing": "Възпроизвежда се",
+    "idle": "В режим на изчакване",
+    "resumeAudio": "Възобнови аудиото",
+    "pauseAudio": "Постави аудиото на пауза",
+    "unmuteVoice": "Включи звука",
+    "muteVoice": "Изключи звука",
+    "restartTranscription": "Рестартирай транскрипцията",
+    "generationTime": "Време за генериране",
+    "totalLatency": "Обща латентност",
+    "bufferSize": "Размер на буфера",
+    "transcriptionLatency": "Латентност на транскрипцията",
+    "lag": "забавяне"
+  },
+  "metadata": {
+    "title": "WebRTC преводач | Lingo.dev демо",
+    "description": "Видео чат в реално време с AI-базиран превод на живо чрез Lingo.dev SDK"
+  }
+}

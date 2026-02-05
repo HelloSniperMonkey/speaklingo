@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Betöltés...",
+    "continue": "Folytatás",
+    "skipForNow": "Kihagyás egyelőre",
+    "poweredBy": "Powered by",
+    "copiedToClipboard": "Vágólapra másolva"
+  },
+  "home": {
+    "title": "Rögzítsd a hangmintádat fordításhoz",
+    "sampleText": "Helló, ma remekül érzem magam, és a napos idő feldobja a hangulatom.",
+    "languageHint": "A nyelveket később a szoba vezérlőiben módosíthatod.",
+    "recording": "Rögzítés...",
+    "sending": "Küldés...",
+    "voiceSampleUploaded": "Hangminta feltöltve",
+    "startRecording": "Rögzítés indítása",
+    "stopRecording": "Rögzítés leállítása",
+    "microphoneAccessDenied": "Mikrofon hozzáférés megtagadva",
+    "failedToSendAudio": "Nem sikerült elküldeni a hangot"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Valós idejű videócsevegés élő AI fordítással",
+    "createNewRoom": "Új szoba létrehozása",
+    "creatingRoom": "Szoba létrehozása...",
+    "or": "VAGY",
+    "enterRoomId": "Szoba azonosító megadása",
+    "joinRoom": "Csatlakozás a szobához",
+    "joining": "Csatlakozás...",
+    "failedToCreateRoom": "Nem sikerült létrehozni a szobát. Kérjük, próbáld újra.",
+    "features": {
+      "videoChat": "Videócsevegés",
+      "speechToText": "Beszéd szöveggé",
+      "aiTranslation": "AI fordítás"
+    }
+  },
+  "room": {
+    "title": "WebRTC fordító",
+    "roomLabel": "Szoba:",
+    "copyRoomId": "Szoba azonosító másolása",
+    "connectingToPeer": "Csatlakozás a partnerhez... Oszd meg a szoba azonosítót a barátoddal.",
+    "muteMicrophone": "Mikrofon némítása",
+    "unmuteMicrophone": "Mikrofon némítás feloldása",
+    "turnOffCamera": "Kamera kikapcsolása",
+    "turnOnCamera": "Kamera bekapcsolása",
+    "stopTranscription": "Átírás leállítása",
+    "startTranscription": "Átírás indítása",
+    "leave": "Kilépés",
+    "shareRoomId": "Oszd meg ezt a szoba azonosítót a barátoddal:",
+    "joinInstructions": "Csatlakozhat úgy, hogy beírja ezt az azonosítót a kezdőlapon.",
+    "translationTip": "Kattints a fordítás gombra az élő fordítás indításához."
+  },
+  "subtitle": {
+    "original": "Eredeti",
+    "listening": "Figyelés...",
+    "waitingForSpeech": "Várakozás beszédre...",
+    "translated": "Lefordítva",
+    "translating": "Fordítás...",
+    "translationPlaceholder": "A fordítás itt fog megjelenni..."
+  },
+  "controls": {
+    "translateTo": "Fordítás erre:"
+  },
+  "voiceIndicator": {
+    "error": "Hiba",
+    "disconnected": "Kapcsolat megszakadt",
+    "paused": "Szüneteltetve",
+    "playing": "Lejátszás",
+    "idle": "Tétlen",
+    "resumeAudio": "Hang folytatása",
+    "pauseAudio": "Hang szüneteltetése",
+    "unmuteVoice": "Hang bekapcsolása",
+    "muteVoice": "Hang némítása",
+    "restartTranscription": "Átírás újraindítása",
+    "generationTime": "Generálási idő",
+    "totalLatency": "Teljes késleltetés",
+    "bufferSize": "Puffer mérete",
+    "transcriptionLatency": "Átírási késleltetés",
+    "lag": "késleltetés"
+  },
+  "metadata": {
+    "title": "WebRTC fordító | Lingo.dev demó",
+    "description": "Valós idejű videócsevegés AI-alapú élő fordítással a Lingo.dev SDK használatával"
+  }
+}

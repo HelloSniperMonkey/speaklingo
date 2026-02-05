@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "continue": "继续",
+    "skipForNow": "暂时跳过",
+    "poweredBy": "技术支持：",
+    "copiedToClipboard": "已复制到剪贴板"
+  },
+  "home": {
+    "title": "录制您的语音样本以便翻译",
+    "sampleText": "你好，我今天感觉很好，天气晴朗，让我的心情更加愉快。",
+    "languageHint": "您可以稍后在房间控制中切换语言。",
+    "recording": "正在录音...",
+    "sending": "正在发送...",
+    "voiceSampleUploaded": "语音样本已上传",
+    "startRecording": "开始录音",
+    "stopRecording": "停止录音",
+    "microphoneAccessDenied": "麦克风访问被拒绝",
+    "failedToSendAudio": "音频发送失败"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "实时视频聊天与 AI 同声翻译",
+    "createNewRoom": "创建新房间",
+    "creatingRoom": "正在创建房间...",
+    "or": "或",
+    "enterRoomId": "输入房间 ID",
+    "joinRoom": "加入房间",
+    "joining": "正在加入...",
+    "failedToCreateRoom": "创建房间失败，请重试。",
+    "features": {
+      "videoChat": "视频聊天",
+      "speechToText": "语音转文字",
+      "aiTranslation": "AI 翻译"
+    }
+  },
+  "room": {
+    "title": "WebRTC 翻译器",
+    "roomLabel": "房间：",
+    "copyRoomId": "复制房间 ID",
+    "connectingToPeer": "正在连接对方……请将房间 ID 分享给你的朋友。",
+    "muteMicrophone": "静音麦克风",
+    "unmuteMicrophone": "取消静音麦克风",
+    "turnOffCamera": "关闭摄像头",
+    "turnOnCamera": "打开摄像头",
+    "stopTranscription": "停止转录",
+    "startTranscription": "开始转录",
+    "leave": "离开",
+    "shareRoomId": "将此房间 ID 分享给你的朋友：",
+    "joinInstructions": "他们可以在主页输入此 ID 加入。",
+    "translationTip": "点击翻译按钮开始实时翻译。"
+  },
+  "subtitle": {
+    "original": "原文",
+    "listening": "正在聆听……",
+    "waitingForSpeech": "等待语音……",
+    "translated": "已翻译",
+    "translating": "正在翻译……",
+    "translationPlaceholder": "翻译内容将显示在这里……"
+  },
+  "controls": {
+    "translateTo": "翻译为："
+  },
+  "voiceIndicator": {
+    "error": "错误",
+    "disconnected": "已断开连接",
+    "paused": "已暂停",
+    "playing": "正在播放",
+    "idle": "空闲",
+    "resumeAudio": "恢复音频",
+    "pauseAudio": "暂停音频",
+    "unmuteVoice": "取消静音",
+    "muteVoice": "静音",
+    "restartTranscription": "重新开始转录",
+    "generationTime": "生成时间",
+    "totalLatency": "总延迟",
+    "bufferSize": "缓冲区大小",
+    "transcriptionLatency": "转录延迟",
+    "lag": "延迟"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev 演示",
+    "description": "使用 Lingo.dev SDK 的 AI 实时翻译视频聊天"
+  }
+}

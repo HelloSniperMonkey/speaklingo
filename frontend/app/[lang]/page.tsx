@@ -1,9 +1,10 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Gloria_Hallelujah } from "next/font/google";
-import { LANGUAGES } from "@/lib/languages";
+import { useTranslation } from "./components/I18nProvider";
+import { LanguageSwitcher } from "./components/LanguageSwitcher";
 
 const handFont = Gloria_Hallelujah({ subsets: ["latin"], weight: "400" });
 
@@ -11,14 +12,14 @@ const handFont = Gloria_Hallelujah({ subsets: ["latin"], weight: "400" });
 // Supports ?testUser=2 query param for testing with same browser
 function getOrCreateUserId(testUserOverride?: string | null): string {
   if (typeof window === 'undefined') return `user_${Date.now()}`;
-  
+
   // For testing: use ?testUser=2 to simulate a second user in same browser
   if (testUserOverride) {
     const testUserId = `test_user_${testUserOverride}`;
     sessionStorage.setItem('voiceUserId', testUserId);
     return testUserId;
   }
-  
+
   let uniqueUserId = localStorage.getItem('voiceUserId');
   if (!uniqueUserId) {
     uniqueUserId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
@@ -30,7 +31,7 @@ function getOrCreateUserId(testUserOverride?: string | null): string {
 // Wrap the main content to handle Suspense for useSearchParams
 export default function HomePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">...</div>}>
       <HomePageContent />
     </Suspense>
   );
@@ -39,9 +40,12 @@ export default function HomePage() {
 function HomePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
+  const lang = params.lang as string;
   const testUser = searchParams.get('testUser'); // For testing: ?testUser=2 simulates second user
-  
-  const [introLanguage, setIntroLanguage] = useState("en");
+  const { t } = useTranslation();
+
+
   const [isRecording, setIsRecording] = useState(false);
   const [recordingError, setRecordingError] = useState<string | null>(null);
   const [recordingStatus, setRecordingStatus] = useState<string>("");
@@ -50,7 +54,7 @@ function HomePageContent() {
   // Use a unique persistent user ID for voice sample storage
   // This ensures each user's voice sample is stored separately
   const uniqueUserIdRef = useRef<string>('');
-  
+
   useEffect(() => {
     uniqueUserIdRef.current = getOrCreateUserId(testUser);
   }, [testUser]);
@@ -62,7 +66,7 @@ function HomePageContent() {
   const sendAudioToQwen = useCallback(async (audioBlob: Blob) => {
     try {
       const uniqueUserId = uniqueUserIdRef.current || getOrCreateUserId(testUser);
-      
+
       const formData = new FormData();
       formData.append("audio", audioBlob, "mic-input.webm");
       formData.append("roomId", "global");  // Use global room for pre-session voice samples
@@ -80,18 +84,18 @@ function HomePageContent() {
       }
 
       const data = await response.json();
-      setRecordingStatus(`Voice sample uploaded (${data.duration?.toFixed(1) || '?'}s)`);
+      setRecordingStatus(t("home.voiceSampleUploaded"));
       setVoiceSampleUploaded(true);
       setRecordingError(null);
-      
+
       // Store the unique user ID in sessionStorage for the room to use
       sessionStorage.setItem('voiceUserId', uniqueUserId);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to send audio";
+      const message = err instanceof Error ? err.message : t("home.failedToSendAudio");
       setRecordingError(message);
       setVoiceSampleUploaded(false);
     }
-  }, [testUser]);
+  }, [testUser, t]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
@@ -127,7 +131,7 @@ function HomePageContent() {
         const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
         chunksRef.current = [];
         if (audioBlob.size > 0) {
-          setRecordingStatus("Sending...");
+          setRecordingStatus(t("home.sending"));
           await sendAudioToQwen(audioBlob);
         }
       };
@@ -135,13 +139,13 @@ function HomePageContent() {
       recorder.start();
       mediaRecorderRef.current = recorder;
       setRecordingError(null);
-      setRecordingStatus("Recording...");
+      setRecordingStatus(t("home.recording"));
       setIsRecording(true);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Microphone access denied";
+      const message = err instanceof Error ? err.message : t("home.microphoneAccessDenied");
       setRecordingError(message);
     }
-  }, [isRecording, sendAudioToQwen, stopRecording]);
+  }, [isRecording, sendAudioToQwen, stopRecording, t]);
 
   useEffect(() => {
     return () => {
@@ -150,50 +154,42 @@ function HomePageContent() {
   }, [stopRecording]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 intro-surface">
-      <div className="relative max-w-4xl w-full bg-[#fffdf7] rounded-[28px] border-[4px] border-gray-900 shadow-[16px_16px_0_#111827] p-8 sm:p-12 overflow-hidden">
+    <div className="intro-surface">
+      {/* Language Switcher in top-right corner */}
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSwitcher />
+      </div>
+
+      <div className="sketch-card relative max-w-4xl w-full p-8 sm:p-12">
         <div className="absolute inset-0 pointer-events-none intro-noise" aria-hidden />
 
         <div className="flex justify-center">
           <div className="sketch-pill">
-            <span className={handFont.className}>Record your voice sample for translation</span>
+            <span className={handFont.className}>{t("home.title")}</span>
           </div>
         </div>
 
         <div className={`text-center mt-10 space-y-8 ${handFont.className}`}>
-          <p className="text-2xl sm:text-3xl leading-relaxed text-gray-900">
-            Hello I am feeling great today and the weather is sunny which uplifts my mood.
+          <p className="text-2xl sm:text-3xl leading-relaxed text-[var(--foreground)]">
+            {t("home.sampleText")}
           </p>
 
-          <div className="flex flex-col items-center gap-3">
-            <select
-              value={introLanguage}
-              onChange={(e) => setIntroLanguage(e.target.value)}
-              className="sketch-select"
-            >
-              {LANGUAGES.map((lang) => (
-                <option key={lang.code} value={lang.code}>
-                  {lang.name}
-                </option>
-              ))}
-            </select>
-            <span className="text-sm text-gray-500 font-medium">
-              You can switch languages later inside the room controls.
-            </span>
-          </div>
+          <p className="text-sm font-medium text-[var(--foreground)] opacity-70">
+            {t("home.languageHint")}
+          </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <button
-              onClick={() => router.push('/create')}
+              onClick={() => router.push(`/${lang}/create`)}
               className="intro-btn intro-btn-primary"
             >
-              Continue
+              {t("common.continue")}
             </button>
             <button
-              onClick={() => router.push('/create')}
+              onClick={() => router.push(`/${lang}/create`)}
               className="intro-btn intro-btn-ghost"
             >
-              Skip for now
+              {t("common.skipForNow")}
             </button>
           </div>
 
@@ -203,7 +199,7 @@ function HomePageContent() {
               onClick={toggleRecording}
               className={`sketch-circle ${isRecording ? "recording" : ""}`}
               aria-pressed={isRecording}
-              aria-label={isRecording ? "Stop recording" : "Start recording"}
+              aria-label={isRecording ? t("home.stopRecording") : t("home.startRecording")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +217,7 @@ function HomePageContent() {
                 <line x1="8" y1="22" x2="16" y2="22" />
               </svg>
             </button>
-            <div className="text-sm text-gray-600 font-medium min-h-[20px]">
+            <div className="text-sm font-medium min-h-[20px] text-[var(--foreground)] opacity-80">
               {recordingError ? recordingError : recordingStatus}
             </div>
           </div>

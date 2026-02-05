@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "جارٍ التحميل...",
+    "continue": "متابعة",
+    "skipForNow": "تخطي الآن",
+    "poweredBy": "مدعوم من",
+    "copiedToClipboard": "تم النسخ إلى الحافظة"
+  },
+  "home": {
+    "title": "سجل عينة صوتك للترجمة",
+    "sampleText": "مرحباً، أشعر بشعور رائع اليوم والطقس مشمس مما يحسن مزاجي.",
+    "languageHint": "يمكنك تبديل اللغات لاحقاً داخل عناصر التحكم في الغرفة.",
+    "recording": "جارٍ التسجيل...",
+    "sending": "جارٍ الإرسال...",
+    "voiceSampleUploaded": "تم رفع العينة الصوتية",
+    "startRecording": "بدء التسجيل",
+    "stopRecording": "إيقاف التسجيل",
+    "microphoneAccessDenied": "تم رفض الوصول إلى الميكروفون",
+    "failedToSendAudio": "فشل إرسال الصوت"
+  },
+  "lobby": {
+    "title": "مترجم WebRTC",
+    "subtitle": "محادثة فيديو فورية مع ترجمة مباشرة بالذكاء الاصطناعي",
+    "createNewRoom": "إنشاء غرفة جديدة",
+    "creatingRoom": "جارٍ إنشاء الغرفة...",
+    "or": "أو",
+    "enterRoomId": "أدخل معرف الغرفة",
+    "joinRoom": "الانضمام إلى الغرفة",
+    "joining": "جارٍ الانضمام...",
+    "failedToCreateRoom": "فشل إنشاء الغرفة. يرجى المحاولة مرة أخرى.",
+    "features": {
+      "videoChat": "محادثة فيديو",
+      "speechToText": "تحويل الكلام إلى نص",
+      "aiTranslation": "الترجمة بالذكاء الاصطناعي"
+    }
+  },
+  "room": {
+    "title": "مترجم WebRTC",
+    "roomLabel": "الغرفة:",
+    "copyRoomId": "نسخ معرّف الغرفة",
+    "connectingToPeer": "جارٍ الاتصال بالطرف الآخر... شارك معرّف الغرفة مع صديقك.",
+    "muteMicrophone": "كتم الميكروفون",
+    "unmuteMicrophone": "إلغاء كتم الميكروفون",
+    "turnOffCamera": "إيقاف الكاميرا",
+    "turnOnCamera": "تشغيل الكاميرا",
+    "stopTranscription": "إيقاف النسخ",
+    "startTranscription": "بدء النسخ",
+    "leave": "مغادرة",
+    "shareRoomId": "شارك معرّف الغرفة هذا مع صديقك:",
+    "joinInstructions": "يمكنهم الانضمام بإدخال هذا المعرّف في الصفحة الرئيسية.",
+    "translationTip": "انقر على زر الترجمة لبدء الترجمة المباشرة."
+  },
+  "subtitle": {
+    "original": "الأصلي",
+    "listening": "جارٍ الاستماع...",
+    "waitingForSpeech": "في انتظار الكلام...",
+    "translated": "مترجم",
+    "translating": "جارٍ الترجمة...",
+    "translationPlaceholder": "ستظهر الترجمة هنا..."
+  },
+  "controls": {
+    "translateTo": "الترجمة إلى:"
+  },
+  "voiceIndicator": {
+    "error": "خطأ",
+    "disconnected": "غير متصل",
+    "paused": "متوقف مؤقتًا",
+    "playing": "قيد التشغيل",
+    "idle": "خامل",
+    "resumeAudio": "استئناف الصوت",
+    "pauseAudio": "إيقاف الصوت مؤقتًا",
+    "unmuteVoice": "إلغاء كتم الصوت",
+    "muteVoice": "كتم الصوت",
+    "restartTranscription": "إعادة تشغيل النسخ",
+    "generationTime": "وقت الإنشاء",
+    "totalLatency": "إجمالي زمن الاستجابة",
+    "bufferSize": "حجم المخزن المؤقت",
+    "transcriptionLatency": "زمن استجابة النسخ",
+    "lag": "تأخير"
+  },
+  "metadata": {
+    "title": "مترجم WebRTC | عرض توضيحي من Lingo.dev",
+    "description": "محادثة فيديو في الوقت الفعلي مع ترجمة مباشرة مدعومة بالذكاء الاصطناعي باستخدام Lingo.dev SDK"
+  }
+}

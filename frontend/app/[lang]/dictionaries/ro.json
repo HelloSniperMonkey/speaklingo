@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Se încarcă...",
+    "continue": "Continuă",
+    "skipForNow": "Sari peste deocamdată",
+    "poweredBy": "Susținut de",
+    "copiedToClipboard": "Copiat în clipboard"
+  },
+  "home": {
+    "title": "Înregistrează un eșantion de voce pentru traducere",
+    "sampleText": "Bună, mă simt grozav astăzi, iar vremea este însorită, ceea ce îmi ridică moralul.",
+    "languageHint": "Poți schimba limba mai târziu din controalele camerei.",
+    "recording": "Se înregistrează...",
+    "sending": "Se trimite...",
+    "voiceSampleUploaded": "Eșantionul de voce a fost încărcat",
+    "startRecording": "Începe înregistrarea",
+    "stopRecording": "Oprește înregistrarea",
+    "microphoneAccessDenied": "Accesul la microfon a fost refuzat",
+    "failedToSendAudio": "Trimiterea audio a eșuat"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Chat video în timp real cu traducere AI live",
+    "createNewRoom": "Creează cameră nouă",
+    "creatingRoom": "Se creează camera...",
+    "or": "SAU",
+    "enterRoomId": "Introdu ID-ul camerei",
+    "joinRoom": "Alătură-te camerei",
+    "joining": "Se alătură...",
+    "failedToCreateRoom": "Crearea camerei a eșuat. Te rugăm să încerci din nou.",
+    "features": {
+      "videoChat": "Chat video",
+      "speechToText": "Transcriere automată",
+      "aiTranslation": "Traducere AI"
+    }
+  },
+  "room": {
+    "title": "WebRTC Translator",
+    "roomLabel": "Cameră:",
+    "copyRoomId": "Copiază ID-ul camerei",
+    "connectingToPeer": "Se conectează la partener... Distribuie ID-ul camerei prietenului tău.",
+    "muteMicrophone": "Dezactivează microfonul",
+    "unmuteMicrophone": "Activează microfonul",
+    "turnOffCamera": "Oprește camera",
+    "turnOnCamera": "Pornește camera",
+    "stopTranscription": "Oprește transcrierea",
+    "startTranscription": "Pornește transcrierea",
+    "leave": "Părăsește",
+    "shareRoomId": "Distribuie acest ID al camerei prietenului tău:",
+    "joinInstructions": "Se poate alătura introducând acest ID pe pagina principală.",
+    "translationTip": "Apasă butonul de traducere pentru a începe traducerea live."
+  },
+  "subtitle": {
+    "original": "Original",
+    "listening": "Ascultă...",
+    "waitingForSpeech": "Se așteaptă vorbirea...",
+    "translated": "Tradus",
+    "translating": "Se traduce...",
+    "translationPlaceholder": "Traducerea va apărea aici..."
+  },
+  "controls": {
+    "translateTo": "Tradu în:"
+  },
+  "voiceIndicator": {
+    "error": "Eroare",
+    "disconnected": "Deconectat",
+    "paused": "Pauzat",
+    "playing": "Redare",
+    "idle": "Inactiv",
+    "resumeAudio": "Reia audio",
+    "pauseAudio": "Pauzează audio",
+    "unmuteVoice": "Activează vocea",
+    "muteVoice": "Dezactivează vocea",
+    "restartTranscription": "Repornește transcrierea",
+    "generationTime": "Timp de generare",
+    "totalLatency": "Latență totală",
+    "bufferSize": "Dimensiune buffer",
+    "transcriptionLatency": "Latență transcriere",
+    "lag": "întârziere"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Demo Lingo.dev",
+    "description": "Chat video în timp real cu traducere live asistată de AI folosind SDK-ul Lingo.dev"
+  }
+}

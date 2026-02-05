@@ -3,8 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0a0b;
-  --foreground: #ededed;
+  --background: #0f1013;
+  --foreground: #f3f4f6;
+  --card-bg: #18191c;
+  --accent: #e5e7eb;
+  --accent-foreground: #0f1013;
+  --sketch-border: 3px solid #e5e7eb;
+  --sketch-shadow: 6px 6px 0px #e5e7eb;
+  --sketch-shadow-hover: 8px 8px 0px #e5e7eb;
+  --sketch-shadow-active: 2px 2px 0px #e5e7eb;
 }
 
 html,
@@ -13,245 +20,225 @@ body {
 }
 
 body {
-  background: linear-gradient(135deg, #0a0a0b 0%, #111113 50%, #0a0a0b 100%);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 25%);
 }
 
-/* Subtle animated gradient for background */
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+/* Noise overlay for texture */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-.gradient-bg {
-  background: linear-gradient(
-    135deg,
-    #0a0a0b 0%,
-    #0f0f12 25%,
-    #111115 50%,
-    #0f0f12 75%,
-    #0a0a0b 100%
-  );
-  background-size: 200% 200%;
-  animation: gradient-shift 15s ease infinite;
-}
+/* Unified Sketchy Components */
 
-/* Video container styles */
-.video-container {
+.sketch-card {
+  background-color: var(--card-bg);
+  border: var(--sketch-border);
+  border-radius: 24px;
+  box-shadow: var(--sketch-shadow);
+  color: var(--foreground);
   position: relative;
-  border-radius: 16px;
   overflow: hidden;
-  background: #1a1a1d;
 }
 
-.video-pip {
+.sketch-card::before {
+  content: "";
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 200px;
-  aspect-ratio: 16/9;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background: #0a0a0b;
+  inset: 0;
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
 }
 
-/* Subtitle panel styles */
-.subtitle-panel {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+/* Typography */
+.font-hand {
+  font-family: inherit;
+  /* Will be overridden by Next.js font class */
 }
 
-/* Button styles */
+/* Buttons */
+.btn-sketch-primary {
+  @apply px-6 py-3 font-bold rounded-full transition-all duration-200;
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  border: var(--sketch-border);
+  box-shadow: 4px 4px 0px #52525b;
+  /* Darker shadow for contrast on light button */
+}
+
+.btn-sketch-primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #52525b;
+}
+
+.btn-sketch-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #52525b;
+}
+
+.btn-sketch-secondary {
+  @apply px-6 py-3 font-bold rounded-full transition-all duration-200;
+  background-color: transparent;
+  color: var(--foreground);
+  border: var(--sketch-border);
+  box-shadow: var(--sketch-shadow);
+}
+
+.btn-sketch-secondary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--sketch-shadow-hover);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-sketch-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--sketch-shadow-active);
+}
+
+/* Inputs */
+.input-sketch {
+  @apply w-full px-5 py-3 font-medium rounded-xl transition-all outline-none;
+  background-color: transparent;
+  border: var(--sketch-border);
+  color: var(--foreground);
+  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
+}
+
+.input-sketch:focus {
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 4px 4px 0px var(--accent);
+  transform: translate(-1px, -1px);
+}
+
+/* Legacy Support / Adapters */
 .btn-primary {
-  @apply px-6 py-3 bg-white text-black font-medium rounded-lg transition-all duration-200;
-}
-
-.btn-primary:hover {
-  @apply bg-gray-200 scale-105;
-}
-
-.btn-primary:disabled {
-  @apply bg-gray-600 text-gray-400 cursor-not-allowed scale-100;
+  @apply btn-sketch-primary flex items-center justify-center;
 }
 
 .btn-secondary {
-  @apply px-6 py-3 bg-transparent border border-white/20 text-white font-medium rounded-lg transition-all duration-200;
+  @apply btn-sketch-secondary flex items-center justify-center;
 }
 
-.btn-secondary:hover {
-  @apply bg-white/10;
-}
-
-.btn-danger {
-  @apply px-6 py-3 bg-red-600 text-white font-medium rounded-lg transition-all duration-200;
-}
-
-.btn-danger:hover {
-  @apply bg-red-700;
-}
-
-/* Control button styles */
-.control-btn {
-  @apply w-12 h-12 flex items-center justify-center rounded-full transition-all duration-200;
-}
-
-.control-btn-active {
-  @apply bg-white/10 text-white hover:bg-white/20;
-}
-
-.control-btn-inactive {
-  @apply bg-red-600 text-white hover:bg-red-700;
-}
-
-/* Input styles */
 .input-field {
-  @apply w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors;
+  @apply input-sketch;
 }
 
-/* Select styles */
-.select-field {
-  @apply px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/30 transition-colors appearance-none cursor-pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+.intro-surface {
+  @apply min-h-screen flex items-center justify-center p-6;
+  background-color: var(--background);
+  /* Use the body background instead of specific surface bg */
+}
+
+.intro-noise {
+  /* Handled by .noise-overlay globally or locally */
+  opacity: 0.1;
+}
+
+.sketch-pill {
+  @apply inline-flex items-center justify-center px-6 py-3 font-bold rounded-2xl;
+  background-color: var(--card-bg);
+  border: var(--sketch-border);
+  box-shadow: var(--sketch-shadow);
+  color: var(--foreground);
+}
+
+.sketch-select {
+  @apply appearance-none cursor-pointer px-5 py-3 rounded-xl font-bold;
+  min-width: 220px;
+  background-color: var(--card-bg);
+  border: var(--sketch-border);
+  box-shadow: var(--sketch-shadow);
+  color: var(--foreground);
+  background-image: linear-gradient(45deg, transparent 50%, var(--foreground) 50%),
+    linear-gradient(135deg, var(--foreground) 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(50% - 4px), calc(100% - 14px) calc(50% - 4px);
+  background-size: 8px 8px, 8px 8px;
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 40px;
 }
 
-/* Fade in animation for subtitles */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.intro-btn {
+  @apply btn-sketch-primary;
 }
 
-.fade-in {
-  animation: fade-in 0.3s ease-out;
+.intro-btn-primary {
+  /* Already handled by mapping */
 }
 
-/* Pulse animation for recording indicator */
+.intro-btn-ghost {
+  @apply btn-sketch-secondary;
+}
+
+.sketch-circle {
+  @apply w-16 h-16 flex items-center justify-center rounded-full font-bold transition-all;
+  background-color: var(--card-bg);
+  border: var(--sketch-border);
+  box-shadow: var(--sketch-shadow);
+  color: var(--foreground);
+}
+
+.sketch-circle:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--sketch-shadow-hover);
+}
+
+.sketch-circle:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--sketch-shadow-active);
+}
+
+.sketch-circle.recording {
+  background-color: #7f1d1d;
+  color: #fecaca;
+  border-color: #ef4444;
+  box-shadow: 6px 6px 0px #991b1b;
+  animation: pulse 2s infinite;
+}
+
+/* Video specific styles */
+.video-container {
+  @apply sketch-card;
+  aspect-ratio: 16/9;
+  background-color: #000;
+}
+
+.video-pip {
+  @apply absolute bottom-4 right-4 w-48 aspect-video rounded-xl border-4 border-[var(--accent)] overflow-hidden;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.8);
+  z-index: 10;
+}
+
+.subtitle-panel {
+  @apply sketch-card mt-4 p-4;
+  background-color: rgba(24, 25, 28, 0.9);
+  backdrop-filter: blur(8px);
+}
+
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
-    opacity: 0.5;
+    opacity: 0.8;
   }
 }
 
-.pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Intro screen styles */
-.intro-surface {
-  background: radial-gradient(circle at 20% 20%, #fff4d8 0%, #f3f0e6 35%, #e8e6df 100%);
-  color: #0f172a;
-}
-
-.intro-noise {
-  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-  background-size: 6px 6px;
-  opacity: 0.25;
-}
-
-.sketch-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 22px;
-  border: 3px solid #111827;
-  border-radius: 16px;
-  background: #fffdf7;
-  box-shadow: 6px 6px 0 #111827;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.sketch-select {
-  min-width: 220px;
-  padding: 12px 14px;
-  border: 3px solid #111827;
-  border-radius: 14px;
-  background: #fffdf7;
-  color: #0f172a;
-  font-weight: 600;
-  box-shadow: 6px 6px 0 #111827;
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #111827 50%),
-    linear-gradient(135deg, #111827 50%, transparent 50%);
-  background-position: calc(100% - 20px) calc(50% - 4px), calc(100% - 14px) calc(50% - 4px);
-  background-size: 8px 8px, 8px 8px;
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-
-.intro-btn {
-  padding: 14px 22px;
-  border: 3px solid #111827;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  box-shadow: 8px 8px 0 #111827;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-}
-
-.intro-btn-primary {
-  background: #111827;
-  color: #fffdf7;
-}
-
-.intro-btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 10px 12px 0 #0a0f1a;
-}
-
-.intro-btn-ghost {
-  background: #fffdf7;
-  color: #0f172a;
-}
-
-.intro-btn-ghost:hover {
-  transform: translateY(-3px);
-  box-shadow: 10px 12px 0 #111827;
-  background: #f5f2e8;
-}
-
-.sketch-circle {
-  width: 72px;
-  height: 72px;
-  border: 3px solid #111827;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  box-shadow: 8px 8px 0 #111827;
-  background: #fffdf7;
-  color: #0f172a;
-}
-
-.sketch-circle.recording {
-  background: #fee2e2;
-  color: #b91c1c;
-  box-shadow: 10px 12px 0 #7f1d1d;
+/* Feature Icons support */
+.feature-icon-wrapper {
+  @apply w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center border-2 border-gray-700 bg-gray-900 shadow-[4px_4px_0_#374151];
 }

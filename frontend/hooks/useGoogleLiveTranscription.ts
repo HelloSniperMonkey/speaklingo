@@ -336,15 +336,16 @@ export function useGoogleLiveTranscription(url: string) {
         });
 
         try {
-            if (websocketRef.current?.readyState === WebSocket.OPEN) {
+            const ws = websocketRef.current as WebSocket | null;
+            if (ws?.readyState === WebSocket.OPEN) {
                 // Send language config first with optional roomId and userId
-                websocketRef.current.send(JSON.stringify({
+                ws.send(JSON.stringify({
                     command: 'config',
                     language: languageCode,
                     roomId: roomId,
                     userId: userId
                 }));
-                websocketRef.current.send(JSON.stringify({ command: 'start' }));
+                ws.send(JSON.stringify({ command: 'start' }));
             } else {
                 console.error('[Transcription] WebSocket not connected after waiting');
                 setError('Failed to connect to transcription server');

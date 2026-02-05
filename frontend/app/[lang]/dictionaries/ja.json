@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "continue": "続ける",
+    "skipForNow": "今はスキップ",
+    "poweredBy": "提供元",
+    "copiedToClipboard": "クリップボードにコピーしました"
+  },
+  "home": {
+    "title": "翻訳用の音声サンプルを録音",
+    "sampleText": "こんにちは、今日はとても気分が良く、天気も晴れているので気持ちが明るくなります。",
+    "languageHint": "ルームコントロール内で後から言語を切り替えることができます。",
+    "recording": "録音中...",
+    "sending": "送信中...",
+    "voiceSampleUploaded": "音声サンプルをアップロードしました",
+    "startRecording": "録音を開始",
+    "stopRecording": "録音を停止",
+    "microphoneAccessDenied": "マイクへのアクセスが拒否されました",
+    "failedToSendAudio": "音声の送信に失敗しました"
+  },
+  "lobby": {
+    "title": "WebRTCトランスレーター",
+    "subtitle": "ライブAI翻訳付きリアルタイムビデオチャット",
+    "createNewRoom": "新しいルームを作成",
+    "creatingRoom": "ルームを作成中...",
+    "or": "または",
+    "enterRoomId": "ルームIDを入力",
+    "joinRoom": "ルームに参加",
+    "joining": "参加中...",
+    "failedToCreateRoom": "ルームの作成に失敗しました。もう一度お試しください。",
+    "features": {
+      "videoChat": "ビデオチャット",
+      "speechToText": "音声テキスト変換",
+      "aiTranslation": "AI翻訳"
+    }
+  },
+  "room": {
+    "title": "WebRTC翻訳",
+    "roomLabel": "ルーム:",
+    "copyRoomId": "ルームIDをコピー",
+    "connectingToPeer": "相手に接続中... ルームIDを友達と共有してください。",
+    "muteMicrophone": "マイクをミュート",
+    "unmuteMicrophone": "マイクのミュートを解除",
+    "turnOffCamera": "カメラをオフ",
+    "turnOnCamera": "カメラをオン",
+    "stopTranscription": "文字起こしを停止",
+    "startTranscription": "文字起こしを開始",
+    "leave": "退出",
+    "shareRoomId": "このルームIDを友達と共有してください:",
+    "joinInstructions": "ホームページでこのIDを入力すると参加できます。",
+    "translationTip": "翻訳ボタンをクリックしてリアルタイム翻訳を開始してください。"
+  },
+  "subtitle": {
+    "original": "原文",
+    "listening": "聞き取り中...",
+    "waitingForSpeech": "音声を待機中...",
+    "translated": "翻訳済み",
+    "translating": "翻訳中...",
+    "translationPlaceholder": "翻訳がここに表示されます..."
+  },
+  "controls": {
+    "translateTo": "翻訳先:"
+  },
+  "voiceIndicator": {
+    "error": "エラー",
+    "disconnected": "切断されました",
+    "paused": "一時停止中",
+    "playing": "再生中",
+    "idle": "待機中",
+    "resumeAudio": "音声を再開",
+    "pauseAudio": "音声を一時停止",
+    "unmuteVoice": "音声のミュートを解除",
+    "muteVoice": "音声をミュート",
+    "restartTranscription": "文字起こしを再開",
+    "generationTime": "生成時間",
+    "totalLatency": "合計レイテンシ",
+    "bufferSize": "バッファサイズ",
+    "transcriptionLatency": "文字起こしレイテンシ",
+    "lag": "遅延"
+  },
+  "metadata": {
+    "title": "WebRTC翻訳 | Lingo.devデモ",
+    "description": "Lingo.dev SDKを使用したAI搭載リアルタイム翻訳機能付きビデオチャット"
+  }
+}

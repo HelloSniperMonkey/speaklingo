@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "continue": "Doorgaan",
+    "skipForNow": "Nu overslaan",
+    "poweredBy": "Mogelijk gemaakt door",
+    "copiedToClipboard": "Gekopieerd naar klembord"
+  },
+  "home": {
+    "title": "Neem je spraakvoorbeeld op voor vertaling",
+    "sampleText": "Hallo, ik voel me vandaag geweldig en het weer is zonnig, wat mijn humeur verbetert.",
+    "languageHint": "Je kunt later van taal wisselen in de ruimte-instellingen.",
+    "recording": "Opnemen...",
+    "sending": "Verzenden...",
+    "voiceSampleUploaded": "Spraakvoorbeeld geüpload",
+    "startRecording": "Start opname",
+    "stopRecording": "Stop opname",
+    "microphoneAccessDenied": "Toegang tot microfoon geweigerd",
+    "failedToSendAudio": "Verzenden van audio mislukt"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Realtime videochat met live AI-vertaling",
+    "createNewRoom": "Nieuwe ruimte aanmaken",
+    "creatingRoom": "Ruimte aanmaken...",
+    "or": "OF",
+    "enterRoomId": "Voer ruimte-ID in",
+    "joinRoom": "Deelnemen aan ruimte",
+    "joining": "Deelnemen...",
+    "failedToCreateRoom": "Aanmaken van ruimte mislukt. Probeer het opnieuw.",
+    "features": {
+      "videoChat": "Videochat",
+      "speechToText": "Spraak naar tekst",
+      "aiTranslation": "AI-vertaling"
+    }
+  },
+  "room": {
+    "title": "WebRTC-vertaler",
+    "roomLabel": "Ruimte:",
+    "copyRoomId": "Kopieer ruimte-ID",
+    "connectingToPeer": "Verbinden met peer... Deel de ruimte-ID met je vriend.",
+    "muteMicrophone": "Microfoon dempen",
+    "unmuteMicrophone": "Microfoon dempen opheffen",
+    "turnOffCamera": "Camera uitschakelen",
+    "turnOnCamera": "Camera inschakelen",
+    "stopTranscription": "Transcriptie stoppen",
+    "startTranscription": "Transcriptie starten",
+    "leave": "Verlaten",
+    "shareRoomId": "Deel deze ruimte-ID met je vriend:",
+    "joinInstructions": "Ze kunnen deelnemen door deze ID in te voeren op de startpagina.",
+    "translationTip": "Klik op de vertalingsknop om live vertaling te starten."
+  },
+  "subtitle": {
+    "original": "Origineel",
+    "listening": "Luisteren...",
+    "waitingForSpeech": "Wachten op spraak...",
+    "translated": "Vertaald",
+    "translating": "Vertalen...",
+    "translationPlaceholder": "Vertaling verschijnt hier..."
+  },
+  "controls": {
+    "translateTo": "Vertalen naar:"
+  },
+  "voiceIndicator": {
+    "error": "Fout",
+    "disconnected": "Verbinding verbroken",
+    "paused": "Gepauzeerd",
+    "playing": "Afspelen",
+    "idle": "Inactief",
+    "resumeAudio": "Audio hervatten",
+    "pauseAudio": "Audio pauzeren",
+    "unmuteVoice": "Stem dempen opheffen",
+    "muteVoice": "Stem dempen",
+    "restartTranscription": "Transcriptie herstarten",
+    "generationTime": "Generatietijd",
+    "totalLatency": "Totale latentie",
+    "bufferSize": "Buffergrootte",
+    "transcriptionLatency": "Transcriptielatentie",
+    "lag": "vertraging"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev demo",
+    "description": "Realtime videochat met AI-aangedreven live vertaling via Lingo.dev SDK"
+  }
+}

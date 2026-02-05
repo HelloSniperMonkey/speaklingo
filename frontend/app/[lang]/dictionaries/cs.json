@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Načítání...",
+    "continue": "Pokračovat",
+    "skipForNow": "Prozatím přeskočit",
+    "poweredBy": "Využívá technologii",
+    "copiedToClipboard": "Zkopírováno do schránky"
+  },
+  "home": {
+    "title": "Nahrajte vzorek svého hlasu pro překlad",
+    "sampleText": "Dobrý den, dnes se cítím skvěle a slunečné počasí mi zvedá náladu.",
+    "languageHint": "Jazyk můžete později změnit v ovládacích prvcích místnosti.",
+    "recording": "Nahrávání...",
+    "sending": "Odesílání...",
+    "voiceSampleUploaded": "Vzorek hlasu nahrán",
+    "startRecording": "Spustit nahrávání",
+    "stopRecording": "Zastavit nahrávání",
+    "microphoneAccessDenied": "Přístup k mikrofonu odepřen",
+    "failedToSendAudio": "Nepodařilo se odeslat zvuk"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "Videohovor v reálném čase s živým překladem pomocí AI",
+    "createNewRoom": "Vytvořit novou místnost",
+    "creatingRoom": "Vytváření místnosti...",
+    "or": "NEBO",
+    "enterRoomId": "Zadejte ID místnosti",
+    "joinRoom": "Připojit se k místnosti",
+    "joining": "Připojování...",
+    "failedToCreateRoom": "Nepodařilo se vytvořit místnost. Zkuste to prosím znovu.",
+    "features": {
+      "videoChat": "Videohovor",
+      "speechToText": "Převod řeči na text",
+      "aiTranslation": "AI překlad"
+    }
+  },
+  "room": {
+    "title": "WebRTC překladač",
+    "roomLabel": "Místnost:",
+    "copyRoomId": "Zkopírovat ID místnosti",
+    "connectingToPeer": "Připojování k účastníkovi... Sdílejte ID místnosti s přítelem.",
+    "muteMicrophone": "Ztlumit mikrofon",
+    "unmuteMicrophone": "Zapnout mikrofon",
+    "turnOffCamera": "Vypnout kameru",
+    "turnOnCamera": "Zapnout kameru",
+    "stopTranscription": "Zastavit přepis",
+    "startTranscription": "Spustit přepis",
+    "leave": "Odejít",
+    "shareRoomId": "Sdílejte toto ID místnosti s přítelem:",
+    "joinInstructions": "Může se připojit zadáním tohoto ID na domovské stránce.",
+    "translationTip": "Klikněte na tlačítko překladu pro spuštění živého překladu."
+  },
+  "subtitle": {
+    "original": "Originál",
+    "listening": "Naslouchám...",
+    "waitingForSpeech": "Čekám na řeč...",
+    "translated": "Přeloženo",
+    "translating": "Překládám...",
+    "translationPlaceholder": "Překlad se zobrazí zde..."
+  },
+  "controls": {
+    "translateTo": "Přeložit do:"
+  },
+  "voiceIndicator": {
+    "error": "Chyba",
+    "disconnected": "Odpojeno",
+    "paused": "Pozastaveno",
+    "playing": "Přehrává se",
+    "idle": "Nečinný",
+    "resumeAudio": "Obnovit zvuk",
+    "pauseAudio": "Pozastavit zvuk",
+    "unmuteVoice": "Zapnout hlas",
+    "muteVoice": "Ztlumit hlas",
+    "restartTranscription": "Restartovat přepis",
+    "generationTime": "Čas generování",
+    "totalLatency": "Celková latence",
+    "bufferSize": "Velikost bufferu",
+    "transcriptionLatency": "Latence přepisu",
+    "lag": "zpoždění"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev Demo",
+    "description": "Videohovor v reálném čase s AI překladem naživo pomocí Lingo.dev SDK"
+  }
+}

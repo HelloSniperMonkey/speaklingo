@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/app/[lang]/components/I18nProvider";
+
 interface SubtitlePanelProps {
   originalText: string;
   translatedText: string;
@@ -15,56 +17,56 @@ export function SubtitlePanel({
   isTranslating,
   targetLanguage,
 }: SubtitlePanelProps) {
+  const { t } = useTranslation();
   const hasContent = originalText || translatedText;
 
   return (
-    <div className="subtitle-panel p-4 mt-4">
+    <div className="subtitle-panel p-6 mt-4">
       {/* Original text (what friend is saying) */}
-      <div className="mb-3">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">
-            Original
+      <div className="mb-4">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-bold text-[var(--foreground)] opacity-50 uppercase tracking-widest">
+            {t("subtitle.original")}
           </span>
           {isTranscribing && (
-            <span className="flex items-center gap-1 text-xs text-blue-400">
-              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full pulse" />
-              Listening...
+            <span className="flex items-center gap-1 text-xs text-blue-300 font-bold animate-pulse">
+              <span className="w-2 h-2 bg-blue-400 rounded-full" />
+              {t("subtitle.listening")}
             </span>
           )}
         </div>
-        <p className="text-gray-400 text-base min-h-[24px]">
+        <p className="text-[var(--foreground)] opacity-70 text-lg font-hand min-h-[28px] leading-relaxed">
           {originalText || (
-            <span className="text-gray-600 italic">
-              Waiting for speech...
+            <span className="opacity-30 italic">
+              {t("subtitle.waitingForSpeech")}
             </span>
           )}
         </p>
       </div>
 
       {/* Divider */}
-      <hr className="border-white/10 my-3" />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-30 my-4" />
 
       {/* Translated text */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">
-            Translated ({targetLanguage})
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-bold text-[var(--foreground)] opacity-50 uppercase tracking-widest">
+            {t("subtitle.translated")} ({targetLanguage})
           </span>
           {isTranslating && (
-            <span className="flex items-center gap-1 text-xs text-green-400">
-              <span className="w-1.5 h-1.5 bg-green-400 rounded-full pulse" />
-              Translating...
+            <span className="flex items-center gap-1 text-xs text-green-300 font-bold animate-pulse">
+              <span className="w-2 h-2 bg-green-400 rounded-full" />
+              {t("subtitle.translating")}
             </span>
           )}
         </div>
         <p
-          className={`text-white text-lg font-medium min-h-[28px] ${
-            hasContent && translatedText ? "fade-in" : ""
-          }`}
+          className={`text-[var(--foreground)] text-xl font-bold font-hand min-h-[32px] leading-relaxed ${hasContent && translatedText ? "fade-in" : ""
+            }`}
         >
           {translatedText || (
-            <span className="text-gray-600 italic font-normal">
-              Translation will appear here...
+            <span className="opacity-30 italic font-normal">
+              {t("subtitle.translationPlaceholder")}
             </span>
           )}
         </p>
@@ -72,3 +74,4 @@ export function SubtitlePanel({
     </div>
   );
 }
+

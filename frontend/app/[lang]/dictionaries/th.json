@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "กำลังโหลด...",
+    "continue": "ดำเนินการต่อ",
+    "skipForNow": "ข้ามไปก่อน",
+    "poweredBy": "ขับเคลื่อนโดย",
+    "copiedToClipboard": "คัดลอกไปยังคลิปบอร์ดแล้ว"
+  },
+  "home": {
+    "title": "บันทึกตัวอย่างเสียงของคุณเพื่อการแปล",
+    "sampleText": "สวัสดี วันนี้ฉันรู้สึกดีมากและอากาศแจ่มใส ซึ่งทำให้อารมณ์ของฉันดีขึ้น",
+    "languageHint": "คุณสามารถเปลี่ยนภาษาได้ภายหลังในการควบคุมห้อง",
+    "recording": "กำลังบันทึก...",
+    "sending": "กำลังส่ง...",
+    "voiceSampleUploaded": "อัปโหลดตัวอย่างเสียงแล้ว",
+    "startRecording": "เริ่มบันทึก",
+    "stopRecording": "หยุดบันทึก",
+    "microphoneAccessDenied": "การเข้าถึงไมโครโฟนถูกปฏิเสธ",
+    "failedToSendAudio": "ส่งเสียงไม่สำเร็จ"
+  },
+  "lobby": {
+    "title": "WebRTC Translator",
+    "subtitle": "วิดีโอแชทแบบเรียลไทม์พร้อมการแปลด้วย AI สด",
+    "createNewRoom": "สร้างห้องใหม่",
+    "creatingRoom": "กำลังสร้างห้อง...",
+    "or": "หรือ",
+    "enterRoomId": "ป้อนรหัสห้อง",
+    "joinRoom": "เข้าร่วมห้อง",
+    "joining": "กำลังเข้าร่วม...",
+    "failedToCreateRoom": "สร้างห้องไม่สำเร็จ กรุณาลองอีกครั้ง",
+    "features": {
+      "videoChat": "วิดีโอแชท",
+      "speechToText": "เสียงเป็นข้อความ",
+      "aiTranslation": "การแปลด้วย AI"
+    }
+  },
+  "room": {
+    "title": "WebRTC Translator",
+    "roomLabel": "ห้อง:",
+    "copyRoomId": "คัดลอก ID ห้อง",
+    "connectingToPeer": "กำลังเชื่อมต่อกับผู้ใช้อื่น... แชร์ ID ห้องให้กับเพื่อนของคุณ",
+    "muteMicrophone": "ปิดไมโครโฟน",
+    "unmuteMicrophone": "เปิดไมโครโฟน",
+    "turnOffCamera": "ปิดกล้อง",
+    "turnOnCamera": "เปิดกล้อง",
+    "stopTranscription": "หยุดถอดเสียง",
+    "startTranscription": "เริ่มถอดเสียง",
+    "leave": "ออก",
+    "shareRoomId": "แชร์ ID ห้องนี้ให้กับเพื่อนของคุณ:",
+    "joinInstructions": "พวกเขาสามารถเข้าร่วมได้โดยป้อน ID นี้ที่หน้าแรก",
+    "translationTip": "คลิกปุ่มแปลเพื่อเริ่มการแปลแบบสด"
+  },
+  "subtitle": {
+    "original": "ต้นฉบับ",
+    "listening": "กำลังฟัง...",
+    "waitingForSpeech": "รอการพูด...",
+    "translated": "แปลแล้ว",
+    "translating": "กำลังแปล...",
+    "translationPlaceholder": "การแปลจะปรากฏที่นี่..."
+  },
+  "controls": {
+    "translateTo": "แปลเป็น:"
+  },
+  "voiceIndicator": {
+    "error": "ข้อผิดพลาด",
+    "disconnected": "ตัดการเชื่อมต่อ",
+    "paused": "หยุดชั่วคราว",
+    "playing": "กำลังเล่น",
+    "idle": "ไม่ได้ใช้งาน",
+    "resumeAudio": "เล่นเสียงต่อ",
+    "pauseAudio": "หยุดเสียงชั่วคราว",
+    "unmuteVoice": "เปิดเสียง",
+    "muteVoice": "ปิดเสียง",
+    "restartTranscription": "เริ่มการถอดเสียงใหม่",
+    "generationTime": "เวลาในการสร้าง",
+    "totalLatency": "เวลาหน่วงรวม",
+    "bufferSize": "ขนาดบัฟเฟอร์",
+    "transcriptionLatency": "เวลาหน่วงการถอดเสียง",
+    "lag": "ความล่าช้า"
+  },
+  "metadata": {
+    "title": "WebRTC Translator | Lingo.dev Demo",
+    "description": "วิดีโอแชทแบบเรียลไทม์พร้อมการแปลสดด้วย AI โดยใช้ Lingo.dev SDK"
+  }
+}

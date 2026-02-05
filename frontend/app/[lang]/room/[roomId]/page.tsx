@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Gloria_Hallelujah } from "next/font/google";
 import { useWebRTC } from "@/hooks/useWebRTC";
 import { useSpeechToText } from "@/hooks/useSpeechToText";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useTranslation as useSpeechTranslation } from "@/hooks/useTranslation";
 import { useProcessedVoice } from "@/hooks/useProcessedVoice";
 import { VideoContainer } from "@/components/VideoContainer";
 import { SubtitlePanel } from "@/components/SubtitlePanel";
@@ -12,6 +13,10 @@ import { ControlBar } from "@/components/ControlBar";
 import { LiveTranscription } from "@/components/LiveTranscription";
 import { VoiceLatencyIndicator } from "@/components/VoiceLatencyIndicator";
 import { getLanguageName } from "@/lib/languages";
+import { useTranslation } from "../../components/I18nProvider";
+import { LanguageSwitcher } from "../../components/LanguageSwitcher";
+
+const handFont = Gloria_Hallelujah({ subsets: ["latin"], weight: "400" });
 
 // Get the unique voice user ID from storage
 function getVoiceUserId(): string {
@@ -24,6 +29,7 @@ export default function RoomPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roomId = params.roomId as string;
+  const lang = params.lang as string;
   const role = searchParams.get("role") || "joiner"; // Default to joiner if no role specified
 
   const [targetLanguage, setTargetLanguage] = useState("en");
@@ -57,20 +63,22 @@ export default function RoomPage() {
     startTranscription,
     stopTranscription,
     restartTranscription,
+    error: transcriptionError,
   } = useSpeechToText(remoteStream);
 
-  const { translatedText, isTranslating, translate } = useTranslation();
+  const { translatedText, isTranslating, translate } = useSpeechTranslation();
+  const { t } = useTranslation();
 
   // Processed voice stream for TTS playback
   // userId: 'local-user' for creator, determines whose processed voice to play locally vs send to remote
   const userId = role === "creator" ? "local-user" : "remote-user";
-  
+
   // Get the actual unique voice user ID for this user
   const voiceUserId = useRef<string>('');
   useEffect(() => {
     voiceUserId.current = getVoiceUserId();
   }, []);
-  
+
   const {
     isConnected: voiceConnected,
     isPlaying: voicePlaying,
@@ -89,7 +97,7 @@ export default function RoomPage() {
   useEffect(() => {
     if (hasRegisteredVoiceRef.current || !roomId) return;
     hasRegisteredVoiceRef.current = true;
-    
+
     const actualVoiceUserId = getVoiceUserId();
     if (actualVoiceUserId) {
       // Register the voice mapping with the backend
@@ -169,8 +177,8 @@ export default function RoomPage() {
   const handleHangup = useCallback(() => {
     stopTranscription();
     hangup();
-    router.push("/");
-  }, [stopTranscription, hangup, router]);
+    router.push(`/${lang}`);
+  }, [stopTranscription, hangup, router, lang]);
 
   // Copy room ID to clipboard
   const copyRoomId = useCallback(() => {
@@ -180,22 +188,28 @@ export default function RoomPage() {
   }, [roomId]);
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-5xl mx-auto">
+    <div className={`min-h-screen p-4 md:p-8 ${handFont.className}`}>
+      {/* Language Switcher in top-right corner */}
+      <div className="fixed top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
+
+      <div className="max-w-5xl mx-auto relative pt-8 md:pt-0">
+
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 pr-0">
           <div className="flex items-center gap-3">
-            <h1 className="text-lg font-semibold text-white">
-              WebRTC Translator
-            </h1>
-            <span className="text-xs text-gray-500">
-              Powered by Lingo.dev
+            <div className="sketch-pill text-sm py-2 px-4">
+              {t("room.title")}
+            </div>
+            <span className="text-xs text-[var(--foreground)] opacity-60">
+              {t("common.poweredBy")} <span className="font-bold">Lingo.dev</span>
             </span>
           </div>
           <button
             onClick={copyRoomId}
-            className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-gray-400 transition-colors"
-            title="Copy room ID"
+            className="btn-sketch-secondary py-2 px-4 flex items-center gap-2 text-sm"
+            title={t("room.copyRoomId")}
           >
             <svg
               className="w-4 h-4"
@@ -210,21 +224,26 @@ export default function RoomPage() {
                 d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
               />
             </svg>
-            <span className="hidden sm:inline">Room: </span>
+            <span className="hidden sm:inline">{t("room.roomLabel")} </span>
             <code className="font-mono">{roomId.slice(0, 8)}...</code>
           </button>
         </div>
 
         {/* Error message */}
         {webrtcError && (
-          <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+          <div className="mb-4 p-4 sketch-card border-red-500 bg-red-900/20 text-red-200 text-sm font-bold">
             {webrtcError}
+          </div>
+        )}
+        {transcriptionError && (
+          <div className="mb-4 p-4 sketch-card border-red-500 bg-red-900/20 text-red-200 text-sm font-bold">
+            Transcription Error: {transcriptionError}
           </div>
         )}
 
         {/* Connection status */}
         {isConnecting && (
-          <div className="mb-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-yellow-400 text-sm flex items-center gap-2">
+          <div className="mb-4 p-4 sketch-card border-yellow-500 bg-yellow-900/20 text-yellow-200 text-sm font-bold flex items-center gap-2">
             <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
               <circle
                 className="opacity-25"
@@ -241,7 +260,7 @@ export default function RoomPage() {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            Connecting to peer... Share the room ID with your friend.
+            {t("room.connectingToPeer")}
           </div>
         )}
 
@@ -293,40 +312,24 @@ export default function RoomPage() {
 
         {/* Instructions */}
         {!isConnected && (
-          <div className="mt-6 text-center text-sm text-gray-500">
+          <div className="mt-6 text-center text-sm text-[var(--foreground)] opacity-70 font-bold">
             <p>
-              Share this room ID with your friend:{" "}
-              <code className="bg-white/5 px-2 py-1 rounded font-mono">
+              {t("room.shareRoomId")}{" "}
+              <code className="bg-[var(--card-bg)] px-2 py-1 rounded font-mono border-2 border-[var(--foreground)]">
                 {roomId}
               </code>
             </p>
             <p className="mt-2">
-              They can join by entering this ID on the home page.
+              {t("room.joinInstructions")}
             </p>
           </div>
         )}
 
         {/* Translation tip */}
         {isConnected && !isTranscribing && (
-          <div className="mt-6 text-center text-sm text-gray-500">
+          <div className="mt-6 text-center text-sm text-[var(--foreground)] opacity-70">
             <p>
-              Click the translation button{" "}
-              <span className="inline-flex items-center justify-center w-6 h-6 bg-white/10 rounded-full mx-1">
-                <svg
-                  className="w-3 h-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-                  />
-                </svg>
-              </span>{" "}
-              to start live translation.
+              {t("room.translationTip")}
             </p>
           </div>
         )}
@@ -339,8 +342,8 @@ export default function RoomPage() {
 
         {/* Toast Notification */}
         {showToast && (
-          <div className="fixed bottom-4 right-4 bg-green-500/90 text-white px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
-            Copied to clipboard
+          <div className="fixed bottom-4 right-4 bg-green-500 text-black font-bold px-4 py-2 rounded-lg shadow-[4px_4px_0_#064e3b] border-2 border-green-900 animate-in fade-in slide-in-from-bottom-2 duration-200">
+            {t("common.copiedToClipboard")}
           </div>
         )}
       </div>
