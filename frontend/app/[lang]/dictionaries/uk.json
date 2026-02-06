@@ -59,7 +59,7 @@
     "translationPlaceholder": "Переклад з'явиться тут..."
   },
   "controls": {
-    "translateTo": "Перекласти на:"
+    "mySpokenLanguage": "Перекласти на:"
   },
   "voiceIndicator": {
     "error": "Помилка",

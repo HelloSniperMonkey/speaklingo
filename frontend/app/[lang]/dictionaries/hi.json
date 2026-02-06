@@ -59,7 +59,7 @@
     "translationPlaceholder": "अनुवाद यहाँ दिखाई देगा..."
   },
   "controls": {
-    "translateTo": "इसमें अनुवाद करें:"
+    "mySpokenLanguage": "इसमें अनुवाद करें:"
   },
   "voiceIndicator": {
     "error": "त्रुटि",

@@ -53,6 +53,40 @@ class TranslationState:
         
 translation_states: Dict[str, TranslationState] = {}  # key: f"{room_id}:{user_id}"
 
+# Language code to full name mapping
+LANGUAGE_NAMES = {
+    'en': 'English',
+    'es': 'Spanish',
+    'fr': 'French',
+    'de': 'German',
+    'it': 'Italian',
+    'pt': 'Portuguese',
+    'nl': 'Dutch',
+    'pl': 'Polish',
+    'ru': 'Russian',
+    'uk': 'Ukrainian',
+    'cs': 'Czech',
+    'sk': 'Slovak',
+    'bg': 'Bulgarian',
+    'ro': 'Romanian',
+    'hu': 'Hungarian',
+    'el': 'Greek',
+    'tr': 'Turkish',
+    'ar': 'Arabic',
+    'he': 'Hebrew',
+    'hi': 'Hindi',
+    'th': 'Thai',
+    'vi': 'Vietnamese',
+    'id': 'Indonesian',
+    'zh': 'Chinese',
+    'ja': 'Japanese',
+    'ko': 'Korean',
+    'sv': 'Swedish',
+    'da': 'Danish',
+    'fi': 'Finnish',
+    'no': 'Norwegian',
+}
+
 
 def get_translation_state(room_id: str, user_id: str) -> TranslationState:
     """Get or create translation state for a user."""
@@ -60,6 +94,31 @@ def get_translation_state(room_id: str, user_id: str) -> TranslationState:
     if key not in translation_states:
         translation_states[key] = TranslationState()
     return translation_states[key]
+
+
+async def get_target_language(room_id: str, target_user_id: str) -> str:
+    """
+    Get the spoken language of the target user from Redis.
+    This is the language we should translate TO.
+    """
+    redis_client = get_redis_client()
+    language_key = f"room:{room_id}:user:{target_user_id}:language"
+    
+    try:
+        language = await redis_client.get(language_key)
+        if language:
+            if isinstance(language, bytes):
+                language = language.decode('utf-8')
+            # Convert language code to full name for the LLM
+            language_name = LANGUAGE_NAMES.get(language, language.capitalize())
+            logger.info(f"🌐 Target language for {target_user_id}: {language} -> {language_name}")
+            return language_name
+    except Exception as e:
+        logger.warning(f"Failed to get target language from Redis: {e}")
+    
+    # Default to English if no language set
+    logger.warning(f"⚠️ No language preference found for {target_user_id}, defaulting to English")
+    return "English"
 
 
 def remove_duplicate_prefix(new_translation: str, previous_translation: str) -> str:
@@ -245,8 +304,13 @@ async def process_continuous_chunk(message_data: str, channel: str):
         # Get translation state
         state = get_translation_state(room_id, user_id)
         
-        # Translate with context
-        translated, latency_ms = await translate_with_context(context, new_text)
+        # Get target user's language preference from Redis
+        target_language_name = await get_target_language(room_id, target_user_id) if target_user_id else "English"
+        
+        logger.info(f"   🎯 Translating to: {target_language_name} (for {target_user_id})")
+        
+        # Translate with context to the target language
+        translated, latency_ms = await translate_with_context(context, new_text, target_language_name)
         
         if not translated.strip():
             return
@@ -277,7 +341,7 @@ async def process_continuous_chunk(message_data: str, channel: str):
             'originalContext': context,
             'translatedText': translated,
             'sourceLanguage': chunk.get('language', 'unknown'),
-            'targetLanguage': 'en',
+            'targetLanguage': target_language_name,
             'isFinal': False,  # Continuous chunks are never "final"
             'isChunk': True,
             'chunkSequence': chunk_sequence,

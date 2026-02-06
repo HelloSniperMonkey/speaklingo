@@ -59,7 +59,7 @@
     "translationPlaceholder": "Oversættelsen vises her..."
   },
   "controls": {
-    "translateTo": "Oversæt til:"
+    "mySpokenLanguage": "Oversæt til:"
   },
   "voiceIndicator": {
     "error": "Fejl",

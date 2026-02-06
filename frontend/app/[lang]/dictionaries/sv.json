@@ -59,7 +59,7 @@
     "translationPlaceholder": "Översättningen visas här..."
   },
   "controls": {
-    "translateTo": "Översätt till:"
+    "mySpokenLanguage": "Översätt till:"
   },
   "voiceIndicator": {
     "error": "Fel",

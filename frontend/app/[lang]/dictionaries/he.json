@@ -59,7 +59,7 @@
     "translationPlaceholder": "התרגום יופיע כאן..."
   },
   "controls": {
-    "translateTo": "תרגם ל:"
+    "mySpokenLanguage": "תרגם ל:"
   },
   "voiceIndicator": {
     "error": "שגיאה",

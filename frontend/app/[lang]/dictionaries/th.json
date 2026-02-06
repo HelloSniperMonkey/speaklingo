@@ -59,7 +59,7 @@
     "translationPlaceholder": "การแปลจะปรากฏที่นี่..."
   },
   "controls": {
-    "translateTo": "แปลเป็น:"
+    "mySpokenLanguage": "แปลเป็น:"
   },
   "voiceIndicator": {
     "error": "ข้อผิดพลาด",

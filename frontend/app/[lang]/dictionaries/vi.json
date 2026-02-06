@@ -59,7 +59,7 @@
     "translationPlaceholder": "Bản dịch sẽ xuất hiện ở đây..."
   },
   "controls": {
-    "translateTo": "Dịch sang:"
+    "mySpokenLanguage": "Dịch sang:"
   },
   "voiceIndicator": {
     "error": "Lỗi",

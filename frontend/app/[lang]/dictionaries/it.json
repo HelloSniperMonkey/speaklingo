@@ -59,7 +59,7 @@
     "translationPlaceholder": "La traduzione apparirà qui..."
   },
   "controls": {
-    "translateTo": "Traduci in:"
+    "mySpokenLanguage": "Traduci in:"
   },
   "voiceIndicator": {
     "error": "Errore",

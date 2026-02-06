@@ -8,10 +8,12 @@ const VIDEO_DELAY_MS = 1000;
 interface RemoteVideoProps {
   stream: MediaStream | null;
   isConnected: boolean;
+  isTranslationEnabled?: boolean; // When true, mute remote audio (TTS will play instead)
 }
 
-export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
+export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false }: RemoteVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null); // Separate audio element for remote audio
   const [hasVideoTrack, setHasVideoTrack] = useState(false);
   const [isDelayComplete, setIsDelayComplete] = useState(false);
   const delayTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -20,11 +22,11 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
     const videoElement = videoRef.current;
     if (videoElement && stream) {
       videoElement.srcObject = stream;
-      
+
       // Check for existing tracks
       const videoTracks = stream.getVideoTracks();
       setHasVideoTrack(videoTracks.length > 0);
-      
+
       // Listen for track additions
       const handleTrackAdded = (event: MediaStreamTrackEvent) => {
         console.log("[RemoteVideo] Track added:", event.track.kind);
@@ -36,7 +38,7 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
           console.warn("[RemoteVideo] Autoplay failed:", err);
         });
       };
-      
+
       const handleTrackRemoved = (event: MediaStreamTrackEvent) => {
         console.log("[RemoteVideo] Track removed:", event.track.kind);
         if (event.track.kind === "video") {
@@ -44,7 +46,7 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
           setHasVideoTrack(videoTracks.length > 0);
         }
       };
-      
+
       // When video starts playing, start the delay timer
       const handlePlaying = () => {
         console.log("[RemoteVideo] Video playing, starting delay timer");
@@ -56,18 +58,18 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
           setIsDelayComplete(true);
         }, VIDEO_DELAY_MS);
       };
-      
+
       stream.addEventListener("addtrack", handleTrackAdded);
       stream.addEventListener("removetrack", handleTrackRemoved);
       videoElement.addEventListener("playing", handlePlaying);
-      
+
       // Try to play immediately if there are tracks
       if (stream.getTracks().length > 0) {
         videoElement.play().catch((err) => {
           console.warn("[RemoteVideo] Initial autoplay failed:", err);
         });
       }
-      
+
       return () => {
         stream.removeEventListener("addtrack", handleTrackAdded);
         stream.removeEventListener("removetrack", handleTrackRemoved);
@@ -79,6 +81,31 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
     }
   }, [stream]);
 
+  // Handle audio playback separately from video
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    if (audioElement && stream) {
+      // Create a new MediaStream with only audio tracks
+      const audioTracks = stream.getAudioTracks();
+      if (audioTracks.length > 0) {
+        const audioStream = new MediaStream(audioTracks);
+        audioElement.srcObject = audioStream;
+        audioElement.play().catch((err) => {
+          console.warn("[RemoteVideo] Audio autoplay failed:", err);
+        });
+      }
+    }
+  }, [stream]);
+
+  // Mute/unmute audio based on translation mode
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      audioElement.muted = isTranslationEnabled;
+      console.log(`[RemoteVideo] Remote audio muted: ${isTranslationEnabled}`);
+    }
+  }, [isTranslationEnabled]);
+
   // Reset delay when stream changes
   useEffect(() => {
     setIsDelayComplete(false);
@@ -89,6 +116,9 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
 
   return (
     <div className="relative w-full aspect-video bg-gray-900 rounded-2xl overflow-hidden border border-white/10">
+      {/* Hidden audio element for remote audio - muted when translation is enabled */}
+      <audio ref={audioRef} autoPlay playsInline hidden />
+
       {/* Video element - plays immediately but hidden until delay completes */}
       <video
         ref={videoRef}
@@ -97,7 +127,7 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
         muted
         className={`w-full h-full object-cover ${showVideo ? 'block' : 'opacity-0 absolute'}`}
       />
-      
+
       {!showVideo && (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500">
           <svg
@@ -122,9 +152,8 @@ export function RemoteVideo({ stream, isConnected }: RemoteVideoProps) {
       {/* Connection indicator */}
       <div className="absolute top-4 left-4 flex items-center gap-2">
         <div
-          className={`w-2 h-2 rounded-full ${
-            isConnected ? "bg-green-500 pulse" : "bg-yellow-500"
-          }`}
+          className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 pulse" : "bg-yellow-500"
+            }`}
         />
         <span className="text-xs text-white/70">
           {isConnected ? "Connected" : "Connecting..."}

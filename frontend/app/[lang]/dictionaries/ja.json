@@ -59,7 +59,7 @@
     "translationPlaceholder": "翻訳がここに表示されます..."
   },
   "controls": {
-    "translateTo": "翻訳先:"
+    "mySpokenLanguage": "翻訳先:"
   },
   "voiceIndicator": {
     "error": "エラー",

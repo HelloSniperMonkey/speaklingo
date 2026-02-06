@@ -59,7 +59,7 @@
     "translationPlaceholder": "Çeviri burada görünecek..."
   },
   "controls": {
-    "translateTo": "Şuna çevir:"
+    "mySpokenLanguage": "Şuna çevir:"
   },
   "voiceIndicator": {
     "error": "Hata",

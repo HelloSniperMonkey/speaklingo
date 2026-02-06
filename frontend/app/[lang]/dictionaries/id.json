@@ -59,7 +59,7 @@
     "translationPlaceholder": "Terjemahan akan muncul di sini..."
   },
   "controls": {
-    "translateTo": "Terjemahkan ke:"
+    "mySpokenLanguage": "Terjemahkan ke:"
   },
   "voiceIndicator": {
     "error": "Kesalahan",

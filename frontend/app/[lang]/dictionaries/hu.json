@@ -59,7 +59,7 @@
     "translationPlaceholder": "A fordítás itt fog megjelenni..."
   },
   "controls": {
-    "translateTo": "Fordítás erre:"
+    "mySpokenLanguage": "Fordítás erre:"
   },
   "voiceIndicator": {
     "error": "Hiba",

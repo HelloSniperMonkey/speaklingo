@@ -59,7 +59,7 @@
     "translationPlaceholder": "Käännös näkyy tässä..."
   },
   "controls": {
-    "translateTo": "Käännä kielelle:"
+    "mySpokenLanguage": "Käännä kielelle:"
   },
   "voiceIndicator": {
     "error": "Virhe",

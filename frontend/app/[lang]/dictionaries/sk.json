@@ -59,7 +59,7 @@
     "translationPlaceholder": "Preklad sa zobrazí tu..."
   },
   "controls": {
-    "translateTo": "Preložiť do:"
+    "mySpokenLanguage": "Preložiť do:"
   },
   "voiceIndicator": {
     "error": "Chyba",

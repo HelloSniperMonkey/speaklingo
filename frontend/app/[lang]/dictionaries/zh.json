@@ -59,7 +59,7 @@
     "translationPlaceholder": "翻译内容将显示在这里……"
   },
   "controls": {
-    "translateTo": "翻译为："
+    "mySpokenLanguage": "翻译为："
   },
   "voiceIndicator": {
     "error": "错误",

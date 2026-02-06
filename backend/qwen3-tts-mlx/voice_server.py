@@ -361,6 +361,86 @@ def get_voice_mapping():
     return jsonify({'error': 'No voice mapping found'}), 404
 
 
+@app.route('/set-language', methods=['POST'])
+def set_language():
+    """
+    Set a user's spoken language preference.
+    This is used by the translation processor to determine what language
+    to translate TO for the other user.
+    
+    Body:
+    - roomId: The room ID
+    - userId: "local-user" or "remote-user"
+    - spokenLanguage: The language code (e.g., "en", "hi", "es")
+    """
+    try:
+        data = request.get_json()
+        room_id = data.get('roomId')
+        user_id = data.get('userId')  # "local-user" or "remote-user"
+        spoken_language = data.get('spokenLanguage')
+        
+        if not room_id or not user_id or not spoken_language:
+            return jsonify({'error': 'Missing required fields: roomId, userId, spokenLanguage'}), 400
+        
+        # Store in Redis: room:{roomId}:user:{userId}:language -> spokenLanguage
+        language_key = f"room:{room_id}:user:{user_id}:language"
+        
+        try:
+            redis_client.setex(language_key, VOICE_SAMPLE_TTL, spoken_language)
+            logger.info(f"🌐 Language set: {language_key} -> {spoken_language}")
+        except Exception as e:
+            logger.warning(f"Redis store failed for language: {e}")
+            # Also store in memory cache as fallback
+            voice_samples_cache[language_key] = spoken_language
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Language preference set',
+            'roomId': room_id,
+            'userId': user_id,
+            'spokenLanguage': spoken_language
+        })
+    
+    except Exception as e:
+        logger.error(f"Set language error: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/get-language', methods=['GET'])
+def get_language():
+    """Get the spoken language for a user in a room (for debugging)."""
+    room_id = request.args.get('roomId')
+    user_id = request.args.get('userId')
+    
+    if not room_id or not user_id:
+        return jsonify({'error': 'Missing roomId or userId'}), 400
+    
+    language_key = f"room:{room_id}:user:{user_id}:language"
+    
+    try:
+        language = redis_client.get(language_key)
+        if language:
+            if isinstance(language, bytes):
+                language = language.decode('utf-8')
+            return jsonify({
+                'roomId': room_id,
+                'userId': user_id,
+                'spokenLanguage': language
+            })
+    except Exception as e:
+        logger.warning(f"Redis get failed: {e}")
+    
+    # Try memory cache
+    language = voice_samples_cache.get(language_key)
+    if language:
+        return jsonify({
+            'roomId': room_id,
+            'userId': user_id,
+            'spokenLanguage': language
+        })
+    
+    return jsonify({'error': 'No language preference found'}), 404
+
 if __name__ == '__main__':
     logger.info("Starting Voice Sample Server on port 8712...")
     app.run(host='0.0.0.0', port=8712, debug=False, threaded=True)

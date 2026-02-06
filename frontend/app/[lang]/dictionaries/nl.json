@@ -59,7 +59,7 @@
     "translationPlaceholder": "Vertaling verschijnt hier..."
   },
   "controls": {
-    "translateTo": "Vertalen naar:"
+    "mySpokenLanguage": "Vertalen naar:"
   },
   "voiceIndicator": {
     "error": "Fout",

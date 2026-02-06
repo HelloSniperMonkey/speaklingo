@@ -12,7 +12,7 @@ import { SubtitlePanel } from "@/components/SubtitlePanel";
 import { ControlBar } from "@/components/ControlBar";
 import { LiveTranscription } from "@/components/LiveTranscription";
 import { VoiceLatencyIndicator } from "@/components/VoiceLatencyIndicator";
-import { getLanguageName } from "@/lib/languages";
+import { getLanguageName, getGoogleLocale } from "@/lib/languages";
 import { useTranslation } from "../../components/I18nProvider";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 
@@ -32,11 +32,15 @@ export default function RoomPage() {
   const lang = params.lang as string;
   const role = searchParams.get("role") || "joiner"; // Default to joiner if no role specified
 
-  const [targetLanguage, setTargetLanguage] = useState("en");
+  const [spokenLanguage, setSpokenLanguage] = useState("en");
   const [showToast, setShowToast] = useState(false);
+  const [isTranslationEnabled, setIsTranslationEnabled] = useState(false); // Translation pipeline toggle
+  const [theirSpeech, setTheirSpeech] = useState(""); // Their transcribed speech (original)
+  const [theirTranslatedSpeech, setTheirTranslatedSpeech] = useState(""); // Their translated speech
   const hasInitializedRef = useRef(false);
   const hasJoinedRef = useRef(false);
   const hasRegisteredVoiceRef = useRef(false);
+  const remoteAudioRef = useRef<HTMLAudioElement | null>(null); // For muting remote audio
 
   const {
     localStream,
@@ -119,6 +123,31 @@ export default function RoomPage() {
     }
   }, [roomId, userId]);
 
+  // Store spoken language preference in Redis whenever it changes
+  // This allows the translation processor to know what language this user speaks
+  // So when translating FOR this user, it knows to translate TO their language
+  useEffect(() => {
+    if (!roomId || !userId) return;
+
+    fetch('/api/set-language', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        roomId,
+        userId, // "local-user" or "remote-user"
+        spokenLanguage // e.g., "en", "hi", "es"
+      })
+    }).then(res => {
+      if (res.ok) {
+        console.log(`[RoomPage] 🌐 Stored language preference: ${userId} speaks ${spokenLanguage}`);
+      } else {
+        res.text().then(text => console.error('[RoomPage] Failed to store language:', text));
+      }
+    }).catch(err => {
+      console.error('[RoomPage] Failed to store language preference:', err);
+    });
+  }, [roomId, userId, spokenLanguage]);
+
   // Pass the WebRTC data channel to the processed voice hook when available
   useEffect(() => {
     if (voiceDataChannel) {
@@ -158,20 +187,30 @@ export default function RoomPage() {
   }, [localStream, role, roomId, createRoom, joinRoom]);
 
   // Translate when transcript changes
+  // Note: The translation target is the OTHER party's spoken language
+  // This is handled by the backend based on room state
   useEffect(() => {
     if (transcript) {
-      translate(transcript, targetLanguage);
+      translate(transcript, spokenLanguage);
     }
-  }, [transcript, targetLanguage, translate]);
+  }, [transcript, spokenLanguage, translate]);
 
-  // Handle transcription toggle
-  const handleToggleTranscription = useCallback(() => {
-    if (isTranscribing) {
-      stopTranscription();
-    } else {
-      startTranscription();
-    }
-  }, [isTranscribing, startTranscription, stopTranscription]);
+  // Handle translation toggle - this enables/disables the entire translation pipeline
+  // When enabled: mute remote audio, transcribe their speech, translate, play via TTS
+  // When disabled: normal voice passthrough
+  const handleToggleTranslation = useCallback(() => {
+    setIsTranslationEnabled(prev => !prev);
+  }, []);
+
+  // Handle their speech transcription (from LiveTranscription component)
+  const handleTheirSpeech = useCallback((text: string) => {
+    setTheirSpeech(text);
+  }, []);
+
+  // Handle their translated speech (from LiveTranscription component)
+  const handleTheirTranslation = useCallback((text: string) => {
+    setTheirTranslatedSpeech(text);
+  }, []);
 
   // Handle hangup
   const handleHangup = useCallback(() => {
@@ -270,27 +309,28 @@ export default function RoomPage() {
           remoteStream={remoteStream}
           isConnected={isConnected}
           isCameraOn={isCameraOn}
+          isTranslationEnabled={isTranslationEnabled}
         />
 
-        {/* Subtitle Panel */}
+        {/* Subtitle Panel - shows THEIR speech (original) and THEIR translated speech */}
         <SubtitlePanel
-          originalText={transcript}
-          translatedText={translatedText}
-          isTranscribing={isTranscribing}
-          isTranslating={isTranslating}
-          targetLanguage={getLanguageName(targetLanguage)}
+          originalText={theirSpeech}
+          translatedText={theirTranslatedSpeech}
+          isTranscribing={isTranslationEnabled}
+          isTranslating={isTranslationEnabled}
+          targetLanguage={getLanguageName(spokenLanguage)}
         />
 
         {/* Control Bar */}
         <ControlBar
           isMicOn={isMicOn}
           isCameraOn={isCameraOn}
-          isTranscribing={isTranscribing}
-          targetLanguage={targetLanguage}
+          isTranscribing={isTranslationEnabled}
+          targetLanguage={spokenLanguage}
           onToggleMic={toggleMic}
           onToggleCamera={toggleCamera}
-          onToggleTranscription={handleToggleTranscription}
-          onLanguageChange={setTargetLanguage}
+          onToggleTranscription={handleToggleTranslation}
+          onLanguageChange={setSpokenLanguage}
           onHangup={handleHangup}
         />
 
@@ -326,7 +366,7 @@ export default function RoomPage() {
         )}
 
         {/* Translation tip */}
-        {isConnected && !isTranscribing && (
+        {isConnected && !isTranslationEnabled && (
           <div className="mt-6 text-center text-sm text-[var(--foreground)] opacity-70">
             <p>
               {t("room.translationTip")}
@@ -338,6 +378,10 @@ export default function RoomPage() {
           localStream={localStream}
           roomId={roomId}
           myUserId={userId}
+          spokenLanguageLocale={getGoogleLocale(spokenLanguage)}
+          isTranslationEnabled={isTranslationEnabled}
+          onTheirSpeech={handleTheirSpeech}
+          onTheirTranslation={handleTheirTranslation}
         />
 
         {/* Toast Notification */}

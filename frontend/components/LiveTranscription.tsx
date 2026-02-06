@@ -11,79 +11,33 @@ interface LiveTranscriptionProps {
     remoteStream?: MediaStream | null; // Optional - not used in simplified flow
     roomId: string;
     myUserId?: string; // 'local-user' for creator, 'remote-user' for joiner
+    spokenLanguageLocale: string; // Google STT locale code (e.g., 'en-US', 'es-ES')
+    isTranslationEnabled: boolean; // Controls if translation pipeline is active
+    onTheirSpeech?: (text: string) => void; // Callback when their speech is transcribed
+    onTheirTranslation?: (text: string) => void; // Callback when their speech is translated
 }
-
-const LANGUAGES = [
-    { code: "auto", name: "Auto-detect" },
-    { code: "en-US", name: "English (US)" },
-    { code: "en-GB", name: "English (UK)" },
-    { code: "en-AU", name: "English (Australia)" },
-    { code: "en-IN", name: "English (India)" },
-    { code: "es-ES", name: "Spanish (Spain)" },
-    { code: "es-MX", name: "Spanish (Mexico)" },
-    { code: "es-AR", name: "Spanish (Argentina)" },
-    { code: "fr-FR", name: "French (France)" },
-    { code: "fr-CA", name: "French (Canada)" },
-    { code: "de-DE", name: "German" },
-    { code: "it-IT", name: "Italian" },
-    { code: "pt-BR", name: "Portuguese (Brazil)" },
-    { code: "pt-PT", name: "Portuguese (Portugal)" },
-    { code: "hi-IN", name: "Hindi" },
-    { code: "bn-IN", name: "Bengali" },
-    { code: "te-IN", name: "Telugu" },
-    { code: "mr-IN", name: "Marathi" },
-    { code: "ta-IN", name: "Tamil" },
-    { code: "gu-IN", name: "Gujarati" },
-    { code: "kn-IN", name: "Kannada" },
-    { code: "ml-IN", name: "Malayalam" },
-    { code: "pa-IN", name: "Punjabi" },
-    { code: "ur-IN", name: "Urdu (India)" },
-    { code: "ur-PK", name: "Urdu (Pakistan)" },
-    { code: "zh-CN", name: "Chinese (Simplified)" },
-    { code: "zh-TW", name: "Chinese (Traditional)" },
-    { code: "ja-JP", name: "Japanese" },
-    { code: "ko-KR", name: "Korean" },
-    { code: "ar-SA", name: "Arabic (Saudi Arabia)" },
-    { code: "ar-EG", name: "Arabic (Egypt)" },
-    { code: "nl-NL", name: "Dutch" },
-    { code: "pl-PL", name: "Polish" },
-    { code: "tr-TR", name: "Turkish" },
-    { code: "vi-VN", name: "Vietnamese" },
-    { code: "th-TH", name: "Thai" },
-    { code: "sv-SE", name: "Swedish" },
-    { code: "uk-UA", name: "Ukrainian" },
-    { code: "ru-RU", name: "Russian" },
-    { code: "id-ID", name: "Indonesian" },
-    { code: "cs-CZ", name: "Czech" },
-    { code: "da-DK", name: "Danish" },
-    { code: "fi-FI", name: "Finnish" },
-    { code: "el-GR", name: "Greek" },
-    { code: "he-IL", name: "Hebrew" },
-    { code: "hu-HU", name: "Hungarian" },
-    { code: "no-NO", name: "Norwegian" },
-    { code: "ro-RO", name: "Romanian" },
-    { code: "sk-SK", name: "Slovak" },
-    { code: "bg-BG", name: "Bulgarian" },
-];
 
 export function LiveTranscription({
     localStream,
     roomId,
     myUserId = 'local-user', // 'local-user' for creator, 'remote-user' for joiner
+    spokenLanguageLocale, // Google STT locale from parent
+    isTranslationEnabled, // Whether translation mode is active
+    onTheirSpeech, // Callback to send their speech to parent
+    onTheirTranslation, // Callback to send their translation to parent
 }: LiveTranscriptionProps) {
-    const [language, setLanguage] = useState("auto");
-    
+
     // My speech (what I say) - transcribed locally
     const [mySegments, setMySegments] = useState<string[]>([]);
     const [myLag, setMyLag] = useState<number | null>(null);
-    
+
     // Their speech (what they say) - received via broadcast
     const [theirSegments, setTheirSegments] = useState<string[]>([]);
     const [theirLag, setTheirLag] = useState<number | null>(null);
-    
+
     // Translations
-    const [myTranslations, setMyTranslations] = useState<Array<{hash?: string, text: string}>>([]);
-    const [theirTranslations, setTheirTranslations] = useState<Array<{hash?: string, text: string}>>([]);
+    const [myTranslations, setMyTranslations] = useState<Array<{ hash?: string, text: string }>>([]);
+    const [theirTranslations, setTheirTranslations] = useState<Array<{ hash?: string, text: string }>>([]);
     const [myTranslationLatency, setMyTranslationLatency] = useState<number | null>(null);
     const [theirTranslationLatency, setTheirTranslationLatency] = useState<number | null>(null);
 
@@ -98,7 +52,7 @@ export function LiveTranscription({
 
     // Translation stream hook - receives translations for all users in room
     const { translation: translationMessage, isConnected: isTranslationConnected } = useTranslationStream(roomId);
-    
+
     // Transcription stream hook - receives transcriptions broadcast by other users
     const { transcription: remoteTranscription, isConnected: isTranscriptionStreamConnected } = useTranscriptionStream(roomId);
 
@@ -128,9 +82,11 @@ export function LiveTranscription({
             if (userId && userId !== myUserId && isFinal && text) {
                 setTheirSegments(prev => [...prev, text]);
                 setTheirLag(processingTime || null);
+                // Notify parent of their speech
+                onTheirSpeech?.(text);
             }
         }
-    }, [remoteTranscription, myUserId]);
+    }, [remoteTranscription, myUserId, onTheirSpeech]);
 
     // Handle incoming translation messages from WebSocket stream
     useEffect(() => {
@@ -150,7 +106,7 @@ export function LiveTranscription({
                 const isMyTranslation = userId === myUserId;
 
                 const newTranslation = { hash, text: translatedText || '' };
-                
+
                 console.log(`[LiveTranscription] Translation: userId=${userId}, myUserId=${myUserId}, isMyTranslation=${isMyTranslation}`);
 
                 if (isMyTranslation) {
@@ -159,6 +115,8 @@ export function LiveTranscription({
                 } else {
                     setTheirTranslations(prev => [...prev, newTranslation]);
                     setTheirTranslationLatency(translationMessage.latencyMs || null);
+                    // Notify parent of their translated speech
+                    onTheirTranslation?.(translatedText || '');
                 }
             } else if (translationMessage.type === 'invalidation') {
                 const baseHash = translationMessage.hash;
@@ -169,16 +127,27 @@ export function LiveTranscription({
                 }
             }
         }
-    }, [translationMessage, myUserId]);
+    }, [translationMessage, myUserId, onTheirTranslation]);
 
     // Interim text for my speech
     const myInterim = !transcriber.transcription?.isFinal ? transcriber.transcription?.text : "";
 
+    // Auto-start/stop transcription based on isTranslationEnabled from parent
+    useEffect(() => {
+        if (isTranslationEnabled && localStream && !transcriber.isRecording) {
+            console.log('[LiveTranscription] Auto-starting transcription (translation enabled)');
+            transcriber.startRecording(localStream, spokenLanguageLocale, roomId, myUserId);
+        } else if (!isTranslationEnabled && transcriber.isRecording) {
+            console.log('[LiveTranscription] Auto-stopping transcription (translation disabled)');
+            transcriber.stopRecording();
+        }
+    }, [isTranslationEnabled, localStream, transcriber.isRecording, spokenLanguageLocale, roomId, myUserId]);
+
     const handleStart = () => {
         if (localStream) {
-            console.log('[LiveTranscription] Starting transcription for my audio');
-            // Transcribe MY audio with MY userId
-            transcriber.startRecording(localStream, language, roomId, myUserId);
+            console.log('[LiveTranscription] Starting transcription for my audio with locale:', spokenLanguageLocale);
+            // Transcribe MY audio with MY userId using the spoken language locale
+            transcriber.startRecording(localStream, spokenLanguageLocale, roomId, myUserId);
         } else {
             console.error('[LiveTranscription] No localStream available');
         }
@@ -196,22 +165,6 @@ export function LiveTranscription({
 
             {/* Controls */}
             <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
-                <div className="flex items-center gap-2">
-                    <label className="text-slate-400 font-medium">Language:</label>
-                    <select
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        className="bg-[#0f1219] text-white border border-gray-700 rounded px-3 py-2 outline-none focus:border-blue-500"
-                        disabled={transcriber.isRecording}
-                    >
-                        {LANGUAGES.map((lang) => (
-                            <option key={lang.code} value={lang.code}>
-                                {lang.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
                 <button
                     onClick={handleStart}
                     disabled={transcriber.isRecording || !localStream}
@@ -287,8 +240,8 @@ export function LiveTranscription({
                             </div>
                         ) : (
                             <span className="text-gray-600 italic">
-                                {isTranscriptionStreamConnected 
-                                    ? "Waiting for the other person to speak..." 
+                                {isTranscriptionStreamConnected
+                                    ? "Waiting for the other person to speak..."
                                     : "Connecting to transcription stream..."}
                             </span>
                         )}

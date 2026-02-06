@@ -11,7 +11,7 @@ interface LanguageSelectorProps {
 export function LanguageSelector({
   value,
   onChange,
-  label = "Translate to",
+  label = "My spoken language",
 }: LanguageSelectorProps) {
   return (
     <div className="flex items-center gap-2">

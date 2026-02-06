@@ -59,7 +59,7 @@
     "translationPlaceholder": "Преводът ще се появи тук..."
   },
   "controls": {
-    "translateTo": "Преведи на:"
+    "mySpokenLanguage": "Преведи на:"
   },
   "voiceIndicator": {
     "error": "Грешка",

@@ -59,7 +59,7 @@
     "translationPlaceholder": "Η μετάφραση θα εμφανιστεί εδώ..."
   },
   "controls": {
-    "translateTo": "Μετάφραση σε:"
+    "mySpokenLanguage": "Μετάφραση σε:"
   },
   "voiceIndicator": {
     "error": "Σφάλμα",

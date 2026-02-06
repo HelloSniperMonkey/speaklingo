@@ -59,7 +59,7 @@
     "translationPlaceholder": "Tutaj pojawi się tłumaczenie..."
   },
   "controls": {
-    "translateTo": "Tłumacz na:"
+    "mySpokenLanguage": "Tłumacz na:"
   },
   "voiceIndicator": {
     "error": "Błąd",
