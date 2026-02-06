@@ -310,6 +310,7 @@ export default function RoomPage() {
           isConnected={isConnected}
           isCameraOn={isCameraOn}
           isTranslationEnabled={isTranslationEnabled}
+          ttsGenerationTimeMs={voiceLatency?.generationTimeMs}
         />
 
         {/* Subtitle Panel - shows THEIR speech (original) and THEIR translated speech */}

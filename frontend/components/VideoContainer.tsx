@@ -9,6 +9,7 @@ interface VideoContainerProps {
   isConnected: boolean;
   isCameraOn: boolean;
   isTranslationEnabled?: boolean; // When true, mute remote audio and use TTS instead
+  ttsGenerationTimeMs?: number;   // Latest TTS generation time for dynamic video delay
 }
 
 export function VideoContainer({
@@ -17,6 +18,7 @@ export function VideoContainer({
   isConnected,
   isCameraOn,
   isTranslationEnabled = false,
+  ttsGenerationTimeMs,
 }: VideoContainerProps) {
   return (
     <div className="video-container relative w-full">
@@ -24,6 +26,7 @@ export function VideoContainer({
         stream={remoteStream}
         isConnected={isConnected}
         isTranslationEnabled={isTranslationEnabled}
+        ttsGenerationTimeMs={ttsGenerationTimeMs}
       />
       <LocalVideo stream={localStream} isCameraOn={isCameraOn} />
     </div>

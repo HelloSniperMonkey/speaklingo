@@ -2,11 +2,16 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 
-// Video delay in milliseconds to sync with TTS audio processing pipeline
-const VIDEO_DELAY_MS = 2000;
+// Default/minimum video delay in milliseconds
+const DEFAULT_VIDEO_DELAY_MS = 2000;
 // Frame capture rate (fps) — lower than display to save memory
 const CAPTURE_FPS = 24;
 const CAPTURE_INTERVAL_MS = 1000 / CAPTURE_FPS;
+// Smoothing factor for EMA (0–1). Lower = smoother, slower to react
+const EMA_ALPHA = 0.15;
+// Clamp delay within sensible bounds
+const MIN_DELAY_MS = 800;
+const MAX_DELAY_MS = 5000;
 
 interface BufferedFrame {
   bitmap: ImageBitmap;
@@ -17,9 +22,10 @@ interface RemoteVideoProps {
   stream: MediaStream | null;
   isConnected: boolean;
   isTranslationEnabled?: boolean; // When true, mute remote audio (TTS will play instead)
+  ttsGenerationTimeMs?: number;  // Latest TTS generation time — used to dynamically adjust video delay
 }
 
-export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false }: RemoteVideoProps) {
+export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false, ttsGenerationTimeMs }: RemoteVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);   // Hidden, plays real-time stream
   const canvasRef = useRef<HTMLCanvasElement>(null);  // Visible, shows delayed frames
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -31,6 +37,18 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
   const animFrameRef = useRef<number>(0);
   const lastCaptureRef = useRef<number>(0);
   const bufferReadyRef = useRef(false);
+
+  // Dynamic delay: EMA-smoothed value that the rAF loop reads
+  const delayMsRef = useRef(DEFAULT_VIDEO_DELAY_MS);
+
+  // Update EMA whenever a new TTS generation time arrives
+  useEffect(() => {
+    if (ttsGenerationTimeMs == null || ttsGenerationTimeMs <= 0) return;
+    const prev = delayMsRef.current;
+    const smoothed = prev * (1 - EMA_ALPHA) + ttsGenerationTimeMs * EMA_ALPHA;
+    delayMsRef.current = Math.round(Math.max(MIN_DELAY_MS, Math.min(MAX_DELAY_MS, smoothed)));
+    console.log(`[RemoteVideo] Dynamic delay EMA: ${prev}ms → ${delayMsRef.current}ms (raw: ${ttsGenerationTimeMs}ms)`);
+  }, [ttsGenerationTimeMs]);
 
   // Clean up all buffered ImageBitmaps
   const flushBuffer = useCallback(() => {
@@ -113,8 +131,8 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
         });
       }
 
-      // Find and display the frame that is VIDEO_DELAY_MS old
-      const targetTime = now - VIDEO_DELAY_MS;
+      // Find and display the frame that is delayMsRef.current old
+      const targetTime = now - delayMsRef.current;
 
       // Drop frames older than our target (keep the closest one before target)
       while (frameBuffer.length > 1 && frameBuffer[1].timestamp <= targetTime) {
