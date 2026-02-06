@@ -1,0 +1,142 @@
+2026-02-07 00:21:08,075 - INFO - Found credentials: /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/google-backend/credential-videoapp.json
+2026-02-07 00:21:08,153 - INFO - Google Speech Async Client initialized.
+2026-02-07 00:21:08,153 - INFO - ============================================================
+2026-02-07 00:21:08,153 - INFO -   CONTINUOUS TRANSCRIPTION SERVER
+2026-02-07 00:21:08,153 - INFO -   Chunk interval: 2.0s
+2026-02-07 00:21:08,153 - INFO -   Context window: 4.0s
+2026-02-07 00:21:08,153 - INFO -   Server: 0.0.0.0:8765
+2026-02-07 00:21:08,153 - INFO - ============================================================
+2026-02-07 00:21:08,153 - INFO - server listening on 0.0.0.0:8765
+2026-02-07 00:21:35,849 - INFO - connection open
+2026-02-07 00:21:35,849 - INFO - New continuous client: 4456614080
+2026-02-07 00:21:35,941 - INFO - Config: lang=hi-IN, room=QIZmiOcQzwWQRVWu2Hmu, user=local-user
+2026-02-07 00:21:35,942 - INFO - Started continuous transcription with 2.0s chunks
+2026-02-07 00:21:35,942 - INFO - Session 4456614080: Starting continuous mode
+2026-02-07 00:21:35,942 - INFO - Starting continuous stream gen 0
+2026-02-07 00:21:35,950 - INFO - Starting chunk timer (interval: 2.0s)
+2026-02-07 00:21:37,951 - INFO - Redis connected: localhost:6379
+2026-02-07 00:21:37,963 - INFO - 📤 Chunk 0: new='क्या...' context_len=0
+2026-02-07 00:21:39,966 - INFO - 📤 Chunk 1: new='आप मेरी बातें सुन पा रहे हैं अगर...' context_len=4
+2026-02-07 00:21:41,969 - INFO - 📤 Chunk 2: new='हां तो बताइए हां...' context_len=37
+2026-02-07 00:21:42,824 - INFO - 📤 Chunk 3: new='शैलेंद्र नहीं तो...' context_len=49
+2026-02-07 00:21:42,825 - INFO - Session 4456614080: Restarting stream (gen 1)
+2026-02-07 00:21:42,827 - INFO - Starting continuous stream gen 1
+2026-02-07 00:21:43,087 - INFO - Stream gen 0 superseded
+2026-02-07 00:21:55,981 - INFO - 📤 Chunk 0: new='यह कुछ...' context_len=0
+2026-02-07 00:21:57,985 - INFO - 📤 Chunk 1: new='अजीब था पर मेरे को ठीक लग रहा...' context_len=6
+2026-02-07 00:21:59,991 - INFO - 📤 Chunk 2: new='है शायद कुछ है इसमें...' context_len=36
+2026-02-07 00:22:01,210 - INFO - 📤 Chunk 3: new='या तो फिर...' context_len=50
+2026-02-07 00:22:01,210 - INFO - Session 4456614080: Restarting stream (gen 2)
+2026-02-07 00:22:01,211 - INFO - Starting continuous stream gen 2
+2026-02-07 00:22:01,351 - INFO - Stream gen 1 superseded
+2026-02-07 00:22:12,002 - INFO - 📤 Chunk 0: new='मैं भी इट्स नॉट...' context_len=0
+2026-02-07 00:22:12,132 - INFO - Session 4456614080: Restarting stream (gen 3)
+2026-02-07 00:22:12,133 - INFO - Starting continuous stream gen 3
+2026-02-07 00:22:12,342 - INFO - Stream gen 2 superseded
+2026-02-07 00:22:20,009 - INFO - 📤 Chunk 0: new='यदि...' context_len=0
+2026-02-07 00:22:22,012 - INFO - 📤 Chunk 1: new='शायद इतना खराब भी नहीं है...' context_len=3
+2026-02-07 00:22:22,552 - INFO - 📤 Chunk 2: new='जितना मैं सोच रहा...' context_len=29
+2026-02-07 00:22:22,553 - INFO - Session 4456614080: Restarting stream (gen 4)
+2026-02-07 00:22:22,553 - INFO - Starting continuous stream gen 4
+2026-02-07 00:22:22,602 - INFO - Stream gen 3 superseded
+2026-02-07 00:22:34,023 - INFO - 📤 Chunk 0: new='यह काफी...' context_len=0
+2026-02-07 00:22:36,027 - INFO - 📤 Chunk 1: new='अच्छे से मेरे ट्रांसलेशन को...' context_len=7
+2026-02-07 00:22:38,030 - INFO - 📤 Chunk 2: new='कैप्चर कर पा रहा है जो...' context_len=35
+2026-02-07 00:22:39,278 - INFO - 📤 Chunk 3: new='उसे इंटरेस्टिंग है मेरे...' context_len=50
+2026-02-07 00:22:39,279 - INFO - Session 4456614080: Restarting stream (gen 5)
+2026-02-07 00:22:39,279 - INFO - Starting continuous stream gen 5
+2026-02-07 00:22:39,369 - INFO - Stream gen 4 superseded
+2026-02-07 00:22:48,995 - INFO - Session 4456614080: Stopping
+2026-02-07 00:22:48,996 - INFO - Chunk timer stopped
+2026-02-07 00:22:49,275 - INFO - Stream gen 5 ended normally
+2026-02-07 00:22:50,759 - INFO - Session ended: 4456614080
+2026-02-07 00:22:50,759 - INFO - connection closed
+2026-02-07 00:22:54,912 - INFO - connection open
+2026-02-07 00:22:54,913 - INFO - New continuous client: 4458896640
+2026-02-07 00:22:55,007 - INFO - Config: lang=en-US, room=QIZmiOcQzwWQRVWu2Hmu, user=local-user
+2026-02-07 00:22:55,008 - INFO - Started continuous transcription with 2.0s chunks
+2026-02-07 00:22:55,008 - INFO - Session 4458896640: Starting continuous mode
+2026-02-07 00:22:55,008 - INFO - Starting continuous stream gen 0
+2026-02-07 00:22:55,008 - INFO - Starting chunk timer (interval: 2.0s)
+2026-02-07 00:22:59,814 - INFO - Session 4458896640: Stopping
+2026-02-07 00:22:59,814 - INFO - Chunk timer stopped
+2026-02-07 00:23:00,286 - INFO - Stream gen 0 ended normally
+2026-02-07 00:23:02,531 - INFO - Session ended: 4458896640
+2026-02-07 00:23:02,531 - INFO - connection closed
+2026-02-07 00:23:02,532 - INFO - connection open
+2026-02-07 00:23:02,533 - INFO - New continuous client: 4464311568
+2026-02-07 00:23:02,630 - INFO - Config: lang=hi-IN, room=QIZmiOcQzwWQRVWu2Hmu, user=local-user
+2026-02-07 00:23:02,630 - INFO - Started continuous transcription with 2.0s chunks
+2026-02-07 00:23:02,630 - INFO - Session 4464311568: Starting continuous mode
+2026-02-07 00:23:02,630 - INFO - Starting continuous stream gen 0
+2026-02-07 00:23:02,633 - INFO - Starting chunk timer (interval: 2.0s)
+2026-02-07 00:23:04,638 - INFO - 📤 Chunk 0: new='यह थोड़ा बहुत...' context_len=0
+2026-02-07 00:23:06,641 - INFO - 📤 Chunk 1: new='गलती कर रहा है पर...' context_len=13
+2026-02-07 00:23:07,514 - INFO - 📤 Chunk 2: new='मेरे को तो सही लग रहा...' context_len=31
+2026-02-07 00:23:07,514 - INFO - Session 4464311568: Restarting stream (gen 1)
+2026-02-07 00:23:07,514 - INFO - Starting continuous stream gen 1
+2026-02-07 00:23:07,774 - INFO - Stream gen 0 superseded
+2026-02-07 00:23:18,649 - INFO - 📤 Chunk 0: new='इतना भी खराब...' context_len=0
+2026-02-07 00:23:20,653 - INFO - 📤 Chunk 1: new='नहीं है पर ठीक...' context_len=12
+2026-02-07 00:23:21,543 - INFO - 📤 Chunk 2: new='ठाक काम कर...' context_len=27
+2026-02-07 00:23:21,543 - INFO - Session 4464311568: Restarting stream (gen 2)
+2026-02-07 00:23:21,543 - INFO - Starting continuous stream gen 2
+2026-02-07 00:23:21,646 - INFO - Stream gen 1 superseded
+2026-02-07 00:23:34,664 - INFO - 📤 Chunk 0: new='अगर...' context_len=0
+2026-02-07 00:23:36,668 - INFO - 📤 Chunk 1: new='मैं उसको कुछ लंबा...' context_len=3
+2026-02-07 00:23:38,671 - INFO - 📤 Chunk 2: new='सा कुछ बोलूं तो क्या...' context_len=21
+2026-02-07 00:23:40,673 - INFO - 📤 Chunk 3: new='यह ठीक से पकड़ पाएगा मेरे को लगता है...' context_len=38
+2026-02-07 00:23:43,757 - INFO - 📤 Chunk 4: new='आप कुछ गलती कर...' context_len=57
+2026-02-07 00:23:43,758 - INFO - Session 4464311568: Restarting stream (gen 3)
+2026-02-07 00:23:43,759 - INFO - Starting continuous stream gen 3
+2026-02-07 00:23:43,783 - INFO - Stream gen 2 superseded
+2026-02-07 00:24:14,109 - INFO - Session 4464311568: Stopping
+2026-02-07 00:24:14,110 - INFO - Chunk timer stopped
+2026-02-07 00:24:14,413 - INFO - Stream gen 3 ended normally
+2026-02-07 00:24:15,210 - INFO - Session ended: 4464311568
+2026-02-07 00:24:15,211 - INFO - connection closed
+2026-02-07 00:24:15,212 - INFO - connection open
+2026-02-07 00:24:15,212 - INFO - New continuous client: 4456462240
+2026-02-07 00:24:15,311 - INFO - Config: lang=hi-IN, room=QIZmiOcQzwWQRVWu2Hmu, user=local-user
+2026-02-07 00:24:15,311 - INFO - Started continuous transcription with 2.0s chunks
+2026-02-07 00:24:15,312 - INFO - Session 4456462240: Starting continuous mode
+2026-02-07 00:24:15,312 - INFO - Starting continuous stream gen 0
+2026-02-07 00:24:15,313 - INFO - Starting chunk timer (interval: 2.0s)
+2026-02-07 00:24:21,319 - INFO - 📤 Chunk 0: new='मैं यह तो नहीं...' context_len=0
+2026-02-07 00:24:23,323 - INFO - 📤 Chunk 1: new='बोलूंगा कि यह सबसे बेहतरीन...' context_len=14
+2026-02-07 00:24:25,327 - INFO - 📤 Chunk 2: new='चीज मैंने बनाई है पर...' context_len=41
+2026-02-07 00:24:27,330 - INFO - 📤 Chunk 3: new='मैं बहुत खुश हूं...' context_len=47
+2026-02-07 00:24:29,334 - INFO - 📤 Chunk 4: new='यह बहुत ज्यादा मेरे दिल के...' context_len=37
+2026-02-07 00:24:29,434 - INFO - 📤 Chunk 5: new='करीब...' context_len=43
+2026-02-07 00:24:29,435 - INFO - Session 4456462240: Restarting stream (gen 1)
+2026-02-07 00:24:29,436 - INFO - Starting continuous stream gen 1
+2026-02-07 00:24:29,687 - INFO - Stream gen 0 superseded
+2026-02-07 00:24:53,353 - INFO - 📤 Chunk 0: new='यह थोड़े बहुत...' context_len=0
+2026-02-07 00:24:55,356 - INFO - 📤 Chunk 1: new='सेंटेंसेस के बीच ओवरलैप ढूंढ...' context_len=13
+2026-02-07 00:24:57,360 - INFO - 📤 Chunk 2: new='रहा है जो मेरे को पसंद नहीं...' context_len=42
+2026-02-07 00:24:57,964 - INFO - 📤 Chunk 3: new='आ रहा...' context_len=56
+2026-02-07 00:24:57,964 - INFO - Session 4456462240: Restarting stream (gen 2)
+2026-02-07 00:24:57,965 - INFO - Starting continuous stream gen 2
+2026-02-07 00:24:58,386 - INFO - Stream gen 1 superseded
+2026-02-07 00:25:11,370 - INFO - 📤 Chunk 0: new='हां यह शायद थोड़ा...' context_len=0
+2026-02-07 00:25:13,374 - INFO - 📤 Chunk 1: new='बहुत उल्टा सीधा काम तो कर...' context_len=17
+2026-02-07 00:25:15,377 - INFO - 📤 Chunk 2: new='रहा है क्योंकि बाकी तो सही...' context_len=43
+2026-02-07 00:25:15,633 - INFO - 📤 Chunk 3: new='है...' context_len=52
+2026-02-07 00:25:15,634 - INFO - Session 4456462240: Restarting stream (gen 3)
+2026-02-07 00:25:15,634 - INFO - Starting continuous stream gen 3
+2026-02-07 00:25:15,957 - INFO - Stream gen 2 superseded
+2026-02-07 00:25:27,714 - INFO - Session 4456462240: Stopping
+2026-02-07 00:25:27,716 - INFO - Chunk timer stopped
+2026-02-07 00:25:27,728 - INFO - Stream gen 3 cancelled
+2026-02-07 00:25:27,728 - INFO - Session ended: 4456462240
+2026-02-07 00:25:27,728 - INFO - connection closed
+2026-02-07 00:25:27,731 - INFO - connection open
+2026-02-07 00:25:27,731 - INFO - New continuous client: 4464310368
+2026-02-07 00:25:27,827 - INFO - Config: lang=hi-IN, room=QIZmiOcQzwWQRVWu2Hmu, user=local-user
+2026-02-07 00:25:27,827 - INFO - Started continuous transcription with 2.0s chunks
+2026-02-07 00:25:27,827 - INFO - Session 4464310368: Starting continuous mode
+2026-02-07 00:25:27,827 - INFO - Starting continuous stream gen 0
+2026-02-07 00:25:27,828 - INFO - Starting chunk timer (interval: 2.0s)
+2026-02-07 00:25:29,860 - INFO - Session 4464310368: Stopping
+2026-02-07 00:25:29,861 - INFO - Chunk timer stopped
+2026-02-07 00:25:30,161 - INFO - Stream gen 0 ended normally

@@ -9,7 +9,7 @@ Usage examples:
   python inspect_model.py --method generate
 
   # Use a different model id
-  python inspect_model.py --model mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit
+  python inspect_model.py --model mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit
 """
 
 import argparse
@@ -56,7 +56,7 @@ def show_method(model, method_name):
 
 def main():
     parser = argparse.ArgumentParser(description="Inspect callable methods on a TTS model")
-    parser.add_argument("--model", default="mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit", help="Model id to load")
+    parser.add_argument("--model", default="mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit", help="Model id to load")
     parser.add_argument("--method", help="If provided, show signature and docstring for this method")
     args = parser.parse_args()
 
@@ -82,6 +82,6 @@ if __name__ == "__main__":
 
 # from mlx_audio.tts.utils import load_model
 
-# model = load_model("mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit")
+# model = load_model("mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit")
 
 # print(model.get_supported_languages())

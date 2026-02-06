@@ -1,0 +1,254 @@
+INFO:__main__:============================================================
+INFO:__main__:  SLIDING WINDOW TRANSLATION PROCESSOR
+INFO:__main__:  Mode: Continuous chunks with context
+INFO:__main__:  Translates 2s new text with 4s context
+INFO:__main__:============================================================
+INFO:redis_client:Redis connected: localhost:6379
+INFO:__main__:Subscribed to: room:*:transcription, room:*:invalidation
+INFO:__main__:🔄 Chunk 0: context='...' new='क्या...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (542ms): 'What...'
+INFO:__main__:  📤 Dispatched to TTS: 'What...'
+INFO:__main__:🔄 Chunk 1: context='क्या...' new='आप मेरी बातें सुन पा रहे हैं अगर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (715ms): 'are you able to hear what I'm saying?...'
+INFO:__main__:  📤 Dispatched to TTS: 'are you able to hear what I'm saying?...'
+INFO:__main__:🔄 Chunk 2: context='क्या आप मेरी बातें सुन पा रहे ...' new='हां तो बताइए हां...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (269ms): 'Yes, then tell me yes...'
+INFO:__main__:  📤 Dispatched to TTS: 'Yes, then tell me yes...'
+INFO:__main__:🔄 Chunk 3: context='आप मेरी बातें सुन पा रहे हैं अ...' new='शैलेंद्र नहीं तो...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (212ms): 'or Shailendra...'
+INFO:__main__:  📤 Dispatched to TTS: 'or Shailendra...'
+INFO:__main__:🔄 Chunk 0: context='...' new='यह कुछ...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (367ms): 'This is something...'
+INFO:__main__:  📤 Dispatched to TTS: 'This is something...'
+INFO:__main__:🔄 Chunk 1: context='यह कुछ...' new='अजीब था पर मेरे को ठीक लग रहा...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (220ms): 'It was strange but seems fine to me now...'
+INFO:__main__:  📤 Dispatched to TTS: 'It was strange but seems fine to me now...'
+INFO:__main__:🔄 Chunk 2: context='यह कुछ अजीब था पर मेरे को ठीक ...' new='है शायद कुछ है इसमें...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (242ms): 'There's probably something in it...'
+INFO:__main__:  📤 Dispatched to TTS: 'There's probably something in it...'
+INFO:__main__:🔄 Chunk 3: context='अजीब था पर मेरे को ठीक लग रहा ...' new='या तो फिर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (228ms): 'or else...'
+INFO:__main__:  📤 Dispatched to TTS: 'or else...'
+INFO:__main__:🔄 Chunk 0: context='...' new='मैं भी इट्स नॉट...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (282ms): 'I'm also it's not...'
+INFO:__main__:  📤 Dispatched to TTS: 'I'm also it's not...'
+INFO:__main__:🔄 Chunk 0: context='...' new='यदि...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (285ms): 'If...'
+INFO:__main__:  📤 Dispatched to TTS: 'If...'
+INFO:__main__:🔄 Chunk 1: context='यदि...' new='शायद इतना खराब भी नहीं है...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (265ms): 'Maybe it's not that bad...'
+INFO:__main__:  📤 Dispatched to TTS: 'Maybe it's not that bad...'
+INFO:__main__:🔄 Chunk 2: context='यदि शायद इतना खराब भी नहीं है...' new='जितना मैं सोच रहा...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (183ms): 'as I am thinking...'
+INFO:__main__:  📤 Dispatched to TTS: 'as I am thinking...'
+INFO:__main__:🔄 Chunk 0: context='...' new='यह काफी...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (351ms): 'This is enough...'
+INFO:__main__:  📤 Dispatched to TTS: 'This is enough...'
+INFO:__main__:🔄 Chunk 1: context='यह काफी...' new='अच्छे से मेरे ट्रांसलेशन को...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (298ms): 'of my translation properly...'
+INFO:__main__:  📤 Dispatched to TTS: 'of my translation properly...'
+INFO:__main__:🔄 Chunk 2: context='यह काफी अच्छे से मेरे ट्रांसले...' new='कैप्चर कर पा रहा है जो...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (271ms): 'is capturing my translation quite well which...'
+INFO:__main__:  📤 Dispatched to TTS: 'is capturing my translation quite well which...'
+INFO:__main__:🔄 Chunk 3: context='अच्छे से मेरे ट्रांसलेशन को कै...' new='उसे इंटरेस्टिंग है मेरे...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (265ms): 'what interests him about me...'
+INFO:__main__:  📤 Dispatched to TTS: 'what interests him about me...'
+INFO:__main__:🔄 Chunk 0: context='...' new='यह थोड़ा बहुत...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (344ms): 'This is a bit too much...'
+INFO:__main__:  📤 Dispatched to TTS: 'This is a bit too much...'
+INFO:__main__:🔄 Chunk 1: context='यह थोड़ा बहुत...' new='गलती कर रहा है पर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (278ms): 'is making a mistake on...'
+INFO:__main__:  📤 Dispatched to TTS: 'is making a mistake on...'
+INFO:__main__:🔄 Chunk 2: context='यह थोड़ा बहुत गलती कर रहा है प...' new='मेरे को तो सही लग रहा...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (247ms): 'But it seems right to me...'
+INFO:__main__:  📤 Dispatched to TTS: 'But it seems right to me...'
+INFO:__main__:🔄 Chunk 0: context='...' new='इतना भी खराब...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (342ms): 'Not that bad...'
+INFO:__main__:  📤 Dispatched to TTS: 'Not that bad...'
+INFO:__main__:🔄 Chunk 1: context='इतना भी खराब...' new='नहीं है पर ठीक...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (261ms): 'it's not that bad but okay...'
+INFO:__main__:  📤 Dispatched to TTS: 'it's not that bad but okay...'
+INFO:__main__:🔄 Chunk 2: context='इतना भी खराब नहीं है पर ठीक...' new='ठाक काम कर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (227ms): 'It's working fine...'
+INFO:__main__:  📤 Dispatched to TTS: 'It's working fine...'
+INFO:__main__:🔄 Chunk 0: context='...' new='अगर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (337ms): 'If...'
+INFO:__main__:  📤 Dispatched to TTS: 'If...'
+INFO:__main__:🔄 Chunk 1: context='अगर...' new='मैं उसको कुछ लंबा...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (212ms): 'if I tell him something a little...'
+INFO:__main__:  📤 Dispatched to TTS: 'if I tell him something a little...'
+INFO:__main__:🔄 Chunk 2: context='अगर मैं उसको कुछ लंबा...' new='सा कुछ बोलूं तो क्या...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (467ms): 'if I tell him something a bit longer, then what...'
+INFO:__main__:  📤 Dispatched to TTS: 'if I tell him something a bit longer, then what...'
+INFO:__main__:🔄 Chunk 3: context='मैं उसको कुछ लंबा सा कुछ बोलूं...' new='यह ठीक से पकड़ पाएगा मेरे को लगता है...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (298ms): 'It will catch it properly, I think...'
+INFO:__main__:  📤 Dispatched to TTS: 'It will catch it properly, I think...'
+INFO:__main__:🔄 Chunk 4: context='सा कुछ बोलूं तो क्या यह ठीक से...' new='आप कुछ गलती कर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (321ms): 'You will make some mistakes...'
+INFO:__main__:  📤 Dispatched to TTS: 'You will make some mistakes...'
+INFO:__main__:🔄 Chunk 0: context='...' new='मैं यह तो नहीं...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (305ms): 'I don't know about this...'
+INFO:__main__:  📤 Dispatched to TTS: 'I don't know about this...'
+INFO:__main__:🔄 Chunk 1: context='मैं यह तो नहीं...' new='बोलूंगा कि यह सबसे बेहतरीन...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (183ms): 'but I will say that this is the best...'
+INFO:__main__:  📤 Dispatched to TTS: 'but I will say that this is the best...'
+INFO:__main__:🔄 Chunk 2: context='मैं यह तो नहीं बोलूंगा कि यह स...' new='चीज मैंने बनाई है पर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (303ms): 'but this is something I've made...'
+INFO:__main__:  📤 Dispatched to TTS: 'but this is something I've made...'
+INFO:__main__:🔄 Chunk 3: context='बोलूंगा कि यह सबसे बेहतरीन चीज...' new='मैं बहुत खुश हूं...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (246ms): 'I am very happy...'
+INFO:__main__:  📤 Dispatched to TTS: 'I am very happy...'
+INFO:__main__:🔄 Chunk 4: context='चीज मैंने बनाई है पर मैं बहुत ...' new='यह बहुत ज्यादा मेरे दिल के...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:__main__:🔄 Chunk 5: context='मैं बहुत खुश हूं यह बहुत ज्याद...' new='करीब...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (282ms): 'This is very close to my heart...'
+INFO:__main__:  📤 Dispatched to TTS: 'This is very close to my heart...'
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (427ms): 'close to my heart...'
+INFO:__main__:  🔧 Deduplicated: '...'
+INFO:__main__:  ⏭️ Skipped (fully duplicate content)
+INFO:__main__:🔄 Chunk 0: context='...' new='यह थोड़े बहुत...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (444ms): 'This is somewhat...'
+INFO:__main__:  📤 Dispatched to TTS: 'This is somewhat...'
+INFO:__main__:🔄 Chunk 1: context='यह थोड़े बहुत...' new='सेंटेंसेस के बीच ओवरलैप ढूंढ...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (297ms): 'find overlap between sentences...'
+INFO:__main__:  📤 Dispatched to TTS: 'find overlap between sentences...'
+INFO:__main__:🔄 Chunk 2: context='यह थोड़े बहुत सेंटेंसेस के बीच...' new='रहा है जो मेरे को पसंद नहीं...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (268ms): 'is something that I don't like...'
+INFO:__main__:  📤 Dispatched to TTS: 'is something that I don't like...'
+INFO:__main__:🔄 Chunk 3: context='सेंटेंसेस के बीच ओवरलैप ढूंढ र...' new='आ रहा...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (228ms): 'is coming...'
+INFO:__main__:  📤 Dispatched to TTS: 'is coming...'
+INFO:__main__:🔄 Chunk 0: context='...' new='हां यह शायद थोड़ा...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (411ms): 'Yes, this is probably a little...'
+INFO:__main__:  📤 Dispatched to TTS: 'Yes, this is probably a little...'
+INFO:__main__:🔄 Chunk 1: context='हां यह शायद थोड़ा...' new='बहुत उल्टा सीधा काम तो कर...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (207ms): 'but does a lot of unnecessary work...'
+INFO:__main__:  📤 Dispatched to TTS: 'but does a lot of unnecessary work...'
+INFO:__main__:🔄 Chunk 2: context='हां यह शायद थोड़ा बहुत उल्टा स...' new='रहा है क्योंकि बाकी तो सही...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (208ms): 'is happening because the rest is correct...'
+INFO:__main__:  📤 Dispatched to TTS: 'is happening because the rest is correct...'
+INFO:__main__:🔄 Chunk 3: context='बहुत उल्टा सीधा काम तो कर रहा ...' new='है...'
+WARNING:__main__:⚠️ No language preference found for remote-user, defaulting to English
+INFO:__main__:   🎯 Translating to: English (for remote-user)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:  ✅ Raw translation (232ms): 'is...'
+INFO:__main__:  📤 Dispatched to TTS: 'is...'

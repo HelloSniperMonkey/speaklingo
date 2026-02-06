@@ -1,0 +1,6 @@
+INFO:__main__:Starting Load Balancer on 0.0.0.0:8089
+INFO:__main__:Service Configuration:
+INFO:__main__:  transcription: HTTP=http://localhost:8765, WS=ws://localhost:8765
+INFO:__main__:  transcription_broadcast: HTTP=http://localhost:8766, WS=ws://localhost:8766
+INFO:__main__:  translation: HTTP=http://localhost:8766, WS=ws://localhost:8767
+INFO:__main__:  voice: HTTP=http://localhost:8712, WS=ws://localhost:8768

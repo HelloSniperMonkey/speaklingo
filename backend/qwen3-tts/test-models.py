@@ -14,7 +14,7 @@
 # import mlx.core as mx
 
 # # Load the model (this will now use local_qwen code)
-# model = load_model("mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit")
+# model = load_model("mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit")
 
 # generate_audio(
 #     model=model,
@@ -26,48 +26,48 @@
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# from qwen_tts import Qwen3TTSModel
-# import torch
-# import time
+from qwen_tts import Qwen3TTSModel
+import torch
+import time
 
-# # Model will be automatically quantized when loaded
-# model = Qwen3TTSModel.from_pretrained(
-#     "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
-#     device_map="mps",
-# )
+# Model will be automatically quantized when loaded
+model = Qwen3TTSModel.from_pretrained(
+    "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
+    device_map="mps",
+)
 
-# # Voice cloning example
-# import soundfile as sf
+# Voice cloning example
+import soundfile as sf
 
-# start_time = time.time()
-# wavs, sr = model.generate_voice_clone(
-#     text="Hello I am feeling great today and the weather is sunny and it uplifts my mood.",
-#     language="English",
-#     ref_audio="data/intro_user.wav",
-#     ref_text="Hello I am feeling great today and the weather is sunny which uplifts my mood.",
-# )
-# sf.write("output.wav", wavs[0], sr)
-# end_time = time.time()
+start_time = time.time()
+wavs, sr = model.generate_voice_clone(
+    text="Hello I am feeling great today and the weather is sunny and it uplifts my mood.",
+    language="English",
+    ref_audio="data/intro_user.wav",
+    ref_text="Hello I am feeling great today and the weather is sunny which uplifts my mood.",
+)
+sf.write("output.wav", wavs[0], sr)
+end_time = time.time()
 
-# generation_time = end_time - start_time
+generation_time = end_time - start_time
 
-# if wavs:
-#     # Get the first result
-#     audio = wavs[0]
+if wavs:
+    # Get the first result
+    audio = wavs[0]
     
-#     audio_duration = len(audio) / sr
+    audio_duration = len(audio) / sr
     
-#     # Print metrics
-#     print(f"\n{'='*50}")
-#     print("Generation completed!")
-#     print(f"{'='*50}")
-#     print(f"Generation time: {generation_time:.2f} seconds")
-#     print(f"Audio duration: {audio_duration:.2f} seconds")
-#     print(f"Speed: {audio_duration/generation_time:.2f}x faster than real-time")
-#     print(f"{'='*50}\n")
+    # Print metrics
+    print(f"\n{'='*50}")
+    print("Generation completed!")
+    print(f"{'='*50}")
+    print(f"Generation time: {generation_time:.2f} seconds")
+    print(f"Audio duration: {audio_duration:.2f} seconds")
+    print(f"Speed: {audio_duration/generation_time:.2f}x faster than real-time")
+    print(f"{'='*50}\n")
     
-#     print(f"Output written to: output.wav")
-# else:
-#     print("No audio generated!")
+    print(f"Output written to: output.wav")
+else:
+    print("No audio generated!")
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

@@ -19,6 +19,7 @@ import os
 import time
 import uuid
 from typing import Optional
+from collections import deque
 
 import websockets
 from websockets.server import WebSocketServerProtocol
@@ -53,30 +54,9 @@ if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
 speech_client = None
 
 # Configuration
-CHUNK_INTERVAL_SECONDS = 3.0  # Max time to wait before emitting (fallback for continuous speech)
+CHUNK_INTERVAL_SECONDS = 2.0  # Emit chunks every 2 seconds
 CONTEXT_WINDOW_SECONDS = 4.0  # Keep 4 seconds of context
-
-# Character-based context window
-# Average speaking rate: ~150 words/min = ~2.5 words/sec = ~15 chars/sec
-# 4-5 seconds of context ≈ 60-100 characters
-# For non-Latin scripts (Bengali, Hindi, etc.), characters are denser
-CONTEXT_MAX_CHARS = 150  # Increased for better context in non-Latin scripts
-
-# Hybrid chunk emission settings
-# Emit when ANY of these conditions are met:
-# 1. Sentence boundary detected AND silence > SENTENCE_SILENCE_MS
-# 2. Long silence > LONG_SILENCE_MS (pause in speech without sentence end)
-# 3. Timer reaches CHUNK_INTERVAL_SECONDS (fallback for continuous speech)
-# 4. BUT only if MIN_CHUNK_LENGTH characters accumulated
-
-MIN_CHUNK_LENGTH = 25  # Increased to get more complete phrases (prevents fragments)
-# Sentence endings for multiple languages:
-# . ? ! - English/Western
-# 。？！ - Chinese/Japanese
-# । - Bengali/Hindi (Devanagari purna viram)
-SENTENCE_ENDINGS = '.?!。？！।'
-SENTENCE_SILENCE_MS = 200  # Short silence needed after sentence ending
-LONG_SILENCE_MS = 800  # Long silence triggers emit even without sentence ending
+CONTEXT_CHUNKS = int(CONTEXT_WINDOW_SECONDS / CHUNK_INTERVAL_SECONDS)  # 2 chunks
 
 
 class ContinuousTranscriptionSession:
@@ -99,15 +79,10 @@ class ContinuousTranscriptionSession:
         # Continuous chunking state
         self.current_interim_text = ""  # Current interim transcription
         self.last_emitted_text = ""     # What we last emitted
-        self.context_text = ""          # Rolling context (character-based, not chunk-based)
+        self.context_history: deque[str] = deque(maxlen=CONTEXT_CHUNKS)  # Rolling context
         self.chunk_timer_task: Optional[asyncio.Task] = None
-        self.silence_detector_task: Optional[asyncio.Task] = None
         self.last_chunk_time = time.time()
         self.chunk_sequence = 0  # Sequence number for chunks
-        
-        # Silence detection state
-        self.last_text_update_time = time.time()  # When we last got new text
-        self.silence_emitted = False  # Whether we already emitted for this silence
         
         # WebSocket reference (set when stream starts)
         self.websocket: Optional[WebSocketServerProtocol] = None
@@ -119,56 +94,12 @@ class ContinuousTranscriptionSession:
     
     def update_interim_text(self, text: str):
         """Update the current interim transcription text."""
-        if text != self.current_interim_text:
-            self.current_interim_text = text
-            self.last_text_update_time = time.time()  # Reset silence timer
-            self.silence_emitted = False  # Allow new silence-based emission
+        self.current_interim_text = text
     
-    def _compute_new_text(self, current_text: str) -> str:
-        """
-        Compute genuinely new text vs last_emitted_text using word-level diffing.
-        
-        Handles the case where Google STT's is_final result differs slightly
-        from the accumulated interim (e.g., minor word corrections), which
-        would cause a naive startswith() check to fail and re-emit everything.
-        """
-        if not current_text:
-            return ""
-        if not self.last_emitted_text:
-            return current_text
-        
-        # Fast path: exact character-level prefix match
-        if current_text.startswith(self.last_emitted_text):
-            return current_text[len(self.last_emitted_text):].strip()
-        
-        # Slow path: word-level prefix matching
-        # Handles minor differences from Google finals (punctuation, word corrections)
-        last_words = self.last_emitted_text.split()
-        current_words = current_text.split()
-        
-        # Strip trailing punctuation for fuzzy word comparison
-        def clean(w):
-            return w.rstrip('.,!?;:\u0964\u0965')  # includes Bengali danda
-        
-        common_prefix_len = 0
-        for i in range(min(len(last_words), len(current_words))):
-            if clean(last_words[i]) == clean(current_words[i]):
-                common_prefix_len = i + 1
-            else:
-                break
-        
-        # If we matched a significant portion of last_emitted (>50%), trust the diff
-        if common_prefix_len > 0 and common_prefix_len >= len(last_words) * 0.5:
-            new_words = current_words[common_prefix_len:]
-            return ' '.join(new_words).strip()
-        
-        # Fallback: treat entire text as new
-        return current_text
-    
-    async def emit_chunk(self, force: bool = False, trigger: str = "manual"):
+    async def emit_chunk(self, force: bool = False):
         """
         Emit the current transcription chunk if there's new content.
-        trigger: 'timer', 'silence', 'manual', or 'force'
+        Called every CHUNK_INTERVAL_SECONDS seconds.
         """
         current_text = self.current_interim_text.strip()
         
@@ -181,14 +112,16 @@ class ContinuousTranscriptionSession:
         if current_text == self.last_emitted_text and not force:
             return
         
-        # Compute the new text using word-level diffing (handles Google final corrections)
-        new_text = self._compute_new_text(current_text)
+        # Compute the new text (what's added since last emit)
+        new_text = current_text
+        if self.last_emitted_text and current_text.startswith(self.last_emitted_text):
+            new_text = current_text[len(self.last_emitted_text):].strip()
         
         if not new_text:
             return
         
-        # Use character-based context (keeps last ~100 chars)
-        context = self.context_text
+        # Build context from history
+        context = ' '.join(self.context_history)
         
         # Create chunk message
         chunk_hash = str(uuid.uuid4())
@@ -198,8 +131,8 @@ class ContinuousTranscriptionSession:
             "roomId": self.room_id,
             "userId": self.user_id or self.session_id,
             "sessionId": self.session_id,
-            "context": context,           # Previous ~4 seconds (already translated)
-            "newText": new_text,           # Current chunk (to translate)
+            "context": context,           # Previous 4 seconds (already translated)
+            "newText": new_text,           # Current 2 seconds (to translate)
             "fullText": current_text,      # Full accumulated text
             "language": self.language_code,
             "isFinal": False,              # These are continuous chunks, never "final"
@@ -214,8 +147,7 @@ class ContinuousTranscriptionSession:
                 redis_client = get_redis_client()
                 channel = f"room:{self.room_id}:transcription"
                 await redis_client.publish(channel, json.dumps(chunk_message))
-                trigger_icon = "⏱️" if trigger == "timer" else "🔇" if trigger == "silence" else "📤"
-                logger.info(f"{trigger_icon} Chunk {self.chunk_sequence} [{trigger}]: new='{new_text[:40]}' ctx='{context[-30:] if context else ''}'")
+                logger.info(f"📤 Chunk {self.chunk_sequence}: new='{new_text[:40]}...' context_len={len(context)}")
             except Exception as e:
                 logger.error(f"Redis publish error: {e}")
         
@@ -227,37 +159,21 @@ class ContinuousTranscriptionSession:
                     "hash": f"{chunk_hash}_tc",
                     "newText": new_text,
                     "fullText": current_text,
-                    "context": context,
                     "chunkSequence": self.chunk_sequence,
                     "timestamp": int(time.time() * 1000)
                 }))
             except Exception as e:
                 logger.error(f"WebSocket send error: {e}")
         
-        # Update context with character-based sliding window
-        # Append new text to context, then trim to max chars
-        if self.context_text:
-            self.context_text = self.context_text + " " + new_text
-        else:
-            self.context_text = new_text
-        
-        # Keep only the last CONTEXT_MAX_CHARS characters
-        if len(self.context_text) > CONTEXT_MAX_CHARS:
-            # Find a word boundary to trim at
-            trim_text = self.context_text[-CONTEXT_MAX_CHARS:]
-            space_idx = trim_text.find(' ')
-            if space_idx > 0:
-                self.context_text = trim_text[space_idx + 1:]
-            else:
-                self.context_text = trim_text
-        
+        # Update state
+        self.context_history.append(new_text)
         self.last_emitted_text = current_text
         self.chunk_sequence += 1
         self.last_chunk_time = time.time()
     
     async def chunk_timer_loop(self):
-        """Background task that emits chunks every CHUNK_INTERVAL_SECONDS (fallback for continuous speech)."""
-        logger.info(f"Starting timer fallback (interval: {CHUNK_INTERVAL_SECONDS}s)")
+        """Background task that emits chunks every CHUNK_INTERVAL_SECONDS."""
+        logger.info(f"Starting chunk timer (interval: {CHUNK_INTERVAL_SECONDS}s)")
         
         while self.is_running:
             try:
@@ -266,15 +182,7 @@ class ContinuousTranscriptionSession:
                 if not self.is_running:
                     break
                 
-                # Check if we have enough text to emit
-                current_text = self.current_interim_text.strip()
-                new_text = self._compute_new_text(current_text) if current_text else ""
-                
-                # Only emit if we have minimum content
-                if len(new_text) >= MIN_CHUNK_LENGTH:
-                    logger.info(f"⏱️ Timer triggered ({CHUNK_INTERVAL_SECONDS}s elapsed)")
-                    await self.emit_chunk(trigger="timer")
-                    self.silence_emitted = True  # Prevent silence detector from re-emitting
+                await self.emit_chunk()
                 
             except asyncio.CancelledError:
                 break
@@ -283,77 +191,19 @@ class ContinuousTranscriptionSession:
         
         logger.info("Chunk timer stopped")
     
-    async def silence_detector_loop(self):
-        """
-        Hybrid chunk emission detector.
-        
-        Emits when ANY of these conditions are met:
-        1. Sentence boundary (., ?, !) detected AND silence > 200ms
-        2. Long silence > 800ms (pause without sentence ending)
-        3. Timer fallback handles continuous speech (separate loop)
-        4. All require MIN_CHUNK_LENGTH characters accumulated
-        """
-        logger.info(f"Starting hybrid detector (sentence+{SENTENCE_SILENCE_MS}ms, long silence {LONG_SILENCE_MS}ms, min {MIN_CHUNK_LENGTH} chars)")
-        
-        check_interval = 0.1  # Check every 100ms for responsiveness
-        
-        while self.is_running:
-            try:
-                await asyncio.sleep(check_interval)
-                
-                if not self.is_running:
-                    break
-                
-                if self.silence_emitted:
-                    continue
-                
-                # Get the new text since last emission
-                current_text = self.current_interim_text.strip()
-                new_text = self._compute_new_text(current_text) if current_text else ""
-                
-                # Check minimum length requirement
-                if len(new_text) < MIN_CHUNK_LENGTH:
-                    continue
-                
-                silence_duration_ms = (time.time() - self.last_text_update_time) * 1000
-                
-                # Check for sentence boundary with short silence
-                ends_with_sentence = any(new_text.rstrip().endswith(c) for c in SENTENCE_ENDINGS)
-                
-                if ends_with_sentence and silence_duration_ms >= SENTENCE_SILENCE_MS:
-                    # Sentence completed - emit immediately
-                    logger.info(f"📝 Sentence boundary detected ({silence_duration_ms:.0f}ms silence)")
-                    await self.emit_chunk(trigger="sentence")
-                    self.silence_emitted = True
-                    
-                elif silence_duration_ms >= LONG_SILENCE_MS:
-                    # Long pause without sentence ending - still emit
-                    logger.info(f"🔇 Long silence detected ({silence_duration_ms:.0f}ms)")
-                    await self.emit_chunk(trigger="silence")
-                    self.silence_emitted = True
-                
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Hybrid detector error: {e}")
-        
-        logger.info("Hybrid detector stopped")
-    
     async def restart_stream(self):
         """Restart the stream and reset context."""
         self.stream_generation += 1
         logger.info(f"Session {self.session_id}: Restarting stream (gen {self.stream_generation})")
         
         # Emit any remaining content before restart
-        await self.emit_chunk(force=True, trigger="restart")
+        await self.emit_chunk(force=True)
         
         # Reset state for new utterance
         self.current_interim_text = ""
         self.last_emitted_text = ""
-        self.context_text = ""  # Reset character-based context
+        self.context_history.clear()
         self.chunk_sequence = 0
-        self.silence_emitted = False  # Reset silence state
-        self.last_text_update_time = time.time()
         
         await self.audio_queue.put(("restart", None, self.stream_generation - 1))
     
@@ -365,12 +215,8 @@ class ContinuousTranscriptionSession:
         if self.chunk_timer_task and not self.chunk_timer_task.done():
             self.chunk_timer_task.cancel()
         
-        # Cancel silence detector
-        if self.silence_detector_task and not self.silence_detector_task.done():
-            self.silence_detector_task.cancel()
-        
         # Emit final chunk
-        await self.emit_chunk(force=True, trigger="final")
+        await self.emit_chunk(force=True)
         
         await self.audio_queue.put(("stop", None, self.stream_generation))
 
@@ -458,7 +304,7 @@ async def continuous_transcribe_stream(session: ContinuousTranscriptionSession, 
                 # If Google marks it as final, we could force emit,
                 # but we let the timer handle it for consistency
                 if is_final:
-                    await session.emit_chunk(force=True, trigger="google_final")
+                    await session.emit_chunk(force=True)
                     # Reset for next utterance
                     session.current_interim_text = ""
         
@@ -532,26 +378,20 @@ async def handle_continuous_client(websocket: WebSocketServerProtocol):
                             )
                             active_tasks.append(transcription_task)
                             
-                            # Start chunk timer (fallback for continuous speech)
+                            # Start chunk timer
                             session.chunk_timer_task = asyncio.create_task(
                                 session.chunk_timer_loop()
                             )
                             active_tasks.append(session.chunk_timer_task)
                             
-                            # Start silence detector (for faster emission on pauses)
-                            session.silence_detector_task = asyncio.create_task(
-                                session.silence_detector_loop()
-                            )
-                            active_tasks.append(session.silence_detector_task)
-                            
-                            logger.info(f"Started continuous transcription: {CHUNK_INTERVAL_SECONDS}s timer + {SILENCE_THRESHOLD_MS}ms silence detection")
+                            logger.info(f"Started continuous transcription with {CHUNK_INTERVAL_SECONDS}s chunks")
                     
                     elif command == "finalize_and_restart":
                         # Still support this for explicit breaks
                         text = data.get("text", "")
                         if text and session.room_id:
                             session.update_interim_text(text)
-                            await session.emit_chunk(force=True, trigger="finalize")
+                            await session.emit_chunk(force=True)
                         
                         await session.restart_stream()
                         
@@ -606,13 +446,9 @@ async def main():
         return
 
     logger.info("=" * 60)
-    logger.info("  HYBRID TRANSCRIPTION SERVER")
-    logger.info("  Emission triggers:")
-    logger.info(f"    📝 Sentence end + {SENTENCE_SILENCE_MS}ms silence")
-    logger.info(f"    🔇 Long silence: {LONG_SILENCE_MS}ms")
-    logger.info(f"    ⏱️  Timer fallback: {CHUNK_INTERVAL_SECONDS}s")
-    logger.info(f"  Min chunk: {MIN_CHUNK_LENGTH} chars")
-    logger.info(f"  Context: ~{CONTEXT_MAX_CHARS} chars")
+    logger.info("  CONTINUOUS TRANSCRIPTION SERVER")
+    logger.info(f"  Chunk interval: {CHUNK_INTERVAL_SECONDS}s")
+    logger.info(f"  Context window: {CONTEXT_WINDOW_SECONDS}s")
     logger.info(f"  Server: {host}:{port}")
     logger.info("=" * 60)
     

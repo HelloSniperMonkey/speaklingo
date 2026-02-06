@@ -126,71 +126,34 @@ def remove_duplicate_prefix(new_translation: str, previous_translation: str) -> 
     Remove overlapping content from the start of new_translation
     that matches the end of previous_translation.
     
-    Handles both exact overlaps and paraphrased re-translations where
-    the LLM translates the same source text slightly differently.
+    Uses ONLY exact suffix-prefix word overlap to avoid false positives.
+    The fuzzy matching approach was too aggressive and could eat genuinely
+    new translations, especially for non-Latin languages.
     
     Example:
-      previous: "I want to say that I have a class tomorrow but I don't feel like going"
-      new:      "I want to say that there's a class tomorrow but I don't feel like going because it's boring"
-      result:   "because it's boring"
+      previous: "Hello my friend how are you"
+      new:      "how are you the weather is nice"
+      result:   "the weather is nice"
     """
-    import string as _string
-    
     if not previous_translation or not new_translation:
         return new_translation
     
-    def clean_word(w):
-        """Normalize word for comparison: lowercase, strip punctuation."""
-        return w.lower().strip(_string.punctuation)
-    
     prev_words = previous_translation.split()
     new_words = new_translation.split()
-    prev_clean = [clean_word(w) for w in prev_words]
-    new_clean = [clean_word(w) for w in new_words]
-    prev_word_set = set(w for w in prev_clean if w)
     
-    # Method 1: Exact suffix-prefix overlap (handles perfect re-emissions)
+    # Exact suffix-prefix overlap (handles perfect re-emissions)
+    # Find the longest suffix of previous that matches a prefix of new
     best_overlap = 0
-    for overlap_len in range(1, min(len(prev_clean), len(new_clean)) + 1):
-        if prev_clean[-overlap_len:] == new_clean[:overlap_len]:
+    for overlap_len in range(1, min(len(prev_words), len(new_words)) + 1):
+        if prev_words[-overlap_len:] == new_words[:overlap_len]:
             best_overlap = overlap_len
     
     if best_overlap > 0:
         result = ' '.join(new_words[best_overlap:])
         if result:
             return result
-    
-    # Method 2: Fuzzy content overlap (handles paraphrased re-translations)
-    # When the LLM translates the same source differently (e.g. "I have" vs "there's")
-    if len(new_clean) > 3:
-        matching = sum(1 for w in new_clean if w and w in prev_word_set)
-        overlap_ratio = matching / len(new_clean) if new_clean else 0
-        
-        if overlap_ratio >= 0.6:
-            # Find unique content at the TAIL of the new translation.
-            # Scan backwards to find a contiguous run of words not seen in previous.
-            unique_tail_start = len(new_words)  # default: nothing unique
-            consecutive_new = 0
-            
-            for i in range(len(new_clean) - 1, -1, -1):
-                if new_clean[i] and new_clean[i] not in prev_word_set:
-                    consecutive_new += 1
-                    unique_tail_start = i
-                else:
-                    # Need at least 3 consecutive new words to count as real new content
-                    if consecutive_new >= 3:
-                        break
-                    consecutive_new = 0
-                    unique_tail_start = len(new_words)
-            
-            if consecutive_new >= 3:
-                result = ' '.join(new_words[unique_tail_start:])
-                if result:
-                    return result
-            
-            # No substantial unique tail found — this is a near-full duplicate
-            if overlap_ratio >= 0.75:
-                return ""
+        # If exact full overlap with nothing new, return empty
+        return ""
     
     return new_translation
 
@@ -361,14 +324,10 @@ async def process_continuous_chunk(message_data: str, channel: str):
         await redis_client.publish(translation_channel, json.dumps(translation_msg))
         
         # Update state for next deduplication check
-        # Append to last_translated_output (keep rolling window)
-        if state.last_translated_output:
-            state.last_translated_output = state.last_translated_output + " " + translated
-            # Keep last ~200 chars for deduplication window
-            if len(state.last_translated_output) > 200:
-                state.last_translated_output = state.last_translated_output[-200:]
-        else:
-            state.last_translated_output = translated
+        # Keep only the LAST translation for dedup (not rolling window)
+        # Rolling window was too aggressive - common words across translations
+        # would trigger false dedup matches
+        state.last_translated_output = translated
         
         state.chunk_translations[chunk_sequence] = translated
         state.last_sequence = chunk_sequence

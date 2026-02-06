@@ -1,0 +1,26 @@
+INFO:__main__:Starting Voice Sample Server on port 8712...
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8712
+ * Running on http://192.170.2.19:8712
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:__main__:Received voice sample: room=global, user=user_1769975240208_aggk7pjrv, size=74678, type=audio/webm
+INFO:__main__:Converting webm to wav...
+INFO:__main__:Audio validated: 4.62s at 16000Hz
+INFO:__main__:Voice sample saved locally: /Users/soumyayotimohanta/Developer/hackathon/webrtc-translator/backend/qwen3-tts-mlx/data/user_1769975240208_aggk7pjrv.wav
+INFO:__main__:Voice sample stored in Redis: voice_sample:user_1769975240208_aggk7pjrv, voice_sample:global:user_1769975240208_aggk7pjrv
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:21:23] "POST /upload-voice-sample HTTP/1.1" 200 -
+INFO:__main__:🌐 Language set: room:QIZmiOcQzwWQRVWu2Hmu:user:local-user:language -> en
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:21:27] "POST /set-language HTTP/1.1" 200 -
+INFO:__main__:Registered voice mapping: voice_mapping:QIZmiOcQzwWQRVWu2Hmu:local-user -> user_1769975240208_aggk7pjrv
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:21:27] "POST /register-voice-mapping HTTP/1.1" 200 -
+INFO:__main__:🌐 Language set: room:QIZmiOcQzwWQRVWu2Hmu:user:local-user:language -> en
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:21:27] "POST /set-language HTTP/1.1" 200 -
+INFO:__main__:🌐 Language set: room:QIZmiOcQzwWQRVWu2Hmu:user:local-user:language -> hi
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:21:35] "POST /set-language HTTP/1.1" 200 -
+INFO:__main__:Registered voice mapping: voice_mapping:QIZmiOcQzwWQRVWu2Hmu:local-user -> user_1769975240208_aggk7pjrv
+INFO:__main__:🌐 Language set: room:QIZmiOcQzwWQRVWu2Hmu:user:local-user:language -> en
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:22:51] "POST /register-voice-mapping HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:22:51] "POST /set-language HTTP/1.1" 200 -
+INFO:__main__:🌐 Language set: room:QIZmiOcQzwWQRVWu2Hmu:user:local-user:language -> hi
+INFO:werkzeug:127.0.0.1 - - [07/Feb/2026 00:23:02] "POST /set-language HTTP/1.1" 200 -

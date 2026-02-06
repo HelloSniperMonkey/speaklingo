@@ -30,7 +30,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Model configuration
-MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit"
+MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit"
 DEFAULT_VOICE = "Chelsie"
 
 # Streaming configuration

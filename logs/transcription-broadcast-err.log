@@ -1,0 +1,17 @@
+2026-02-07 00:21:07,970 - INFO - Starting Transcription Broadcast server on 0.0.0.0:8766
+2026-02-07 00:21:07,971 - INFO - server listening on 0.0.0.0:8766
+2026-02-07 00:21:27,220 - INFO - connection open
+2026-02-07 00:21:27,220 - INFO - Client connected: 4408255856
+2026-02-07 00:21:27,223 - INFO - Client 4408255856 cleaned up
+2026-02-07 00:21:27,223 - INFO - connection closed
+2026-02-07 00:21:27,232 - INFO - connection open
+2026-02-07 00:21:27,232 - INFO - Client connected: 4319808064
+2026-02-07 00:21:27,235 - INFO - Client 4319808064 subscribed to room QIZmiOcQzwWQRVWu2Hmu
+2026-02-07 00:21:27,235 - INFO - Redis connected: localhost:6379
+2026-02-07 00:21:27,245 - INFO - Subscribed to Redis channel: room:QIZmiOcQzwWQRVWu2Hmu:transcription
+2026-02-07 00:22:50,753 - INFO - Client 4319808064 cleaned up
+2026-02-07 00:22:50,754 - INFO - connection closed
+2026-02-07 00:22:51,060 - INFO - connection open
+2026-02-07 00:22:51,060 - INFO - Client connected: 4408833952
+2026-02-07 00:22:51,064 - INFO - Client 4408833952 subscribed to room QIZmiOcQzwWQRVWu2Hmu
+2026-02-07 00:22:51,068 - INFO - Subscribed to Redis channel: room:QIZmiOcQzwWQRVWu2Hmu:transcription

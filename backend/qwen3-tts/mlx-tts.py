@@ -4,7 +4,7 @@ import soundfile as sf
 import numpy as np
 import time
 
-model = load_model("mlx-community/Qwen3-TTS-12Hz-0.6B-Base-8bit")
+model = load_model("mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit")
 
 start_time = time.time()
 # Load the reference audio file and convert to MLX array

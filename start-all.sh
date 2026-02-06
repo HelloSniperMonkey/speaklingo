@@ -12,8 +12,8 @@ source ./backend/.venv/bin/activate
 echo "Starting Frontend..."
 cd ./frontend
 pm2 start npm --name "frontend" \
-	--output ./logs/frontend-out.log \
-	--error ./logs/frontend-err.log \
+	--output ../logs/frontend-out.log \
+	--error ../logs/frontend-err.log \
 	-- run dev
 
 # Start Transcription Server
