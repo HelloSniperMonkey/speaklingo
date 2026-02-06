@@ -82,27 +82,68 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
   }, [stream]);
 
   // Handle audio playback separately from video
+  // NOTE: We include `isConnected` as a dependency because Chrome does NOT fire
+  // `addtrack` events for programmatic MediaStream.addTrack() calls.
+  // When WebRTC's ontrack handler adds audio tracks to the remote stream,
+  // no addtrack event fires. But isConnected changes at the same time,
+  // so re-running this effect when isConnected changes lets us pick up the tracks.
   useEffect(() => {
     const audioElement = audioRef.current;
-    if (audioElement && stream) {
-      // Create a new MediaStream with only audio tracks
+    if (!audioElement || !stream) return;
+
+    const setupAudio = () => {
       const audioTracks = stream.getAudioTracks();
+      console.log(`[RemoteVideo] setupAudio called - found ${audioTracks.length} audio track(s), isConnected: ${isConnected}`);
       if (audioTracks.length > 0) {
         const audioStream = new MediaStream(audioTracks);
         audioElement.srcObject = audioStream;
+        // Respect current translation state when starting playback
+        audioElement.muted = isTranslationEnabled;
         audioElement.play().catch((err) => {
           console.warn("[RemoteVideo] Audio autoplay failed:", err);
         });
+        console.log(`[RemoteVideo] ✅ Audio setup complete - muted: ${isTranslationEnabled}, tracks: ${audioTracks.length}`);
+        return true;
       }
+      return false;
+    };
+
+    // Setup audio for any existing tracks
+    const success = setupAudio();
+
+    // Fallback: if no tracks yet, retry after a short delay
+    // This handles edge cases where state updates arrive before tracks
+    let retryTimeout: NodeJS.Timeout | null = null;
+    if (!success && isConnected) {
+      console.log("[RemoteVideo] No audio tracks yet despite isConnected=true, scheduling retry...");
+      retryTimeout = setTimeout(() => {
+        setupAudio();
+      }, 500);
     }
-  }, [stream]);
+
+    // Also listen for tracks added later (as a safety net, even though Chrome
+    // doesn't fire addtrack for programmatic addTrack calls)
+    const handleTrackAdded = (event: MediaStreamTrackEvent) => {
+      if (event.track.kind === "audio") {
+        console.log("[RemoteVideo] addtrack event fired for audio track, setting up audio playback");
+        setupAudio();
+      }
+    };
+
+    stream.addEventListener("addtrack", handleTrackAdded);
+
+    return () => {
+      stream.removeEventListener("addtrack", handleTrackAdded);
+      if (retryTimeout) clearTimeout(retryTimeout);
+    };
+  }, [stream, isTranslationEnabled, isConnected]);
 
   // Mute/unmute audio based on translation mode
   useEffect(() => {
     const audioElement = audioRef.current;
     if (audioElement) {
       audioElement.muted = isTranslationEnabled;
-      console.log(`[RemoteVideo] Remote audio muted: ${isTranslationEnabled}`);
+      console.log(`[RemoteVideo] 🔊 Remote audio muted: ${isTranslationEnabled} (translation ${isTranslationEnabled ? 'ON - TTS will play' : 'OFF - normal voice'})`);
     }
   }, [isTranslationEnabled]);
 

@@ -58,6 +58,16 @@ class RedisClient:
         await self._pubsub.psubscribe(*patterns)
         return self._pubsub
     
+    async def get(self, key: str) -> Optional[str]:
+        """Get value by key."""
+        await self.connect()
+        return await self._client.get(key)
+    
+    async def set(self, key: str, value: str, ex: Optional[int] = None) -> bool:
+        """Set value by key with optional expiration."""
+        await self.connect()
+        return await self._client.set(key, value, ex=ex)
+    
     async def ping(self) -> bool:
         """Check if Redis is reachable."""
         try:

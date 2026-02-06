@@ -68,6 +68,50 @@ VOICE_SAMPLE_CACHE_TTL = 300  # 5 minutes TTL
 _voice_sample_cache: OrderedDict[str, Tuple[bytes, str, int, float]] = OrderedDict()
 _voice_sample_cache_lock = Lock()
 
+# ===== Deduplication Cache =====
+# Track recently processed text to prevent duplicate TTS generation
+# This prevents the same translation from being processed twice due to round-robin or overlap
+_recently_processed: OrderedDict[str, float] = OrderedDict()
+_recently_processed_lock = Lock()
+DEDUP_CACHE_SIZE = 128
+DEDUP_TTL = 10.0  # seconds - ignore duplicate text within this window
+
+
+def _make_dedup_key(data: dict) -> str:
+    """Create a deduplication key from translation data."""
+    room_id = data.get('roomId', '')
+    user_id = data.get('userId', '')
+    text = data.get('translatedText', '') or data.get('text', '')
+    target_user = data.get('targetUserId', '')
+    return f"{room_id}:{user_id}:{target_user}:{text}"
+
+
+def _is_duplicate(data: dict) -> bool:
+    """Check if this translation was recently processed or queued."""
+    key = _make_dedup_key(data)
+    current_time = time.time()
+    
+    with _recently_processed_lock:
+        # Clean expired entries
+        expired = [k for k, t in _recently_processed.items() if current_time - t > DEDUP_TTL]
+        for k in expired:
+            del _recently_processed[k]
+        
+        if key in _recently_processed:
+            age = current_time - _recently_processed[key]
+            text = data.get('translatedText', '') or data.get('text', '')
+            logger.info(f"⏭️ Skipping duplicate text (seen {age:.1f}s ago): '{text[:40]}...'")
+            return True
+        
+        # Mark as seen
+        _recently_processed[key] = current_time
+        
+        # Trim cache size
+        while len(_recently_processed) > DEDUP_CACHE_SIZE:
+            _recently_processed.popitem(last=False)
+    
+    return False
+
 
 def load_model():
     """Load the TTS model."""
@@ -355,7 +399,11 @@ async def process_invalidation(message: dict, redis_client):
 
 
 def _add_to_user_queue(data: dict):
-    """Add request to per-user queue with fair limiting."""
+    """Add request to per-user queue with fair limiting and deduplication."""
+    # Check for duplicate text before even queuing (saves compute)
+    if _is_duplicate(data):
+        return
+    
     user_id = data.get('userId', 'default')
     data['_enqueue_time'] = time.time()  # Track when request was queued
     
@@ -364,6 +412,14 @@ def _add_to_user_queue(data: dict):
             _user_queues[user_id] = []
         
         user_queue = _user_queues[user_id]
+        
+        # Also check if same text is already in the queue for this user
+        new_text = data.get('translatedText', '') or data.get('text', '')
+        for queued in user_queue:
+            queued_text = queued.get('translatedText', '') or queued.get('text', '')
+            if queued_text == new_text:
+                logger.info(f"⏭️ Skipping already-queued text for {user_id}: '{new_text[:40]}...'")
+                return
         
         # Limit queue depth per user - drop oldest if at capacity
         while len(user_queue) >= MAX_QUEUE_PER_USER:

@@ -1,0 +1,11 @@
+[     969ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/favicon.ico:0
+[   56301ms] [WARNING] WebSocket connection to 'ws://localhost:8768/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useProcessedVoice.ts:398
+[   56301ms] [WARNING] WebSocket connection to 'ws://localhost:8767/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranslationStream.ts:107
+[   56302ms] [WARNING] WebSocket connection to 'ws://localhost:8766/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranscriptionStream.ts:83
+[   56306ms] [ERROR] [ProcessedVoice] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[   56311ms] [ERROR] Translation WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[   56312ms] [ERROR] [TranscriptionStream] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  568236ms] [ERROR] The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [[object MediaStream], false] [[object MediaStream], false, true] @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56

@@ -1,0 +1,19 @@
+[   11311ms] [WARNING] WebSocket connection to 'ws://localhost:8768/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useProcessedVoice.ts:398
+[   11312ms] [WARNING] WebSocket connection to 'ws://localhost:8767/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranslationStream.ts:107
+[   11312ms] [WARNING] WebSocket connection to 'ws://localhost:8766/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranscriptionStream.ts:83
+[   11317ms] [ERROR] [ProcessedVoice] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[   11330ms] [ERROR] Translation WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[   11332ms] [ERROR] [TranscriptionStream] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  136635ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ webpack-internal:///(app-pages-browser)/./hooks/useGoogleLiveTranscription.ts:367
+[  250648ms] [WARNING] WebSocket connection to 'ws://localhost:8768/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useProcessedVoice.ts:398
+[  250648ms] [WARNING] WebSocket connection to 'ws://localhost:8767/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranslationStream.ts:107
+[  250648ms] [WARNING] WebSocket connection to 'ws://localhost:8766/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranscriptionStream.ts:83
+[  250654ms] [ERROR] [ProcessedVoice] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  250660ms] [ERROR] Translation WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  250661ms] [ERROR] [TranscriptionStream] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  296818ms] [WARNING] WebSocket connection to 'ws://localhost:8768/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useProcessedVoice.ts:398
+[  296818ms] [WARNING] WebSocket connection to 'ws://localhost:8767/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranslationStream.ts:107
+[  296818ms] [WARNING] WebSocket connection to 'ws://localhost:8766/' failed: WebSocket is closed before the connection is established. @ webpack-internal:///(app-pages-browser)/./hooks/useTranscriptionStream.ts:83
+[  296824ms] [ERROR] [ProcessedVoice] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  296831ms] [ERROR] Translation WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[  296833ms] [ERROR] [TranscriptionStream] WebSocket error: Event @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
