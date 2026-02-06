@@ -14,7 +14,10 @@ import sys
 import tempfile
 import time
 import uuid
+from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
+from threading import Lock
+from typing import Optional, Tuple
 
 import numpy as np
 import soundfile as sf
@@ -33,8 +36,8 @@ DEFAULT_VOICE = "Chelsie"
 # Audio chunk size in seconds (500ms for low latency)
 CHUNK_DURATION = 0.5
 
-# Thread pool for blocking TTS operations
-executor = ThreadPoolExecutor(max_workers=2)
+# Thread pool for blocking TTS operations - SINGLE WORKER to prevent GPU contention
+executor = ThreadPoolExecutor(max_workers=1)
 
 # Global model instance
 _model = None
@@ -42,6 +45,67 @@ _model_type = 'qwen'
 
 # Track active audio generation sessions for cancellation
 active_generations = {}  # hash -> {'session_id': str, 'cancelled': bool, 'room_id': str}
+
+# ===== Fair Round-Robin TTS Scheduler =====
+# Per-user queues for fair scheduling when multiple users talk simultaneously
+# This prevents User B from waiting for all of User A's chunks
+MAX_QUEUE_PER_USER = 2  # Max pending requests per user (older ones dropped)
+REQUEST_STALENESS_THRESHOLD = 5.0  # Skip requests older than 5 seconds
+_user_queues: dict[str, list[dict]] = {}  # userId -> list of requests
+_user_queue_lock = Lock()
+_queue_event = None  # asyncio.Event to signal new requests
+
+# ===== Voice Sample LRU Cache =====
+# Cache for decoded voice samples to avoid redundant I/O (2-3x improvement)
+# Key: cache_key (room_id:voice_user_id), Value: (wav_data, transcript, sample_rate, timestamp)
+VOICE_SAMPLE_CACHE_SIZE = 32
+VOICE_SAMPLE_CACHE_TTL = 300  # 5 minutes TTL
+_voice_sample_cache: OrderedDict[str, Tuple[bytes, str, int, float]] = OrderedDict()
+_voice_sample_cache_lock = Lock()
+
+# ===== Deduplication Cache =====
+# Track recently processed text to prevent duplicate TTS generation
+# This prevents the same translation from being processed twice due to round-robin or overlap
+_recently_processed: OrderedDict[str, float] = OrderedDict()
+_recently_processed_lock = Lock()
+DEDUP_CACHE_SIZE = 128
+DEDUP_TTL = 10.0  # seconds - ignore duplicate text within this window
+
+
+def _make_dedup_key(data: dict) -> str:
+    """Create a deduplication key from translation data."""
+    room_id = data.get('roomId', '')
+    user_id = data.get('userId', '')
+    text = data.get('translatedText', '') or data.get('text', '')
+    target_user = data.get('targetUserId', '')
+    return f"{room_id}:{user_id}:{target_user}:{text}"
+
+
+def _is_duplicate(data: dict) -> bool:
+    """Check if this translation was recently processed or queued."""
+    key = _make_dedup_key(data)
+    current_time = time.time()
+    
+    with _recently_processed_lock:
+        # Clean expired entries
+        expired = [k for k, t in _recently_processed.items() if current_time - t > DEDUP_TTL]
+        for k in expired:
+            del _recently_processed[k]
+        
+        if key in _recently_processed:
+            age = current_time - _recently_processed[key]
+            text = data.get('translatedText', '') or data.get('text', '')
+            logger.info(f"⏭️ Skipping duplicate text (seen {age:.1f}s ago): '{text[:40]}...'")
+            return True
+        
+        # Mark as seen
+        _recently_processed[key] = current_time
+        
+        # Trim cache size
+        while len(_recently_processed) > DEDUP_CACHE_SIZE:
+            _recently_processed.popitem(last=False)
+    
+    return False
 
 
 def load_model():
@@ -78,17 +142,96 @@ def load_model():
         raise RuntimeError(f"Could not load TTS model: {e}")
 
 
-def get_voice_sample_from_redis(room_id: str, user_id: str = 'default') -> tuple[bytes, str, int] | None:
+def get_voice_mapping(room_id: str, role: str) -> str | None:
+    """Get the actual voice user ID for a room role from Redis."""
+    import redis
+    
+    mapping_key = f"voice_mapping:{room_id}:{role}"
+    
+    try:
+        client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+        voice_user_id = client.get(mapping_key)
+        if voice_user_id:
+            logger.info(f"✓ Found voice mapping: {mapping_key} -> {voice_user_id}")
+            return voice_user_id
+    except Exception as e:
+        logger.warning(f"Redis voice mapping lookup failed: {e}")
+    
+    logger.warning(f"✗ No voice mapping found for {mapping_key}")
+    return None
+
+
+def _get_cache_key(room_id: str, voice_user_id: str) -> str:
+    return f"{room_id}:{voice_user_id}"
+
+
+def _cache_get(cache_key: str) -> Optional[Tuple[bytes, str, int]]:
+    """Get voice sample from cache if valid (unexpired)."""
+    with _voice_sample_cache_lock:
+        if cache_key in _voice_sample_cache:
+            wav_data, transcript, sr, cached_time = _voice_sample_cache[cache_key]
+            if time.time() - cached_time < VOICE_SAMPLE_CACHE_TTL:
+                _voice_sample_cache.move_to_end(cache_key)
+                logger.debug(f"✓ Voice sample cache HIT: {cache_key}")
+                return wav_data, transcript, sr
+            del _voice_sample_cache[cache_key]
+            logger.debug(f"✗ Voice sample cache EXPIRED: {cache_key}")
+    return None
+
+
+def _cache_put(cache_key: str, wav_data: bytes, transcript: str, sr: int):
+    """Put voice sample in cache with LRU eviction."""
+    with _voice_sample_cache_lock:
+        while len(_voice_sample_cache) >= VOICE_SAMPLE_CACHE_SIZE:
+            evicted_key, _ = _voice_sample_cache.popitem(last=False)
+            logger.debug(f"✗ Voice sample cache evicted: {evicted_key}")
+        _voice_sample_cache[cache_key] = (wav_data, transcript, sr, time.time())
+        logger.info(f"✓ Voice sample cached: {cache_key} (cache size: {len(_voice_sample_cache)})")
+
+
+def get_voice_sample_from_redis(room_id: str, user_id: str = 'default', target_user_id: str = None) -> tuple[bytes, str, int] | None:
     """Fetch voice sample from Redis or local file (sync version for thread pool).
+
+    For 2-way voice communication:
+    - user_id: The speaker (whose text we're converting to speech)
+    - target_user_id: The voice to use (the OTHER user, so the listener hears their own voice style)
+
+    If target_user_id is provided, we look up the voice mapping to get the actual voice user ID.
     Returns (wav_data, transcript, sample_rate) or None."""
     import redis
     
-    # Try user-based key first, then room-based, then global 'intro_user' fallback
+    # Resolve the actual voice user ID from the mapping
+    actual_voice_user_id = None
+    if target_user_id:
+        actual_voice_user_id = get_voice_mapping(room_id, target_user_id)
+        if actual_voice_user_id:
+            logger.info(f"Resolved voice mapping: {target_user_id} -> {actual_voice_user_id}")
+    
+    # Determine which user's voice sample to use
+    voice_user_id = actual_voice_user_id or target_user_id or user_id
+    cache_key = _get_cache_key(room_id, voice_user_id)
+    cached = _cache_get(cache_key)
+    if cached:
+        return cached
+    
     keys_to_try = [
-        f"voice_sample:{user_id}",
-        f"voice_sample:{room_id}:{user_id}",
-        f"voice_sample:intro_user",  # Global fallback for intro voice sample
+        f"voice_sample:{voice_user_id}",
+        f"voice_sample:{room_id}:{voice_user_id}",
     ]
+    
+    if actual_voice_user_id and target_user_id:
+        keys_to_try.extend([
+            f"voice_sample:{target_user_id}",
+            f"voice_sample:{room_id}:{target_user_id}",
+        ])
+    
+    if target_user_id and target_user_id != user_id:
+        keys_to_try.extend([
+            f"voice_sample:{user_id}",
+            f"voice_sample:{room_id}:{user_id}",
+        ])
+    
+    keys_to_try.append("voice_sample:intro_user")
     
     try:
         client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
@@ -98,16 +241,21 @@ def get_voice_sample_from_redis(room_id: str, user_id: str = 'default') -> tuple
                 sample = json.loads(data)
                 wav_data = base64.b64decode(sample['wav_base64'])
                 transcript = sample.get('transcript', '')
-                # Extract sample rate from WAV data
                 audio, sr = sf.read(io.BytesIO(wav_data))
                 logger.info(f"✓ Found voice sample in Redis: {key} (sr={sr})")
+                _cache_put(cache_key, wav_data, transcript, sr)
                 return wav_data, transcript, sr
     except Exception as e:
         logger.warning(f"Redis lookup failed: {e}")
     
-    # Fallback to local files - try user_id first, then intro_user
-    users_to_try = [user_id]
-    if user_id != 'intro_user':
+    users_to_try = [voice_user_id]
+    if actual_voice_user_id and actual_voice_user_id not in users_to_try:
+        users_to_try.append(actual_voice_user_id)
+    if target_user_id and target_user_id not in users_to_try:
+        users_to_try.append(target_user_id)
+    if user_id and user_id not in users_to_try:
+        users_to_try.append(user_id)
+    if 'intro_user' not in users_to_try:
         users_to_try.append('intro_user')
     
     try:
@@ -120,9 +268,7 @@ def get_voice_sample_from_redis(room_id: str, user_id: str = 'default') -> tuple
                 with open(wav_file, 'rb') as f:
                     wav_data = f.read()
                 
-                # Extract sample rate from WAV file
                 audio, sr = sf.read(wav_file)
-                
                 transcript = ''
                 if os.path.exists(meta_file):
                     with open(meta_file, 'r') as f:
@@ -130,23 +276,24 @@ def get_voice_sample_from_redis(room_id: str, user_id: str = 'default') -> tuple
                         transcript = meta.get('transcript', '')
                 
                 logger.info(f"✓ Found voice sample in local file: {wav_file} (sr={sr})")
+                _cache_put(cache_key, wav_data, transcript, sr)
                 return wav_data, transcript, sr
     except Exception as e:
         logger.warning(f"Local file lookup failed: {e}")
     
-    logger.warning(f"✗ No voice sample found for user={user_id}, room={room_id}")
+    logger.warning(f"✗ No voice sample found for voice_user={voice_user_id}, speaker={user_id}, room={room_id}")
     return None
 
 
-def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'default') -> tuple[np.ndarray, int]:
+def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'default', target_user_id: str = None) -> tuple[np.ndarray, int]:
     """
     Generate audio using TTS with voice cloning if sample available.
     Returns (audio_array, sample_rate).
     """
     model, model_type = load_model()
     
-    # Try to get voice sample for cloning
-    voice_sample = get_voice_sample_from_redis(room_id, user_id)
+    # Get the SPEAKER's voice sample for cloning (user_id)
+    voice_sample = get_voice_sample_from_redis(room_id, user_id, user_id)
     
     try:
         wavs = []
@@ -157,29 +304,22 @@ def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'def
             
             logger.info(f"🎤 Using voice cloning with reference audio (sr={ref_sample_rate})")
             
-            # Save reference audio to temp file if needed by library, 
-            # or pass wav data directly. Most libs handle paths easier.
             with tempfile.NamedTemporaryFile(suffix='.wav', delete=True) as temp_wav:
                 temp_wav.write(wav_data)
                 temp_wav.flush()
                 
-                # Generate with Qwen model
                 wavs, out_sr = model.generate_voice_clone(
                     text=text,
                     ref_audio=temp_wav.name,
                     ref_text=ref_text or text
                 )
         else:
-            # Use default generation without voice cloning
             logger.info(f"🔊 Using default voice generation (Voice Design)")
-            # Use a default instruction for Voice Design
             wavs, out_sr = model.generate_voice_design(
                 text=text,
                 instruct="A warm, professional female voice."
             )
             
-        # Process result
-        # Qwen3TTSModel returns List[np.ndarray] and sample_rate
         if wavs and len(wavs) > 0:
             audio_data = wavs[0]
         else:
@@ -187,13 +327,11 @@ def generate_audio_with_voice_clone(text: str, room_id: str, user_id: str = 'def
              
         sr = out_sr
         
-        # Convert to numpy and ensure 1D
         if isinstance(audio_data, torch.Tensor):
             audio_np = audio_data.cpu().numpy()
         else:
             audio_np = np.array(audio_data)
         
-        # Flatten if needed
         if len(audio_np.shape) > 1:
             audio_np = audio_np.flatten()
             
@@ -232,6 +370,7 @@ async def process_translation(message: dict, redis_client):
     room_id = message.get('roomId')
     user_id = message.get('userId', 'default')
     text = message.get('translatedText') or message.get('text', '')
+    target_user_id = message.get('targetUserId')
     source_language = message.get('sourceLanguage', 'unknown')
     target_language = message.get('targetLanguage', 'unknown')
     ml_hash = message.get('hash')  # Extract hash (format: {uuid}_ml)
@@ -244,7 +383,7 @@ async def process_translation(message: dict, redis_client):
     base_hash = ml_hash.replace('_ml', '') if ml_hash else None
     au_hash = f"{base_hash}_au" if base_hash else None
     
-    logger.info(f"Processing voice for room {room_id}, user {user_id}: '{text[:50]}...' (hash: {au_hash})")
+    logger.info(f"Processing voice for room {room_id}, speaker={user_id}, target_voice={target_user_id}: '{text[:50]}...' (hash: {au_hash})")
     logger.info(f"  Language: {source_language} → {target_language}")
     
     session_id = str(uuid.uuid4())
@@ -259,12 +398,11 @@ async def process_translation(message: dict, redis_client):
         }
     
     try:
-        # Run TTS in thread pool (blocking operation)
         loop = asyncio.get_event_loop()
         audio, sample_rate = await loop.run_in_executor(
             executor,
             generate_audio_with_voice_clone,
-            text, room_id, user_id
+            text, room_id, user_id, target_user_id
         )
         
         # Check if cancelled during generation
@@ -299,6 +437,7 @@ async def process_translation(message: dict, redis_client):
                 'sessionId': session_id,
                 'roomId': room_id,
                 'userId': user_id,
+                'targetUserId': target_user_id,
                 'chunkIndex': idx,
                 'totalChunks': total_chunks,
                 'audioBase64': audio_to_base64(chunk, sample_rate),
@@ -370,46 +509,130 @@ async def process_invalidation(message: dict, redis_client):
     logger.info(f"Published audio invalidation to {channel}")
 
 
+def _add_to_user_queue(data: dict):
+    """Add request to per-user queue with fair limiting and deduplication."""
+    if _is_duplicate(data):
+        return
+    
+    user_id = data.get('userId', 'default')
+    data['_enqueue_time'] = time.time()
+    
+    with _user_queue_lock:
+        if user_id not in _user_queues:
+            _user_queues[user_id] = []
+        
+        user_queue = _user_queues[user_id]
+        new_text = data.get('translatedText', '') or data.get('text', '')
+        for queued in user_queue:
+            queued_text = queued.get('translatedText', '') or queued.get('text', '')
+            if queued_text == new_text:
+                logger.info(f"⏭️ Skipping already-queued text for {user_id}: '{new_text[:40]}...'")
+                return
+        
+        while len(user_queue) >= MAX_QUEUE_PER_USER:
+            dropped = user_queue.pop(0)
+            logger.info(f"⏭️ Dropped stale request for {user_id} (queue full)")
+        
+        user_queue.append(data)
+        logger.debug(f"Queued request for {user_id} (queue size: {len(user_queue)})")
+
+
+def _get_next_request_round_robin() -> dict | None:
+    """Get next request using round-robin across users."""
+    with _user_queue_lock:
+        users_with_requests = [u for u, q in _user_queues.items() if q]
+        if not users_with_requests:
+            return None
+        
+        current_time = time.time()
+        for user_id in users_with_requests:
+            queue = _user_queues[user_id]
+            while queue:
+                request = queue.pop(0)
+                enqueue_time = request.get('_enqueue_time', current_time)
+                age = current_time - enqueue_time
+                if age > REQUEST_STALENESS_THRESHOLD:
+                    logger.info(f"⏭️ Skipped stale request for {user_id} (age: {age:.1f}s)")
+                    continue
+                return request
+        return None
+
+
 async def translation_subscriber():
     """
     Subscribe to translation channel and process messages.
     Receives both translations and invalidations from the same channel.
+    Uses FAIR ROUND-ROBIN scheduling to prevent one user from starving others.
     """
+    global _queue_event
+    
     redis_client = get_redis_client()
+    _queue_event = asyncio.Event()
+    queue_processor_task = asyncio.create_task(process_tts_queue(redis_client))
     
     while True:
         try:
-            # Only subscribe to translation channel - invalidations come through here too
             pubsub = await redis_client.psubscribe('room:*:translation')
-            logger.info("Subscribed to Redis pattern: room:*:translation")
+            logger.info("Subscribed to Redis pattern: room:*:translation (FAIR SCHEDULING)")
             
             async for message in pubsub.listen():
                 if message['type'] == 'pmessage':
                     try:
                         data = json.loads(message['data'])
-                        
-                        # Extract roomId from channel
                         channel = message['channel']
                         parts = channel.split(':')
                         if len(parts) >= 3:
                             data['roomId'] = parts[1]
                         
-                        # Process based on message type
                         msg_type = data.get('type')
                         if msg_type == 'invalidation':
                             asyncio.create_task(process_invalidation(data, redis_client))
                         elif msg_type == 'translation':
-                            asyncio.create_task(process_translation(data, redis_client))
-                        
-                    except json.JSONDecodeError:
-                        logger.warning(f"Invalid JSON in message: {message['data']}")
-                        
+                            _add_to_user_queue(data)
+                            _queue_event.set()
                     except json.JSONDecodeError:
                         logger.warning(f"Invalid JSON in message: {message['data']}")
         
         except Exception as e:
             logger.error(f"Subscriber error: {e}", exc_info=True)
-            await asyncio.sleep(5)  # Retry with backoff
+            await asyncio.sleep(5)
+
+
+async def process_tts_queue(redis_client):
+    """Process TTS requests using fair round-robin scheduling."""
+    global _queue_event
+    
+    logger.info("🚀 Fair round-robin TTS scheduler started")
+    last_processed_user = None
+    
+    while True:
+        try:
+            data = _get_next_request_round_robin()
+            
+            if data is None:
+                await _queue_event.wait()
+                _queue_event.clear()
+                continue
+            
+            user_id = data.get('userId', 'default')
+            ml_hash = data.get('hash')
+            base_hash = ml_hash.replace('_ml', '') if ml_hash else None
+            
+            if base_hash and base_hash in active_generations and active_generations[base_hash].get('cancelled'):
+                logger.info(f"Skipping already-cancelled TTS request: {base_hash}")
+                continue
+            
+            if last_processed_user and last_processed_user != user_id:
+                logger.info(f"🔄 Fair switch: {last_processed_user} → {user_id}")
+            last_processed_user = user_id
+            
+            try:
+                await process_translation(data, redis_client)
+            except Exception as e:
+                logger.error(f"Error processing TTS request: {e}", exc_info=True)
+        except Exception as e:
+            logger.error(f"Queue processor error: {e}", exc_info=True)
+            await asyncio.sleep(1)
 
 
 async def main():

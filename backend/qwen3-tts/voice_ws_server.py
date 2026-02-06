@@ -96,6 +96,16 @@ async def redis_subscriber():
                     channel = message['channel']
                     data_str = message['data']
                     
+                    # Parse to get chunk info for logging
+                    try:
+                        chunk_data = json.loads(data_str)
+                        chunk_idx = chunk_data.get('chunkIndex', '?')
+                        total = chunk_data.get('totalChunks', '?')
+                        session_id = chunk_data.get('sessionId', '')[:8]
+                        logger.info(f"Received voice chunk {chunk_idx+1 if isinstance(chunk_idx, int) else chunk_idx}/{total} for session {session_id}...")
+                    except:
+                        pass
+                    
                     # Extract roomId from channel name
                     # Channel format: room:{roomId}:voice-chunk
                     parts = channel.split(':')
@@ -105,13 +115,18 @@ async def redis_subscriber():
                         # Broadcast to all clients in this room
                         if room_id in room_clients:
                             clients = room_clients[room_id].copy()
-                            logger.debug(f"Broadcasting voice chunk to {len(clients)} clients in room {room_id}")
+                            logger.info(f"Broadcasting voice chunk to {len(clients)} clients in room {room_id}")
                             
                             # Send to all clients concurrently
-                            await asyncio.gather(
+                            results = await asyncio.gather(
                                 *[client.send(data_str) for client in clients],
                                 return_exceptions=True
                             )
+                            for i, result in enumerate(results):
+                                if isinstance(result, Exception):
+                                    logger.error(f"Failed to send to client: {result}")
+                        else:
+                            logger.warning(f"No clients in room {room_id} to receive voice chunk")
         
         except Exception as e:
             logger.error(f"Redis subscriber error: {e}")
