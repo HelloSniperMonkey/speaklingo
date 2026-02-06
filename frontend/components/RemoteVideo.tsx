@@ -1,9 +1,17 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 
-// Video delay in milliseconds to sync with TTS audio processing
-const VIDEO_DELAY_MS = 1000;
+// Video delay in milliseconds to sync with TTS audio processing pipeline
+const VIDEO_DELAY_MS = 2000;
+// Frame capture rate (fps) — lower than display to save memory
+const CAPTURE_FPS = 24;
+const CAPTURE_INTERVAL_MS = 1000 / CAPTURE_FPS;
+
+interface BufferedFrame {
+  bitmap: ImageBitmap;
+  timestamp: number;
+}
 
 interface RemoteVideoProps {
   stream: MediaStream | null;
@@ -12,81 +20,130 @@ interface RemoteVideoProps {
 }
 
 export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false }: RemoteVideoProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null); // Separate audio element for remote audio
+  const videoRef = useRef<HTMLVideoElement>(null);   // Hidden, plays real-time stream
+  const canvasRef = useRef<HTMLCanvasElement>(null);  // Visible, shows delayed frames
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [hasVideoTrack, setHasVideoTrack] = useState(false);
-  const [isDelayComplete, setIsDelayComplete] = useState(false);
-  const delayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isBufferReady, setIsBufferReady] = useState(false);
 
+  // Frame buffer refs (not state — mutated in rAF loop)
+  const frameBufferRef = useRef<BufferedFrame[]>([]);
+  const animFrameRef = useRef<number>(0);
+  const lastCaptureRef = useRef<number>(0);
+  const bufferReadyRef = useRef(false);
+
+  // Clean up all buffered ImageBitmaps
+  const flushBuffer = useCallback(() => {
+    const buf = frameBufferRef.current;
+    while (buf.length > 0) {
+      const f = buf.shift();
+      f?.bitmap.close();
+    }
+    bufferReadyRef.current = false;
+    setIsBufferReady(false);
+  }, []);
+
+  // ── 1. Attach stream to hidden <video> (real-time source) ──
   useEffect(() => {
     const videoElement = videoRef.current;
-    if (videoElement && stream) {
-      videoElement.srcObject = stream;
+    if (!videoElement || !stream) return;
 
-      // Check for existing tracks
-      const videoTracks = stream.getVideoTracks();
-      setHasVideoTrack(videoTracks.length > 0);
+    videoElement.srcObject = stream;
+    setHasVideoTrack(stream.getVideoTracks().length > 0);
 
-      // Listen for track additions
-      const handleTrackAdded = (event: MediaStreamTrackEvent) => {
-        console.log("[RemoteVideo] Track added:", event.track.kind);
-        if (event.track.kind === "video") {
-          setHasVideoTrack(true);
+    const handleTrackAdded = (event: MediaStreamTrackEvent) => {
+      console.log("[RemoteVideo] Track added:", event.track.kind);
+      if (event.track.kind === "video") setHasVideoTrack(true);
+      videoElement.play().catch(() => {});
+    };
+
+    const handleTrackRemoved = (event: MediaStreamTrackEvent) => {
+      console.log("[RemoteVideo] Track removed:", event.track.kind);
+      if (event.track.kind === "video") {
+        setHasVideoTrack(stream.getVideoTracks().length > 0);
+      }
+    };
+
+    stream.addEventListener("addtrack", handleTrackAdded);
+    stream.addEventListener("removetrack", handleTrackRemoved);
+
+    if (stream.getTracks().length > 0) {
+      videoElement.play().catch(() => {});
+    }
+
+    return () => {
+      stream.removeEventListener("addtrack", handleTrackAdded);
+      stream.removeEventListener("removetrack", handleTrackRemoved);
+    };
+  }, [stream]);
+
+  // ── 2. Frame-buffer loop: capture → buffer → draw delayed ──
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!videoElement || !canvas || !stream) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    flushBuffer();
+    const frameBuffer = frameBufferRef.current;
+
+    const tick = () => {
+      const now = performance.now();
+
+      // Capture a frame at CAPTURE_FPS rate
+      if (
+        videoElement.readyState >= 2 &&
+        videoElement.videoWidth > 0 &&
+        now - lastCaptureRef.current >= CAPTURE_INTERVAL_MS
+      ) {
+        lastCaptureRef.current = now;
+
+        // Resize canvas to match video dimensions
+        if (canvas.width !== videoElement.videoWidth || canvas.height !== videoElement.videoHeight) {
+          canvas.width = videoElement.videoWidth;
+          canvas.height = videoElement.videoHeight;
         }
-        // Force play when tracks are added
-        videoElement.play().catch((err) => {
-          console.warn("[RemoteVideo] Autoplay failed:", err);
-        });
-      };
 
-      const handleTrackRemoved = (event: MediaStreamTrackEvent) => {
-        console.log("[RemoteVideo] Track removed:", event.track.kind);
-        if (event.track.kind === "video") {
-          const videoTracks = stream.getVideoTracks();
-          setHasVideoTrack(videoTracks.length > 0);
-        }
-      };
-
-      // When video starts playing, start the delay timer
-      const handlePlaying = () => {
-        console.log("[RemoteVideo] Video playing, starting delay timer");
-        if (delayTimerRef.current) {
-          clearTimeout(delayTimerRef.current);
-        }
-        delayTimerRef.current = setTimeout(() => {
-          console.log("[RemoteVideo] Delay complete, showing video");
-          setIsDelayComplete(true);
-        }, VIDEO_DELAY_MS);
-      };
-
-      stream.addEventListener("addtrack", handleTrackAdded);
-      stream.addEventListener("removetrack", handleTrackRemoved);
-      videoElement.addEventListener("playing", handlePlaying);
-
-      // Try to play immediately if there are tracks
-      if (stream.getTracks().length > 0) {
-        videoElement.play().catch((err) => {
-          console.warn("[RemoteVideo] Initial autoplay failed:", err);
+        // Capture as GPU-backed ImageBitmap (much lighter than ImageData)
+        const captureTime = now;
+        createImageBitmap(videoElement).then((bitmap) => {
+          frameBuffer.push({ bitmap, timestamp: captureTime });
         });
       }
 
-      return () => {
-        stream.removeEventListener("addtrack", handleTrackAdded);
-        stream.removeEventListener("removetrack", handleTrackRemoved);
-        videoElement.removeEventListener("playing", handlePlaying);
-        if (delayTimerRef.current) {
-          clearTimeout(delayTimerRef.current);
-        }
-      };
-    }
-  }, [stream]);
+      // Find and display the frame that is VIDEO_DELAY_MS old
+      const targetTime = now - VIDEO_DELAY_MS;
 
-  // Handle audio playback separately from video
-  // NOTE: We include `isConnected` as a dependency because Chrome does NOT fire
-  // `addtrack` events for programmatic MediaStream.addTrack() calls.
-  // When WebRTC's ontrack handler adds audio tracks to the remote stream,
-  // no addtrack event fires. But isConnected changes at the same time,
-  // so re-running this effect when isConnected changes lets us pick up the tracks.
+      // Drop frames older than our target (keep the closest one before target)
+      while (frameBuffer.length > 1 && frameBuffer[1].timestamp <= targetTime) {
+        const old = frameBuffer.shift();
+        old?.bitmap.close(); // Free GPU memory
+      }
+
+      // Draw the delayed frame onto the visible canvas
+      if (frameBuffer.length > 0 && frameBuffer[0].timestamp <= targetTime) {
+        ctx.drawImage(frameBuffer[0].bitmap, 0, 0, canvas.width, canvas.height);
+        if (!bufferReadyRef.current) {
+          bufferReadyRef.current = true;
+          setIsBufferReady(true);
+          console.log("[RemoteVideo] Buffer filled — showing delayed video");
+        }
+      }
+
+      animFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    animFrameRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(animFrameRef.current);
+      flushBuffer();
+    };
+  }, [stream, flushBuffer]);
+
+  // ── 3. Audio playback (unchanged) ──
   useEffect(() => {
     const audioElement = audioRef.current;
     if (!audioElement || !stream) return;
@@ -97,7 +154,6 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
       if (audioTracks.length > 0) {
         const audioStream = new MediaStream(audioTracks);
         audioElement.srcObject = audioStream;
-        // Respect current translation state when starting playback
         audioElement.muted = isTranslationEnabled;
         audioElement.play().catch((err) => {
           console.warn("[RemoteVideo] Audio autoplay failed:", err);
@@ -108,11 +164,8 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
       return false;
     };
 
-    // Setup audio for any existing tracks
     const success = setupAudio();
 
-    // Fallback: if no tracks yet, retry after a short delay
-    // This handles edge cases where state updates arrive before tracks
     let retryTimeout: NodeJS.Timeout | null = null;
     if (!success && isConnected) {
       console.log("[RemoteVideo] No audio tracks yet despite isConnected=true, scheduling retry...");
@@ -121,8 +174,6 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
       }, 500);
     }
 
-    // Also listen for tracks added later (as a safety net, even though Chrome
-    // doesn't fire addtrack for programmatic addTrack calls)
     const handleTrackAdded = (event: MediaStreamTrackEvent) => {
       if (event.track.kind === "audio") {
         console.log("[RemoteVideo] addtrack event fired for audio track, setting up audio playback");
@@ -147,26 +198,31 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
     }
   }, [isTranslationEnabled]);
 
-  // Reset delay when stream changes
+  // Reset buffer when stream changes
   useEffect(() => {
-    setIsDelayComplete(false);
-  }, [stream]);
+    flushBuffer();
+  }, [stream, flushBuffer]);
 
-  // Show video when we have a stream with video tracks OR when connected AND delay complete
-  const showVideo = stream && (hasVideoTrack || isConnected) && isDelayComplete;
+  const showVideo = stream && (hasVideoTrack || isConnected) && isBufferReady;
 
   return (
     <div className="relative w-full aspect-video bg-gray-900 rounded-2xl overflow-hidden border border-white/10">
-      {/* Hidden audio element for remote audio - muted when translation is enabled */}
+      {/* Hidden audio element for remote audio */}
       <audio ref={audioRef} autoPlay playsInline hidden />
 
-      {/* Video element - plays immediately but hidden until delay completes */}
+      {/* Hidden video element — plays real-time stream as frame source */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
         muted
-        className={`w-full h-full object-cover ${showVideo ? 'block' : 'opacity-0 absolute'}`}
+        className="opacity-0 absolute w-0 h-0 pointer-events-none"
+      />
+
+      {/* Visible canvas — displays frames delayed by VIDEO_DELAY_MS */}
+      <canvas
+        ref={canvasRef}
+        className={`w-full h-full object-cover ${showVideo ? 'block' : 'hidden'}`}
       />
 
       {!showVideo && (
@@ -185,7 +241,7 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
             />
           </svg>
           <p className="text-sm">
-            {stream && hasVideoTrack ? "Syncing video..." : "Waiting for connection..."}
+            {stream && hasVideoTrack ? "Buffering video..." : "Waiting for connection..."}
           </p>
         </div>
       )}
@@ -193,8 +249,7 @@ export function RemoteVideo({ stream, isConnected, isTranslationEnabled = false 
       {/* Connection indicator */}
       <div className="absolute top-4 left-4 flex items-center gap-2">
         <div
-          className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 pulse" : "bg-yellow-500"
-            }`}
+          className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 pulse" : "bg-yellow-500"}`}
         />
         <span className="text-xs text-white/70">
           {isConnected ? "Connected" : "Connecting..."}
