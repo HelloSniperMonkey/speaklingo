@@ -71,7 +71,7 @@ function HomePageContent() {
       formData.append("audio", audioBlob, "mic-input.webm");
       formData.append("roomId", "global");  // Use global room for pre-session voice samples
       formData.append("userId", uniqueUserId);  // Use unique user ID instead of "intro_user"
-      formData.append("transcript", "Hello I am feeling great today and the weather is sunny which uplifts my mood.");
+      formData.append("transcript", t("home.sampleText"));
 
       const response = await fetch("/api/qwen-tts", {
         method: "POST",

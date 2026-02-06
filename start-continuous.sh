@@ -29,7 +29,7 @@ pm2 start npm --name "frontend" \
 
 # Start CONTINUOUS Transcription Server (2-second chunks)
 echo "Starting CONTINUOUS Transcription Server..."
-cd ./backend/google-backend
+cd ../backend/google-backend
 pm2 start python --name "transcription-server" \
 	--output ../../logs/transcription-server-out.log \
 	--error ../../logs/transcription-server-err.log \

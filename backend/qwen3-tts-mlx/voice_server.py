@@ -10,8 +10,10 @@ import io
 import json
 import logging
 import os
+import subprocess
 import tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor
 from threading import Thread
 
 from flask import Flask, request, jsonify
@@ -41,38 +43,83 @@ VOICE_SAMPLE_TTL = 3600
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 os.makedirs(DATA_DIR, exist_ok=True)
 
+# Thread pool for ffmpeg conversions (prevents blocking requests)
+# Using 4 workers to handle concurrent uploads without blocking
+ffmpeg_executor = ThreadPoolExecutor(max_workers=4, thread_name_prefix='ffmpeg')
 
-def convert_webm_to_wav(webm_data: bytes) -> bytes:
-    """Convert webm audio to wav format using ffmpeg."""
-    import subprocess
-    
-    with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as webm_file:
-        webm_file.write(webm_data)
-        webm_path = webm_file.name
-    
-    wav_path = webm_path.replace('.webm', '.wav')
+
+def _convert_webm_to_wav_sync(webm_data: bytes) -> bytes:
+    """
+    Synchronous webm to wav conversion (runs in thread pool).
+    This is the actual work that runs in a separate thread.
+    """
+    webm_path = None
+    wav_path = None
     
     try:
-        # Use ffmpeg to convert webm to wav (16kHz mono for TTS)
-        result = subprocess.run([
-            'ffmpeg', '-y', '-i', webm_path,
-            '-ar', '16000', '-ac', '1', '-f', 'wav', wav_path
-        ], capture_output=True, text=True)
+        with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as webm_file:
+            webm_file.write(webm_data)
+            webm_path = webm_file.name
         
-        if result.returncode != 0:
-            logger.error(f"ffmpeg error: {result.stderr}")
-            raise RuntimeError(f"ffmpeg conversion failed: {result.stderr}")
+        wav_path = webm_path.replace('.webm', '.wav')
+        
+        # Use ffmpeg to convert webm to wav (16kHz mono for TTS)
+        # Using subprocess.Popen for better control and timeout handling
+        process = subprocess.Popen(
+            ['ffmpeg', '-y', '-i', webm_path, '-ar', '16000', '-ac', '1', '-f', 'wav', wav_path],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        
+        try:
+            # Timeout after 30 seconds to prevent hanging
+            _, stderr = process.communicate(timeout=30)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.communicate()
+            raise RuntimeError("ffmpeg conversion timed out after 30 seconds")
+        
+        if process.returncode != 0:
+            error_msg = stderr.decode('utf-8', errors='replace') if stderr else 'Unknown error'
+            logger.error(f"ffmpeg error: {error_msg}")
+            raise RuntimeError(f"ffmpeg conversion failed: {error_msg}")
         
         with open(wav_path, 'rb') as f:
             wav_data = f.read()
         
         return wav_data
+        
     finally:
         # Cleanup temp files
-        if os.path.exists(webm_path):
-            os.remove(webm_path)
-        if os.path.exists(wav_path):
-            os.remove(wav_path)
+        if webm_path and os.path.exists(webm_path):
+            try:
+                os.remove(webm_path)
+            except OSError:
+                pass
+        if wav_path and os.path.exists(wav_path):
+            try:
+                os.remove(wav_path)
+            except OSError:
+                pass
+
+
+def convert_webm_to_wav(webm_data: bytes) -> bytes:
+    """
+    Convert webm audio to wav format using ffmpeg (non-blocking).
+    
+    Uses ThreadPoolExecutor to run ffmpeg in a separate thread,
+    preventing it from blocking other Flask request handlers.
+    """
+    # Submit conversion to thread pool and wait for result
+    # This allows other requests to be processed while ffmpeg runs
+    future = ffmpeg_executor.submit(_convert_webm_to_wav_sync, webm_data)
+    
+    try:
+        # Wait for conversion with timeout (slightly longer than process timeout)
+        return future.result(timeout=35)
+    except Exception as e:
+        logger.error(f"Async ffmpeg conversion failed: {e}")
+        raise
 
 
 def store_voice_sample(room_id: str, user_id: str, wav_data: bytes, transcript: str = ""):
