@@ -158,6 +158,39 @@ def remove_duplicate_prefix(new_translation: str, previous_translation: str) -> 
     return new_translation
 
 
+def _detect_source_language_hint(text: str) -> str:
+    """Give a rough source-language hint based on Unicode script."""
+    for ch in text:
+        cp = ord(ch)
+        if 0x0900 <= cp <= 0x097F:
+            return "Hindi"
+        if 0x4E00 <= cp <= 0x9FFF:
+            return "Chinese"
+        if 0x3040 <= cp <= 0x30FF:
+            return "Japanese"
+        if 0xAC00 <= cp <= 0xD7AF:
+            return "Korean"
+        if 0x0600 <= cp <= 0x06FF:
+            return "Arabic"
+        if 0x0E00 <= cp <= 0x0E7F:
+            return "Thai"
+        if 0x0400 <= cp <= 0x04FF:
+            return "Russian"
+    # Default to auto-detect
+    return "auto-detected"
+
+
+def _clean_translation(text: str) -> str:
+    """Remove common LLM artifacts from translation output."""
+    text = text.strip()
+    if text.startswith('"') and text.endswith('"'):
+        text = text[1:-1]
+    for prefix in ["Translation:", "translation:", "Here is", "Here's"]:
+        if text.lower().startswith(prefix.lower()):
+            text = text[len(prefix):].strip()
+    return text
+
+
 async def translate_with_context(
     context: str,
     new_text: str,
@@ -166,37 +199,34 @@ async def translate_with_context(
     """
     Translate new_text using context for coherence.
     Only returns translation of new_text, not the context.
+    Uses non-streaming for lowest latency (3s chunks go straight to TTS).
     """
     start_time = time.time()
     
     if not new_text.strip():
         return "", 0
     
-    # Build the prompt
+    source_hint = _detect_source_language_hint(new_text)
+    
+    system_msg = (
+        f"You are an expert real-time speech translator. "
+        f"You translate spoken language into natural, fluent {target_language}. "
+        f"You ONLY output the translated text — no explanations, no labels, no quotes, no notes. "
+        f"The input may be a short fragment of ongoing speech — translate it naturally as a continuation."
+    )
+    
     if context.strip():
-        prompt = f"""You are a real-time speech translator. Translate [NEW TEXT] from the source language to {target_language}.
-
-[PREVIOUSLY SPOKEN - For understanding context, DO NOT translate]
-{context}
-
-[NEW TEXT - Translate THIS ONLY]
-{new_text}
-
-CRITICAL RULES:
-1. Output ONLY the translation of [NEW TEXT], never repeat [PREVIOUSLY SPOKEN]
-2. Use [PREVIOUSLY SPOKEN] to understand context and meaning
-3. If [NEW TEXT] is incomplete/fragmented, translate it naturally as a continuation
-4. Make the translation flow naturally from the context
-5. NO explanations, NO notes, ONLY the translation
-
-Translation:"""
+        prompt = (
+            f"The speaker is talking in {source_hint}. "
+            f"Translate the [NEW] part into {target_language}.\n\n"
+            f"[CONTEXT — already translated, for reference only]\n{context}\n\n"
+            f"[NEW — translate this]\n{new_text}"
+        )
     else:
-        # No context, simple translation
-        prompt = f"""Translate to {target_language}. Output ONLY the translation.
-
-Text: {new_text}
-
-Translation:"""
+        prompt = (
+            f"The speaker is talking in {source_hint}. "
+            f"Translate the following into {target_language}:\n\n{new_text}"
+        )
     
     try:
         loop = asyncio.get_event_loop()
@@ -204,20 +234,20 @@ Translation:"""
             None,
             lambda: client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,
+                messages=[
+                    {"role": "system", "content": system_msg},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.2,
                 max_completion_tokens=150,
-                top_p=1,
+                top_p=0.95,
                 stream=False
             )
         )
         
         translated = response.choices[0].message.content
         if translated:
-            translated = translated.strip()
-            # Remove any accidental quoting
-            if translated.startswith('"') and translated.endswith('"'):
-                translated = translated[1:-1]
+            translated = _clean_translation(translated)
         else:
             translated = new_text  # Fallback
         
@@ -272,7 +302,7 @@ async def process_continuous_chunk(message_data: str, channel: str):
         
         logger.info(f"   🎯 Translating to: {target_language_name} (for {target_user_id})")
         
-        # Translate with context to the target language
+        # Translate immediately — no buffering to keep the 3s chunk → TTS pipeline flowing
         translated, latency_ms = await translate_with_context(context, new_text, target_language_name)
         
         if not translated.strip():
@@ -422,7 +452,7 @@ async def main():
     logger.info("=" * 60)
     logger.info("  SLIDING WINDOW TRANSLATION PROCESSOR")
     logger.info("  Mode: Continuous chunks with context")
-    logger.info("  Translates 2s new text with 4s context")
+    logger.info("  Translates 3s new text with 6s context")
     logger.info("=" * 60)
     
     try:

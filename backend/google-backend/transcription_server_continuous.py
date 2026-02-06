@@ -3,13 +3,13 @@
 CONTINUOUS TRANSCRIPTION SERVER - WebSocket server for real-time speech transcription.
 
 KEY DIFFERENCE from original:
-- Emits transcription chunks every 2 seconds (configurable) regardless of silence
+- Emits transcription chunks every 3 seconds (configurable) regardless of silence
 - Each chunk includes context window tracking for the translation processor
 - No waiting for silence detection - continuous streaming
 
 This enables the sliding window translation approach where:
-- 4 seconds of context (already translated) + 2 seconds new = 6 second window
-- Translation starts immediately every 2s, not waiting for speaker to stop
+- 6 seconds of context (already translated) + 3 seconds new = 9 second window
+- Translation starts immediately every 3s, not waiting for speaker to stop
 """
 
 import asyncio
@@ -54,14 +54,14 @@ if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
 speech_client = None
 
 # Configuration
-CHUNK_INTERVAL_SECONDS = 2.0  # Emit chunks every 2 seconds
-CONTEXT_WINDOW_SECONDS = 4.0  # Keep 4 seconds of context
+CHUNK_INTERVAL_SECONDS = 3.0  # Emit chunks every 3 seconds
+CONTEXT_WINDOW_SECONDS = 9.0  # Keep 6 seconds of context
 CONTEXT_CHUNKS = int(CONTEXT_WINDOW_SECONDS / CHUNK_INTERVAL_SECONDS)  # 2 chunks
 
 
 class ContinuousTranscriptionSession:
     """
-    Manages a continuous transcription session with 2-second chunking.
+    Manages a continuous transcription session with 3-second chunking.
     """
 
     def __init__(self, session_id: str, room_id: Optional[str] = None, user_id: Optional[str] = None):
@@ -131,8 +131,8 @@ class ContinuousTranscriptionSession:
             "roomId": self.room_id,
             "userId": self.user_id or self.session_id,
             "sessionId": self.session_id,
-            "context": context,           # Previous 4 seconds (already translated)
-            "newText": new_text,           # Current 2 seconds (to translate)
+            "context": context,           # Previous 6 seconds (already translated)
+            "newText": new_text,           # Current 3 seconds (to translate)
             "fullText": current_text,      # Full accumulated text
             "language": self.language_code,
             "isFinal": False,              # These are continuous chunks, never "final"
